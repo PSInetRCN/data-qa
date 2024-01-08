@@ -11,6 +11,7 @@ assignees: ''
 
 * Dataset identifier:
 * Submitting author:
+* Submitting author email:
 * SFN or PN:
 * Raw file box ID:
 * Cleaned files box IDs:
