@@ -2,12 +2,14 @@ library(boxr)
 library(dplyr)
 
 source(here::here("general-scripts", "box_auth.R"))
-
+source(here::here("general-scripts", "template-data", "qa_functions.R"))
 #' This script is for general-purpose QA of datasets submitted using the PSInet template.
 #'
 
 dataset_identifier <- 9
 raw_box_id <- 1418283786880
+
+error_report <- list()
 
 # load each sheet into a data frame ####
 
@@ -15,6 +17,12 @@ raw_box_id <- 1418283786880
 
 sheet1 <- box_read_excel(raw_box_id, sheet = 2,
                          col_types = "text")[2,-1]
+
+
+required_fields_sheet1 <- c(1, 2, 3, 4, 5, 7, 8, 9, 10, 11)
+
+sheet1_missing_fields <- check_fields(sheet1, required_fields_sheet1)
+
 
 
 ## Sheet 2. Data description ####
