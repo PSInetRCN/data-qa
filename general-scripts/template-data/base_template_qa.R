@@ -74,7 +74,7 @@ check_fields(sheet1, required_fields_sheet1)
 sheet1_cols_typed <- set_sheet1_types(sheet1)
 
 # If there are errors, uncomment this:
-error_report[1, "data_typing_error"] <- 1
+# error_report[1, "data_typing_error"] <- 1
 
 ## Update error report #### 
 
