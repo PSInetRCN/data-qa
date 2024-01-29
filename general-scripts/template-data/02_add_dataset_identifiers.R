@@ -87,7 +87,7 @@ for(i in 1:nrow(tracking_data_updated)) {
   )
   
   tracking_data_updated$error_report_box_file_ID[i] <- write_output$id
-  tracking_data_updated$error_report_box_file_name <- write_output$name
+  tracking_data_updated$error_report_box_file_name[i] <- write_output$name
 }
 
 box_write(tracking_data_updated, "dataset_tracking.xlsx", "230431401206")
