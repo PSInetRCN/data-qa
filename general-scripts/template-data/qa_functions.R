@@ -7,7 +7,7 @@ check_fields <- function(sheet, required_fields) {
     select(where(anyNA))
   
   if(ncol(missing_fields) > 0) {
-    return(paste(colnames(missing_fields, collapse = ", ")))
+    return(paste(colnames(missing_fields), collapse = ", "))
   } else {
     return("No missing fields")
   }
@@ -66,3 +66,5 @@ set_sheet6_types <- function(sheet6) {
       across(all_of(c(2)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x))))    
     )
 }
+
+
