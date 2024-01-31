@@ -8,7 +8,7 @@ source(here::here("general-scripts", "template-data", "qa_functions.R"))
 
 # Setup ####
 
-dataset_identifier <- "Bohrer_1"
+dataset_identifier <- "Johnson_1"
 
 tracking_sheet <- box_read_excel("1426404123641")
 
@@ -75,6 +75,24 @@ if(dataset_identifier == "Keen_1") {
   
 }
 
+if(dataset_identifier == "Johnson_1") {
+  
+  to_decimal_degrees <- function(x) {
+    lat_deg = as.numeric(substr(x, 1,2))
+    lat_min = as.numeric(substr(x, 4,5))
+    lat_sec = as.numeric(substr(x, 8,9))
+    
+    sum(lat_deg, lat_min / 60, lat_sec / 3600)
+  }
+  
+  sheet1 <- sheet1 |>
+    mutate(`Latitude (WGS84)` = to_decimal_degrees(`Latitude (WGS84)`),
+           `Longitude (WGS84)` = to_decimal_degrees(`Longitude (WGS84)`))
+  
+  str(sheet1)
+  
+}
+
 sheet1_cols_typed <- sheet1 |>  
   mutate(
     across(all_of(c(1,2,3,4,5,6,7,12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
@@ -85,7 +103,7 @@ sheet1_cols_typed <- sheet1 |>
 str(sheet1_cols_typed)
 
 # If there are errors, uncomment this:
-# error_report[1, "data_typing_error"] <- 0
+# error_report[1, "data_typing_error"] <- 1
 
 ## Store typed data ####
 
@@ -150,7 +168,7 @@ sheet2_cols_typed <- sheet2 |>
                                      as.numeric(`Is it available?`))) |>
   mutate(`Is it available?` = as.logical(`Is it available?`),
          across(all_of(c(1,3,4,5,6,9)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-         across(all_of(c(7,8)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x))))
+         across(all_of(c(7,8)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))
   )
 
 str(sheet2_cols_typed)
