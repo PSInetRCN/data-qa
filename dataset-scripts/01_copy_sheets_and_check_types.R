@@ -778,3 +778,13 @@ box_write(
 ## Update error report ####
 
 box_write(error_report, file_name = error_report_name, dir_id = qa_box_folder_id)
+
+## Update tally sheet ####
+
+tally_sheet <- read.csv(here::here("dataset-scripts", "01_copy_sheets_and_check_types_tally.csv"))
+tally_sheet <- rbind(tally_sheet,
+                     data.frame(dataset_identifier = dataset_identifier,
+                                date = Sys.Date(),
+                                custom_changes = F))
+write.csv(tally_sheet, here::here("dataset-scripts", "01_copy_sheets_and_check_types_tally.csv"), row.names = F)
+
