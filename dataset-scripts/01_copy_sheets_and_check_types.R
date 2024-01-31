@@ -8,7 +8,7 @@ source(here::here("general-scripts", "template-data", "qa_functions.R"))
 
 # Setup ####
 
-dataset_identifier <- "Keen_1"
+dataset_identifier <- "Bohrer_1"
 
 tracking_sheet <- box_read_excel("1426404123641")
 
@@ -85,7 +85,7 @@ sheet1_cols_typed <- sheet1 |>
 str(sheet1_cols_typed)
 
 # If there are errors, uncomment this:
-error_report[1, "data_typing_error"] <- 1
+# error_report[1, "data_typing_error"] <- 0
 
 ## Store typed data ####
 
@@ -451,6 +451,29 @@ if(dataset_identifier == "Keen_1") {
     filter(if_any(everything(), ~ !is.na(.)))
 }
 
+if(dataset_identifier == "Bohrer_1") {
+  
+  sheet7 <-
+    box_read_excel(
+      raw_box_id,
+      sheet = 8,
+      col_names = colnames(sheet7_cols),
+      col_types = c(
+        "skip",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text"
+      )
+    )[-c(1:2),]  |>
+    filter(if_any(everything(), ~ !is.na(.)))
+}
+
 
 # These warnings are expected:
 # Warning messages:
@@ -496,6 +519,12 @@ all(
 ## Set column types ####
 
 str(sheet7)
+
+if(dataset_identifier == "Bohrer_1") {
+  sheet7 <-  sheet7 |>
+    mutate(Date = as.Date(Date, format = "%Y%m%d")) |>
+    mutate(Time = as.POSIXct(Time, format = "%H:%M:%S"))
+}
 
 sheet7_cols_typed <-  sheet7 |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA_character_, x)))) |>
@@ -677,6 +706,36 @@ if(dataset_identifier == "Keen_1") {
     filter(if_any(everything(), ~ !is.na(.)))
 }
 
+if(dataset_identifier == "Bohrer_1") {
+  
+  sheet9 <-
+    box_read_excel(
+      raw_box_id,
+      sheet = 10,
+      col_names = colnames(sheet9_cols),
+      col_types = c(
+        "skip",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text"
+      )
+    )[-c(1:2),] |>
+    filter(if_any(everything(), ~ !is.na(.)))
+}
+
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -725,6 +784,13 @@ all(
 ## Set column types ####
 
 str(sheet9)
+
+
+if(dataset_identifier == "Bohrer_1") {
+  sheet9 <-  sheet9 |>
+    mutate(Date = as.Date(Date, format = "%Y%m%d")) |>
+    mutate(Time = as.POSIXct(Time, format = "%H:%M:%S"))
+}
 
 sheet9_cols_typed <-  sheet9 |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
@@ -781,6 +847,30 @@ sheet10 <-
   )[-c(1:2),] |>
   filter(if_any(everything(), ~ !is.na(.)))
 
+if(dataset_identifier == "Bohrer_1") {
+  
+  sheet10 <-
+    box_read_excel(
+      raw_box_id,
+      sheet = 11,
+      col_names = colnames(sheet10_cols),
+      col_types = c(
+        "skip",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text"
+      )
+    )[-c(1:2),] |>
+    filter(if_any(everything(), ~ !is.na(.)))
+}
+
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -824,9 +914,15 @@ all(
 
 str(sheet10)
 
+
+if(dataset_identifier == "Bohrer_1") {
+  sheet10 <-  sheet10 |>
+    mutate(Date = as.Date(Date, format = "%Y%m%d"))
+}
+
 sheet10_cols_typed <-  sheet10 |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
-  mutate(across(all_of(c(2:10)), (\(x) ifelse(
+  mutate(across(all_of(c(3:10)), (\(x) ifelse(
     is.na(x), NA_real_, as.numeric(x)
   )))) |>
   mutate(Date = as.character(Date),
