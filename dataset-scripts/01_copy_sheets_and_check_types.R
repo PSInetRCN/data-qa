@@ -8,7 +8,7 @@ source(here::here("general-scripts", "template-data", "qa_functions.R"))
 
 # Setup ####
 
-dataset_identifier <- "Johnson_1"
+dataset_identifier <- "Sturchio_1"
 
 tracking_sheet <- box_read_excel("1426404123641")
 
@@ -93,6 +93,32 @@ if(dataset_identifier == "Johnson_1") {
   
 }
 
+if(dataset_identifier == "Sturchio_1") {
+  
+  lat_to_decimal_degrees <- function(x) {
+    lat_deg = as.numeric(substr(x, 1,2))
+    lat_min = as.numeric(substr(x, 4,5))
+    lat_sec = as.numeric(substr(x, 7,10))
+    
+    sum(lat_deg, lat_min / 60, lat_sec / 3600)
+  }
+  
+  long_to_decimal_degrees <- function(x) {
+    long_deg = as.numeric(substr(x, 1,3))
+    long_min = as.numeric(substr(x, 5,6))
+    long_sec = as.numeric(substr(x, 8,11))
+    
+    sum(long_deg, long_min / 60, long_sec / 3600)
+  }
+  sheet1 <- sheet1 |>
+    mutate(`Latitude (WGS84)` = lat_to_decimal_degrees(`Latitude (WGS84)`),
+           `Longitude (WGS84)` = long_to_decimal_degrees(`Longitude (WGS84)`))
+  
+  str(sheet1)
+  
+}
+
+
 sheet1_cols_typed <- sheet1 |>  
   mutate(
     across(all_of(c(1,2,3,4,5,6,7,12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
@@ -103,7 +129,7 @@ sheet1_cols_typed <- sheet1 |>
 str(sheet1_cols_typed)
 
 # If there are errors, uncomment this:
-# error_report[1, "data_typing_error"] <- 1
+#error_report[1, "data_typing_error"] <- 1
 
 ## Store typed data ####
 
@@ -446,7 +472,7 @@ sheet7 <-
   )[-c(1:2),]  |>
   filter(if_any(everything(), ~ !is.na(.)))
 
-if(dataset_identifier == "Keen_1") {
+if(dataset_identifier %in% c("Keen_1", "Sturchio_1")) {
   
   sheet7 <-
     box_read_excel(
@@ -694,6 +720,57 @@ sheet9 <-
   )[-c(1:2),] |>
   filter(if_any(everything(), ~ !is.na(.)))
 
+if(dataset_identifier == "Sturchio_1") {
+  
+  
+  sheet9 <-
+    box_read_excel(
+      raw_box_id,
+      sheet = 10,
+      col_names = colnames(sheet9_cols),
+      col_types = c(
+        "skip",
+        "text",
+        "text",
+        "date",
+        "date",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text"
+      )
+    )[-c(1:2),] |>
+    filter(if_any(everything(), ~ !is.na(.)))
+  
+  sheet9_date1 <- box_read_excel(
+    raw_box_id,
+    sheet = 10,
+    col_names = c("Date"),
+    col_types = c(
+      "skip",
+      "skip",
+      "skip",
+      "text",
+      "skip",
+      "skip"
+    ),
+    skip = 2,
+    n_max = 1
+  ) |>
+    mutate(Date = as.Date(Date, format = "%Y%m%d"))
+  
+  sheet9$Date[1] <- sheet9_date1$Date[1]
+  
+}
+
 if(dataset_identifier == "Keen_1") {
   
   sheet9 <-
@@ -824,7 +901,7 @@ sheet9_cols_typed <-  sheet9 |>
 str(sheet9_cols_typed)
 
 # If there are errors, uncomment this:
-# error_report[9, "data_typing_error"] <- 1
+ error_report[9, "data_typing_error"] <- 1
 
 
 ## Store typed data ####
@@ -864,6 +941,30 @@ sheet10 <-
     )
   )[-c(1:2),] |>
   filter(if_any(everything(), ~ !is.na(.)))
+
+if(dataset_identifier == "Sturchio_1") {
+  
+  sheet10_date1 <- box_read_excel(
+    raw_box_id,
+    sheet = 11,
+    col_names = c("Date"),
+    col_types = c(
+      "skip",
+      "text",
+      "skip",
+      "skip",
+      "skip",
+      "skip",
+      "skip",
+      "skip"
+    ),
+    skip = 2,
+    n_max = 1
+  ) |>
+    mutate(Date = as.Date(Date, format = "%Y%m%d"))
+  
+  sheet10$Date[1] <- sheet10_date1$Date[1]
+}
 
 if(dataset_identifier == "Bohrer_1") {
   
@@ -937,6 +1038,11 @@ if(dataset_identifier == "Bohrer_1") {
   sheet10 <-  sheet10 |>
     mutate(Date = as.Date(Date, format = "%Y%m%d"))
 }
+if(dataset_identifier == "Sturchio_1") {
+  sheet10 <-  sheet10 |>
+    mutate(Time = format(Time, format = "%H:%M:%S"))
+}
+
 
 sheet10_cols_typed <-  sheet10 |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
