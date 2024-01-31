@@ -8,7 +8,7 @@ source(here::here("general-scripts", "template-data", "qa_functions.R"))
 
 # Setup ####
 
-dataset_identifier <- "Flo_2"
+dataset_identifier <- "Keen_1"
 
 tracking_sheet <- box_read_excel("1426404123641")
 
@@ -53,17 +53,28 @@ all(
 # If either is FALSE, uncomment this:
 # error_report[1, "bad_dim"] <- 1
 
-# ## Check if there are missing fields ####
-# 
-# required_fields_sheet1 <- c(1, 2, 3, 4, 5, 7, 8, 9, 10, 11)
-# check_fields(sheet1, required_fields_sheet1)
-# 
-# # If either is false, uncomment this:
-# # error_report[1, "missing_required_fields"] <- 1
-
 ## Set column types ####
 
 str(sheet1)
+
+if(dataset_identifier == "Keen_1") {
+  
+  to_decimal_degrees <- function(x) {
+    lat_deg = as.numeric(substr(x, 1,2))
+    lat_min = as.numeric(substr(x, 4,5))
+    lat_sec = as.numeric(substr(x, 7,8))
+    
+    sum(lat_deg, lat_min / 60, lat_sec / 3600)
+  }
+  
+  sheet1 <- sheet1 |>
+    mutate(`Latitude (WGS84)` = to_decimal_degrees(`Latitude (WGS84)`),
+           `Longitude (WGS84)` = to_decimal_degrees(`Longitude (WGS84)`))
+  
+  str(sheet1)
+  
+}
+
 sheet1_cols_typed <- sheet1 |>  
   mutate(
     across(all_of(c(1,2,3,4,5,6,7,12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
@@ -74,7 +85,7 @@ sheet1_cols_typed <- sheet1 |>
 str(sheet1_cols_typed)
 
 # If there are errors, uncomment this:
-# error_report[1, "data_typing_error"] <- 1
+error_report[1, "data_typing_error"] <- 1
 
 ## Store typed data ####
 
@@ -134,7 +145,9 @@ all(
 str(sheet2)
 
 sheet2_cols_typed <- sheet2 |>
-  mutate(`Is it available?` = as.numeric(`Is it available?`)) |>
+  mutate(`Is it available?` = ifelse(`Is it available?` %in% c("TRUE", "FALSE"),
+                                     as.logical(`Is it available?`),
+                                     as.numeric(`Is it available?`))) |>
   mutate(`Is it available?` = as.logical(`Is it available?`),
          across(all_of(c(1,3,4,5,6,9)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
          across(all_of(c(7,8)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x))))
@@ -185,9 +198,11 @@ all(
 str(sheet3)
 
 sheet3_cols_typed <- sheet3 |>
-  mutate(across(c("Availability", "Publication"), as.numeric)) |>
+  mutate(across(c("Availability", "Publication"), (\(x) ifelse(x %in% c("TRUE", "FALSE", NA),
+                                                               as.logical(x),
+                                                               as.numeric(x))))) |>
   mutate(across(c("Availability", "Publication"), as.logical)) |>
-  mutate(across(all_of(c(1, 3:8)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))))
+  mutate(across(all_of(c(1, 4:8)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))))
 
 str(sheet3_cols_typed)
 
@@ -209,7 +224,7 @@ box_write(
 ## Check that there are the right number/names rows and columns ####
 
 sheet4 <- box_read_excel(raw_box_id, sheet = 5,
-                          col_types = "text")[-1, 2:4] |>
+                         col_types = "text")[-1, 2:4] |>
   filter(if_any(everything(), ~ !is.na(.)))
 
 nrow(sheet4) > 0
@@ -365,6 +380,10 @@ sheet6_cols_typed <-  sheet6 |>
     across(all_of(c(2)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x))))    
   )
 
+if(dataset_identifier == "Keen_1") {
+  sheet6_cols_typed <- sheet6_cols_typed |>
+    mutate(Remarks = gsub("\\*\\*", "", Remarks))
+}
 
 str(sheet6_cols_typed)
 
@@ -409,6 +428,29 @@ sheet7 <-
   )[-c(1:2),]  |>
   filter(if_any(everything(), ~ !is.na(.)))
 
+if(dataset_identifier == "Keen_1") {
+  
+  sheet7 <-
+    box_read_excel(
+      raw_box_id,
+      sheet = 8,
+      col_names = colnames(sheet7_cols),
+      col_types = c(
+        "skip",
+        "text",
+        "text",
+        "date",
+        "date",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text"
+      )
+    )[-c(1:2),]  |>
+    filter(if_any(everything(), ~ !is.na(.)))
+}
+
 
 # These warnings are expected:
 # Warning messages:
@@ -417,7 +459,7 @@ sheet7 <-
 
 ## Check that there are the right number/names rows and columns ####
 
-if (sheet2$`Is it available?`[1] == 1) {
+if (sheet2_cols_typed$`Is it available?`[1] == TRUE) {
   nrow(sheet7) > 0
 } else {
   nrow(sheet7) == 0
@@ -587,8 +629,8 @@ sheet9 <-
       "skip",
       "text",
       "text",
-      "date",
       "text",
+      "date",
       "text",
       "text",
       "text",
@@ -605,11 +647,40 @@ sheet9 <-
   )[-c(1:2),] |>
   filter(if_any(everything(), ~ !is.na(.)))
 
+if(dataset_identifier == "Keen_1") {
+  
+  sheet9 <-
+    box_read_excel(
+      raw_box_id,
+      sheet = 10,
+      col_names = colnames(sheet9_cols),
+      col_types = c(
+        "skip",
+        "text",
+        "text",
+        "date",
+        "date",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text"
+      )
+    )[-c(1:2),] |>
+    filter(if_any(everything(), ~ !is.na(.)))
+}
 
 
 ## Check that there are the right number/names rows and columns ####
 
-if (sum(sheet2$`Is it available?`[3:6] == 1) > 0) {
+if (sum(sheet2_cols_typed$`Is it available?`[3:6] == TRUE) > 0) {
   nrow(sheet9) > 0
 } else {
   nrow(sheet9) == 0
@@ -663,7 +734,8 @@ sheet9_cols_typed <-  sheet9 |>
   across(all_of(c(5:16)), (\(x) ifelse(
     is.na(x), NA_real_, as.numeric(x)
   )))) |>
-  mutate(Date = as.character(Date))
+  mutate(Date = as.character(Date),
+         Time = format(Time, "%H:%M:%S"))
 
 str(sheet9_cols_typed)
 
@@ -712,7 +784,7 @@ sheet10 <-
 
 ## Check that there are the right number/names rows and columns ####
 
-if (sum(sheet2$`Is it available?`[7:14] == 1) > 0) {
+if (sum(sheet2_cols_typed$`Is it available?`[7:14] == TRUE) > 0) {
   nrow(sheet10) > 0
 } else {
   nrow(sheet10) == 0
@@ -785,6 +857,6 @@ tally_sheet <- read.csv(here::here("dataset-scripts", "01_copy_sheets_and_check_
 tally_sheet <- rbind(tally_sheet,
                      data.frame(dataset_identifier = dataset_identifier,
                                 date = Sys.Date(),
-                                custom_changes = F))
+                                custom_changes = T))
 write.csv(tally_sheet, here::here("dataset-scripts", "01_copy_sheets_and_check_types_tally.csv"), row.names = F)
 
