@@ -6,7 +6,7 @@ source(here::here("general-scripts", "box_auth.R"))
 
 # Setup ####
 
-dataset_identifier <- "Keen_1"
+dataset_identifier <- "Flo_1"
 
 tracking_sheet <- box_read_excel("1426404123641")
 
@@ -31,9 +31,13 @@ if(!(all(qa_file_names %in% qa_files$name))) {
 
 # Load files #### 
 
-all_sheets <- lapply(qa_files$id, box_read_csv)
+expected_sheet_classes <- readRDS(here::here("checks", "expected_sheet_classes.Rds"))
 
-names(all_sheets) <- qa_files$sheet
+all_sheets <- purrr::map2(qa_files$id,
+                          expected_sheet_classes,
+                          .f = \(x, y) box_read_csv(file_id = x,
+                                                    colClasses = y)) 
+names(all_sheets) = qa_files$sheet
 
 # Check dims ####
 
@@ -43,7 +47,6 @@ get_sheet_dims <- function(sheet) {
              n_cols = ncol(sheet))
   
 }
-
 
 expected_sheet_dims <- read.csv(here::here("checks", "expected_sheet_dims.csv"))
 
@@ -61,30 +64,3 @@ if(sum(sheet_dims$rows_ok) != 10) {
 if(sum(sheet_dims$cols_ok) != 10){
   message("Problem with ncol!")
 }
-
-
-
-
-
-# Classes #### 
-
-get_sheet_types <- function(sheet) {
-  sapply(sheet, class)
-}
-
-sheet_classes <- lapply(all_sheets, get_sheet_types)
-
-sheet_classes$sheet1[12] <- "character"
-sheet_classes$sheet1[6] <- "character"
-sheet_classes$sheet2[5] <- "character"
-sheet_classes$sheet2[7:8] <- "numeric"
-sheet_classes$sheet2[9] <- "character"
-sheet_classes$sheet3[2:3] <- "logical"
-sheet_classes$sheet3[4:8] <- "character"
-
-# Pick up here setting the expected classes for the sheets
-# Then save those as an object
-# Then create a check loading each .csv with the types set and check for errors
-
-sheet_classed <- box_read_csv(qa_files$id[1], colClasses = sheet_classes$sheet1)
-str(sheet_classed)
