@@ -21,7 +21,9 @@ qa_box_folder_id <-
 
 qa_files <- as.data.frame(box_ls(qa_box_folder_id)) |>
   filter(!grepl(".xlsx", name)) |>
-  mutate(sheet = gsub(".csv", "", name))
+  mutate(sheet = gsub(".csv", "", name),
+         file_order = c(1, 10, 2:9)) |>
+  arrange(file_order)
 
 qa_file_names <- paste0("sheet", 1:10, ".csv")
 
@@ -63,4 +65,28 @@ if(sum(sheet_dims$rows_ok) != 10) {
 
 if(sum(sheet_dims$cols_ok) != 10){
   message("Problem with ncol!")
+}
+
+# Check classes #### 
+
+get_col_classes <- function(x) {
+  sapply(x, class)
+}
+
+sheet_classes <- lapply(all_sheets, get_col_classes) 
+
+compare_sheet_classes <- function(expected_classes, actual_classes) {
+  not_char <- which(actual_classes[expected_classes$character] != "character")
+  not_int <- which(actual_classes[expected_classes$integer] != "integer")
+  not_num <- which(actual_classes[expected_classes$numeric] != "numeric")
+  
+  return(c(not_char, not_int, not_num))
+}
+
+all_compares <- purrr::map2(expected_sheet_classes,
+                            sheet_classes,
+                          .f = compare_sheet_classes)
+
+if(any(all_compares != 0)) {
+  print("Col classes error!")
 }

@@ -12,6 +12,7 @@ sheet_classes$sheet2 <- list(character = c(1, 3:6, 9),
                              numeric = 7:8) 
 sheet_classes$sheet3 <- list(character = c(1,4:8),
                              logical = 2:3) 
+sheet_classes$sheet4 <- list(character = c(1:3))
 sheet_classes$sheet5 <- list(character= 1:12)
 sheet_classes$sheet6 <- list(character = c(1, 3:8, 12),
                              integer = 2,
