@@ -3,6 +3,7 @@ library(dplyr)
 
 source(here::here("general-scripts", "box_auth.R"))
 
+error_list <- vector(mode = "character")
 
 # Setup ####
 
@@ -21,6 +22,7 @@ qa_box_folder_id <-
 
 qa_files <- as.data.frame(box_ls(qa_box_folder_id)) |>
   filter(!grepl(".xlsx", name)) |>
+  filter(!grepl("error", name)) |>
   mutate(sheet = gsub(".csv", "", name),
          file_order = c(1, 10, 2:9)) |>
   arrange(file_order)
@@ -28,7 +30,7 @@ qa_files <- as.data.frame(box_ls(qa_box_folder_id)) |>
 qa_file_names <- paste0("sheet", 1:10, ".csv")
 
 if(!(all(qa_file_names %in% qa_files$name))) {
-  message("Cannot find .csvs on box!")
+  error_list <- c(error_list, "Cannot find .csvs on box")
 }
 
 # Load files #### 
@@ -60,11 +62,11 @@ sheet_dims <- lapply(all_sheets, get_sheet_dims) |>
          cols_ok = n_cols == expected_cols)
 
 if(sum(sheet_dims$rows_ok) != 10) {
-  message("Problem with nrow!")
+  error_list <- c(error_list, "Problem with nrow")
 }
 
 if(sum(sheet_dims$cols_ok) != 10){
-  message("Problem with ncol!")
+  error_list <- c(error_list, "Problem with ncol")
 }
 
 # Check classes #### 
@@ -86,7 +88,22 @@ compare_sheet_classes <- function(expected_classes, actual_classes) {
 all_compares <- purrr::map2(expected_sheet_classes,
                             sheet_classes,
                           .f = compare_sheet_classes)
+all_compares_lengths <- lapply(all_compares, FUN = length) |> unlist()
 
-if(any(all_compares != 0)) {
-  print("Col classes error!")
+if(any(all_compares_lengths != 0)) {
+  error_list <- c(error_list, "Col classes error")
 }
+
+# Summarize errors #### 
+
+if(length(error_list) == 0) {
+  error_list = "All good!"
+}
+
+error_df <- data.frame(
+  dataset_identifier  = dataset_identifier,
+  qa_box_folder_id = qa_box_folder_id,
+  errors = error_list
+)
+
+box_write(error_df, paste0(dataset_identifier, "_errors_01.csv"), dir_id = qa_box_folder_id)
