@@ -21,7 +21,7 @@ qa_box_folder_id <-
 # Sheet 1. Study and site information ####
 
 sheet1 <- box_read_excel(raw_box_id, sheet = 2,
-                         col_types = "text")[2,-1]
+                         col_types = "text")[2, -1]
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -49,47 +49,34 @@ all(
 str(sheet1)
 
 
-  to_decimal_degrees <- function(x) {
-    lat_deg = as.numeric(substr(x, 1,2))
-    lat_min = as.numeric(substr(x, 4,5))
-    lat_sec = as.numeric(substr(x, 7,8))
-    
-    sum(lat_deg, lat_min / 60, lat_sec / 3600)
-  }
+to_decimal_degrees <- function(x) {
+  lat_deg = as.numeric(substr(x, 1, 2))
+  lat_min = as.numeric(substr(x, 4, 5))
+  lat_sec = as.numeric(substr(x, 7, 8))
   
-  sheet1 <- sheet1 |>
-    mutate(`Latitude (WGS84)` = to_decimal_degrees(`Latitude (WGS84)`),
-           `Longitude (WGS84)` = to_decimal_degrees(`Longitude (WGS84)`))
-  
-  str(sheet1)
-  
-# 
-# 
-# if(dataset_identifier == "Johnson_1") {
-#   
-#   to_decimal_degrees <- function(x) {
-#     lat_deg = as.numeric(substr(x, 1,2))
-#     lat_min = as.numeric(substr(x, 4,5))
-#     lat_sec = as.numeric(substr(x, 8,9))
-#     
-#     sum(lat_deg, lat_min / 60, lat_sec / 3600)
-#   }
-#   
-#   sheet1 <- sheet1 |>
-#     mutate(`Latitude (WGS84)` = to_decimal_degrees(`Latitude (WGS84)`),
-#            `Longitude (WGS84)` = to_decimal_degrees(`Longitude (WGS84)`))
-#   
-#   str(sheet1)
-#   
-# }
+  sum(lat_deg, lat_min / 60, lat_sec / 3600)
+}
 
-
-sheet1_cols_typed <- sheet1 |>  
+sheet1 <- sheet1 |>
   mutate(
-    across(all_of(c(1,2,3,4,5,6,7,12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-    across(all_of(c(8,9)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x)))),
-    across(all_of(c(10,11)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))
+    `Latitude (WGS84)` = to_decimal_degrees(`Latitude (WGS84)`),
+    `Longitude (WGS84)` = to_decimal_degrees(`Longitude (WGS84)`)
   )
+
+str(sheet1)
+
+
+
+sheet1_cols_typed <- sheet1 |>
+  mutate(across(all_of(c(1, 2, 3, 4, 5, 6, 7, 12)), (
+    \(x) ifelse(is.na(x), NA_character_, as.character(x))
+  )),
+  across(all_of(c(8, 9)), (
+    \(x) ifelse(is.na(x), NA_integer_, as.integer(x))
+  )),
+  across(all_of(c(10, 11)), (\(x) ifelse(
+    is.na(x), NA_real_, as.numeric(x)
+  ))))
 
 str(sheet1_cols_typed)
 
@@ -105,7 +92,7 @@ box_write(
 # Sheet 2. Data description ####
 
 sheet2 <- box_read_excel(raw_box_id, sheet = 3,
-                         col_types = "text")[-1,-1]
+                         col_types = "text")[-1, -1]
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -131,13 +118,18 @@ all(
 str(sheet2)
 
 sheet2_cols_typed <- sheet2 |>
-  mutate(`Is it available?` = ifelse(`Is it available?` %in% c("TRUE", "FALSE"),
-                                     as.logical(`Is it available?`),
-                                     as.numeric(`Is it available?`))) |>
+  mutate(`Is it available?` = ifelse(
+    `Is it available?` %in% c("TRUE", "FALSE"),
+    as.logical(`Is it available?`),
+    as.numeric(`Is it available?`)
+  )) |>
   mutate(`Is it available?` = as.logical(`Is it available?`),
-         across(all_of(c(1,3,4,5,6,9)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-         across(all_of(c(7,8)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))
-  )
+         across(all_of(c(1, 3, 4, 5, 6, 9)), (
+           \(x) ifelse(is.na(x), NA_character_, as.character(x))
+         )),
+         across(all_of(c(7, 8)), (\(x) ifelse(
+           is.na(x), NA_real_, as.numeric(x)
+         ))))
 
 str(sheet2_cols_typed)
 
@@ -154,7 +146,7 @@ box_write(
 # Sheet 3. Additional data availability ####
 
 sheet3 <- box_read_excel(raw_box_id, sheet = 4,
-                         col_types = "text")[-1,-1]
+                         col_types = "text")[-1, -1]
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -179,11 +171,15 @@ all(
 str(sheet3)
 
 sheet3_cols_typed <- sheet3 |>
-  mutate(across(c("Availability", "Publication"), (\(x) ifelse(x %in% c("TRUE", "FALSE", NA),
-                                                               as.logical(x),
-                                                               as.numeric(x))))) |>
+  mutate(across(c("Availability", "Publication"), (
+    \(x) ifelse(x %in% c("TRUE", "FALSE", NA),
+                as.logical(x),
+                as.numeric(x))
+  ))) |>
   mutate(across(c("Availability", "Publication"), as.logical)) |>
-  mutate(across(all_of(c(1, 4:8)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))))
+  mutate(across(all_of(c(1, 4:8)), (
+    \(x) ifelse(is.na(x), NA_character_, as.character(x))
+  )))
 
 str(sheet3_cols_typed)
 
@@ -213,10 +209,10 @@ all(colnames(sheet4) == c('Level of treatment', 'Treatment ID', 'Treatment descr
 ## Set column types ####
 str(sheet4)
 
-sheet4_cols_typed <- sheet4 |>  
-  mutate(
-    across(everything(), (\(x) ifelse(is.na(x), NA_character_, as.character(x))))
-  )
+sheet4_cols_typed <- sheet4 |>
+  mutate(across(everything(), (
+    \(x) ifelse(is.na(x), NA_character_, as.character(x))
+  )))
 
 str(sheet4_cols_typed)
 
@@ -234,7 +230,7 @@ box_write(
 # Sheet 5. Plots ####
 
 sheet5 <-  box_read_excel(raw_box_id, sheet = 6,
-                          col_types = "text")[-1, -1]|>
+                          col_types = "text")[-1,-1] |>
   filter(if_any(everything(), ~ !is.na(.)))
 
 ## Check that there are the right number/names rows and columns ####
@@ -262,11 +258,13 @@ all(
 
 str(sheet5)
 
-sheet5_cols_typed <-  sheet5 |>  
-  mutate(
-    across(all_of(c(1, 2, 3, 4, 5, 6, 7, 8, 12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-    across(all_of(c(9, 10, 11)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))    
-  )
+sheet5_cols_typed <-  sheet5 |>
+  mutate(across(all_of(c(1, 2, 3, 4, 5, 6, 7, 8, 12)), (
+    \(x) ifelse(is.na(x), NA_character_, as.character(x))
+  )),
+  across(all_of(c(9, 10, 11)), (\(x) ifelse(
+    is.na(x), NA_real_, as.numeric(x)
+  ))))
 
 str(sheet5_cols_typed)
 
@@ -283,7 +281,7 @@ box_write(
 # Sheet 6. Plants ####
 
 sheet6 <- box_read_excel(raw_box_id, sheet = 7,
-                         col_types = "text")[-1, -1]
+                         col_types = "text")[-1,-1]
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -310,12 +308,16 @@ all(
 
 str(sheet6)
 
-sheet6_cols_typed <-  sheet6 |>  
-  mutate(
-    across(all_of(c(1, 3, 4, 5, 6, 7, 8, 12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-    across(all_of(c(9, 10, 11)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x)))),
-    across(all_of(c(2)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x))))    
-  )
+sheet6_cols_typed <-  sheet6 |>
+  mutate(across(all_of(c(1, 3, 4, 5, 6, 7, 8, 12)), (
+    \(x) ifelse(is.na(x), NA_character_, as.character(x))
+  )),
+  across(all_of(c(9, 10, 11)), (\(x) ifelse(
+    is.na(x), NA_real_, as.numeric(x)
+  ))),
+  across(all_of(c(2)), (
+    \(x) ifelse(is.na(x), NA_integer_, as.integer(x))
+  )))
 
 str(sheet6_cols_typed)
 
@@ -335,72 +337,28 @@ box_write(
 sheet7_cols <- box_read_excel(raw_box_id,
                               sheet = 8,
                               n_max = 0,
-                              col_types = "text")[,-1]
+                              col_types = "text")[, -1]
 
-# sheet7 <-
-#   box_read_excel(
-#     raw_box_id,
-#     sheet = 8,
-#     col_names = colnames(sheet7_cols),
-#     col_types = c(
-#       "skip",
-#       "text",
-#       "text",
-#       "text",
-#       "date",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text"
-#     )
-#   )[-c(1:2),]  |>
-#   filter(if_any(everything(), ~ !is.na(.)))
 
-  
-  sheet7 <-
-    box_read_excel(
-      raw_box_id,
-      sheet = 8,
-      col_names = colnames(sheet7_cols),
-      col_types = c(
-        "skip",
-        "text",
-        "text",
-        "date",
-        "date",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text"
-      )
-    )[-c(1:2),]  |>
-    filter(if_any(everything(), ~ !is.na(.)))
-# 
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   
-#   sheet7 <-
-#     box_read_excel(
-#       raw_box_id,
-#       sheet = 8,
-#       col_names = colnames(sheet7_cols),
-#       col_types = c(
-#         "skip",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text"
-#       )
-#     )[-c(1:2),]  |>
-#     filter(if_any(everything(), ~ !is.na(.)))
-# }
+sheet7 <-
+  box_read_excel(
+    raw_box_id,
+    sheet = 8,
+    col_names = colnames(sheet7_cols),
+    col_types = c(
+      "skip",
+      "text",
+      "text",
+      "date",
+      "date",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text"
+    )
+  )[-c(1:2), ]  |>
+  filter(if_any(everything(), ~ !is.na(.)))
 
 
 # These warnings are expected:
@@ -434,16 +392,12 @@ all(
 ## Set column types ####
 
 str(sheet7)
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   sheet7 <-  sheet7 |>
-#     mutate(Date = as.Date(Date, format = "%Y%m%d")) |>
-#     mutate(Time = as.POSIXct(Time, format = "%H:%M:%S"))
-# }
 
 sheet7_cols_typed <-  sheet7 |>
-  mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA_character_, x)))) |>
-  mutate(across(c(1,2,5,6), as.character)) |>
+  mutate(across(where(is.character), (\(x) ifelse(
+    x == "NA", NA_character_, x
+  )))) |>
+  mutate(across(c(1, 2, 5, 6), as.character)) |>
   mutate(across(all_of(c(7, 8, 9)), (\(x) ifelse(
     is.na(x), NA_real_, as.numeric(x)
   )))) |>
@@ -466,7 +420,7 @@ box_write(
 
 sheet8_cols <- box_read_excel(raw_box_id,
                               sheet = 9,
-                              n_max = 0)[,-1]
+                              n_max = 0)[, -1]
 
 sheet8 <-
   box_read_excel(
@@ -485,7 +439,7 @@ sheet8 <-
       "text",
       "text"
     )
-  )[-c(1:2),]  |>
+  )[-c(1:2), ]  |>
   filter(if_any(everything(), ~ !is.na(.)))
 
 
@@ -544,95 +498,36 @@ box_write(
 sheet9_cols <- box_read_excel(raw_box_id,
                               sheet = 10,
                               n_max = 0,
-                              col_types = "text")[,-1]
-# 
-# sheet9 <-
-#   box_read_excel(
-#     raw_box_id,
-#     sheet = 10,
-#     col_names = colnames(sheet9_cols),
-#     col_types = c(
-#       "skip",
-#       "text",
-#       "text",
-#       "text",
-#       "date",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text"
-#     )
-#   )[-c(1:2),] |>
-#   filter(if_any(everything(), ~ !is.na(.)))
+                              col_types = "text")[, -1]
 
 
-  
-  sheet9 <-
-    box_read_excel(
-      raw_box_id,
-      sheet = 10,
-      col_names = colnames(sheet9_cols),
-      col_types = c(
-        "skip",
-        "text",
-        "text",
-        "date",
-        "date",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text"
-      )
-    )[-c(1:2),] |>
-    filter(if_any(everything(), ~ !is.na(.)))
-# 
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   
-#   sheet9 <-
-#     box_read_excel(
-#       raw_box_id,
-#       sheet = 10,
-#       col_names = colnames(sheet9_cols),
-#       col_types = c(
-#         "skip",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text"
-#       )
-#     )[-c(1:2),] |>
-#     filter(if_any(everything(), ~ !is.na(.)))
-# }
-# 
+sheet9 <-
+  box_read_excel(
+    raw_box_id,
+    sheet = 10,
+    col_names = colnames(sheet9_cols),
+    col_types = c(
+      "skip",
+      "text",
+      "text",
+      "date",
+      "date",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text"
+    )
+  )[-c(1:2), ] |>
+  filter(if_any(everything(), ~ !is.na(.)))
+
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -669,12 +564,6 @@ all(
 str(sheet9)
 
 
-# if(dataset_identifier == "Bohrer_1") {
-#   sheet9 <-  sheet9 |>
-#     mutate(Date = as.Date(Date, format = "%Y%m%d")) |>
-#     mutate(Time = as.POSIXct(Time, format = "%H:%M:%S"))
-# }
-
 sheet9_cols_typed <-  sheet9 |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
   mutate(across(all_of(c(1, 2)), (
@@ -704,7 +593,7 @@ box_write(
 sheet10_cols <- box_read_excel(raw_box_id,
                                sheet = 11,
                                n_max = 0,
-                               col_types = "text")[,-1]
+                               col_types = "text")[, -1]
 
 sheet10 <-
   box_read_excel(
@@ -724,56 +613,9 @@ sheet10 <-
       "text",
       "text"
     )
-  )[-c(1:2),] |>
+  )[-c(1:2), ] |>
   filter(if_any(everything(), ~ !is.na(.)))
 
-# if(dataset_identifier == "Sturchio_1") {
-#   
-#   sheet10_date1 <- box_read_excel(
-#     raw_box_id,
-#     sheet = 11,
-#     col_names = c("Date"),
-#     col_types = c(
-#       "skip",
-#       "text",
-#       "skip",
-#       "skip",
-#       "skip",
-#       "skip",
-#       "skip",
-#       "skip"
-#     ),
-#     skip = 2,
-#     n_max = 1
-#   ) |>
-#     mutate(Date = as.Date(Date, format = "%Y%m%d"))
-#   
-#   sheet10$Date[1] <- sheet10_date1$Date[1]
-# }
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   
-#   sheet10 <-
-#     box_read_excel(
-#       raw_box_id,
-#       sheet = 11,
-#       col_names = colnames(sheet10_cols),
-#       col_types = c(
-#         "skip",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text"
-#       )
-#     )[-c(1:2),] |>
-#     filter(if_any(everything(), ~ !is.na(.)))
-# }
 
 
 ## Check that there are the right number/names rows and columns ####
@@ -804,16 +646,6 @@ all(
 
 str(sheet10)
 
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   sheet10 <-  sheet10 |>
-#     mutate(Date = as.Date(Date, format = "%Y%m%d"))
-# }
-# if(dataset_identifier == "Sturchio_1") {
-#   sheet10 <-  sheet10 |>
-#     mutate(Time = format(Time, format = "%H:%M:%S"))
-# }
-
 
 sheet10_cols_typed <-  sheet10 |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
@@ -834,5 +666,3 @@ box_write(
   write_fun = readr::write_excel_csv,
   dir_id = qa_box_folder_id
 )
-
-

@@ -8,7 +8,7 @@ source(here::here("general-scripts", "template-data", "qa_functions.R"))
 
 # Setup ####
 
-dataset_identifier <- "Flo_1"
+dataset_identifier <- "Bohrer_1"
 
 tracking_sheet <- box_read_excel("1426404123641")
 
@@ -17,6 +17,7 @@ this_dataset_row <-
 raw_box_id <- tracking_sheet[this_dataset_row, "raw_box_file_ID"]
 qa_box_folder_id <-
   tracking_sheet[this_dataset_row, "qa_box_folder_ID"]
+
 
 # Sheet 1. Study and site information ####
 
@@ -44,19 +45,14 @@ all(
   )
 )
 
+## Check if there are missing fields ####
+
+required_fields_sheet1 <- c(1, 2, 3, 4, 5, 7, 8, 9, 10, 11)
+check_fields(sheet1, required_fields_sheet1)
+
 ## Set column types ####
 
-str(sheet1)
-
-sheet1_cols_typed <- sheet1 |>  
-  mutate(
-    across(all_of(c(1,2,3,4,5,6,7,12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-    across(all_of(c(8,9)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x)))),
-    across(all_of(c(10,11)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))
-  )
-
-str(sheet1_cols_typed)
-
+sheet1_cols_typed <- set_sheet1_types(sheet1)
 
 ## Store typed data ####
 
@@ -90,22 +86,27 @@ all(
   )
 )
 
+## Check for missing required fields ####
+
+# Missing data availability specification
+anyNA(sheet2$`Is it available?`)
+
+# For data specified as available...
+
+sheet2_available <- sheet2 |>
+  filter(`Is it available?` == 1)
+
+anyNA(sheet2_available$Units)
+
+anyNA(sheet2_available |>
+        filter(grepl("potential", `Data variable`)) |>
+        select(`Methodology or Instrument`))
 
 ## Set column types ####
 
+sheet2_cols_typed <- set_sheet2_types(sheet2)
 str(sheet2)
-
-sheet2_cols_typed <- sheet2 |>
-  mutate(`Is it available?` = ifelse(`Is it available?` %in% c("TRUE", "FALSE"),
-                                     as.logical(`Is it available?`),
-                                     as.numeric(`Is it available?`))) |>
-  mutate(`Is it available?` = as.logical(`Is it available?`),
-         across(all_of(c(1,3,4,5,6,9)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-         across(all_of(c(7,8)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))
-  )
-
 str(sheet2_cols_typed)
-
 
 ## Store typed data ####
 
@@ -139,15 +140,19 @@ all(
   )
 )
 
+
+## Check for missing required fields ####
+
+# Missing data availability specification
+anyNA(sheet3$Availability)
+
+sheet3 <- sheet3 |>
+  mutate(Availability = ifelse(is.na(Availability), F, Availability))
+
+
 ## Set column types ####
 
-str(sheet3)
-
-sheet3_cols_typed <- sheet3 |>
-  mutate(across(c("Availability", "Publication"), (\(x) ifelse(x == "0", FALSE, ifelse(x == "1", TRUE, NA))))) |>
-  mutate(across(all_of(c(1, 4:8)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))))
-
-str(sheet3_cols_typed)
+sheet3_cols_typed <- set_sheet3_types(sheet3)
 
 ## Store typed data ####
 
@@ -163,25 +168,28 @@ box_write(
 
 ## Check that there are the right number/names rows and columns ####
 
-sheet4 <- box_read_excel(raw_box_id, sheet = 5,
-                         col_types = "text")[-1, 2:4] |>
-  filter(if_any(everything(), ~ !is.na(.)))
+sheet4 <-  box_read_excel(raw_box_id, sheet = 5,
+                          col_types = "text")[-1, 2:4]
+
 
 nrow(sheet4) > 0
 
 all(colnames(sheet4) == c('Level of treatment', 'Treatment ID', 'Treatment description'))
 
 
+## Check for missing required fields ####
+
+# Missing data availability specification
+
+sheet4_truevals <- sheet4 |>
+  filter(if_any(everything(), ~ !is.na(.)))
+
+anyNA(sheet4_truevals$`Level of treatment`)
+anyNA(sheet4_truevals$`Treatment ID`)
+
 ## Set column types ####
-str(sheet4)
 
-sheet4_cols_typed <- sheet4 |>  
-  mutate(
-    across(everything(), (\(x) ifelse(is.na(x), NA_character_, as.character(x))))
-  )
-
-str(sheet4_cols_typed)
-
+sheet4_cols_typed <- set_sheet4_types(sheet4_truevals)
 
 ## Store typed data ####
 
@@ -193,11 +201,10 @@ box_write(
 )
 
 
-# Sheet 5. Plots ####
+# Sheet 5. Plots START HERE ####
 
 sheet5 <-  box_read_excel(raw_box_id, sheet = 6,
-                          col_types = "text")[-1, -1]|>
-  filter(if_any(everything(), ~ !is.na(.)))
+                          col_types = "text")[-1, -1]
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -220,17 +227,15 @@ all(
   )
 )
 
+## Check for missing required fields ####
+
+anyNA(sheet5$`Plot ID`)
+anyNA(sheet5$`Treatment ID`)
+
+
 ## Set column types ####
 
-str(sheet5)
-
-sheet5_cols_typed <-  sheet5 |>  
-  mutate(
-    across(all_of(c(1, 2, 3, 4, 5, 6, 7, 8, 12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-    across(all_of(c(9, 10, 11)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))    
-  )
-
-str(sheet5_cols_typed)
+sheet5_cols_typed <- set_sheet5_types(sheet5)
 
 ## Store typed data ####
 
@@ -268,27 +273,16 @@ all(
   )
 )
 
+
+## Check for missing required fields ####
+
+required_fields_sheet6 <- c(1, 2, 3, 4, 5, 6, 7)
+
+check_fields(sheet6, required_fields = required_fields_sheet6)
+
 ## Set column types ####
 
-str(sheet6)
-
-sheet6_cols_typed <-  sheet6 |>  
-  mutate(
-    across(all_of(c(1, 3, 4, 5, 6, 7, 8, 12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-    across(all_of(c(9, 10, 11)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x)))),
-    across(all_of(c(2)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x))))    
-  )
-
-if(dataset_identifier == "Keen_1") {
-  sheet6_cols_typed <- sheet6_cols_typed |>
-    mutate(Remarks = gsub("\\*\\*", "", Remarks))
-}
-
-str(sheet6_cols_typed)
-
-# If there are errors, uncomment this:
-# error_report[6, "data_typing_error"] <- 1
-
+sheet6_cols_typed <- set_sheet6_types(sheet6)
 
 ## Store typed data ####
 
@@ -324,9 +318,7 @@ sheet7 <-
       "text",
       "text"
     )
-  )[-c(1:2),]  |>
-  filter(if_any(everything(), ~ !is.na(.)))
-
+  )[-c(1:2),]
 
 # These warnings are expected:
 # Warning messages:
@@ -335,14 +327,17 @@ sheet7 <-
 
 ## Check that there are the right number/names rows and columns ####
 
-if (sheet2_cols_typed$`Is it available?`[1] == TRUE) {
-  nrow(sheet7) > 0
+sheet7_truevals <- sheet7 |>
+  filter(if_any(everything(), ~ !is.na(.)))
+
+if (sheet2$`Is it available?`[1] == 1) {
+  nrow(sheet7_truevals) > 0
 } else {
-  nrow(sheet7) == 0
+  nrow(sheet7_truevals) == 0
 }
 
 all(
-  colnames(sheet7) == c(
+  colnames(sheet7_truevals) == c(
     'Individual_ID',
     'Plot_ID',
     'Date',
@@ -355,21 +350,27 @@ all(
   )
 )
 
+
+## Check for missing required fields ####
+
+if (sheet2$`Is it available?`[1] == 1) {
+  required_fields_sheet7 = c(1, 2, 3, 4, 5, 7)
+  check_fields(sheet7_truevals, required_fields_sheet7)
+  
+}
+
 ## Set column types ####
 
-str(sheet7)
-
-
-sheet7_cols_typed <-  sheet7 |>
-  mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA_character_, x)))) |>
-  mutate(across(c(1,2,5,6), as.character)) |>
-  mutate(across(all_of(c(7, 8, 9)), (\(x) ifelse(
+sheet7_cols_typed <-  sheet7_truevals |>
+  mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
+  mutate(across(all_of(c(1, 2, 5, 6)), (
+    \(x) ifelse(is.na(x), NA_character_, as.character(x))
+  )),
+  across(all_of(c(7, 8, 9)), (\(x) ifelse(
     is.na(x), NA_real_, as.numeric(x)
   )))) |>
   mutate(Date = as.Date(Date, format = "%Y%m%d")) |>
   mutate(Time = format(Time, "%H:%M:%S"))
-
-str(sheet7_cols_typed)
 
 ## Store typed data ####
 
@@ -403,20 +404,22 @@ sheet8 <-
       "text",
       "text"
     )
-  )[-c(1:2),]  |>
-  filter(if_any(everything(), ~ !is.na(.)))
+  )[-c(1:2),]
 
 
 ## Check that there are the right number/names rows and columns ####
 
+sheet8_truevals <- sheet8 |>
+  filter(if_any(everything(), ~ !is.na(.)))
+
 if (sheet2$`Is it available?`[2] == 1) {
-  nrow(sheet8) > 0
+  nrow(sheet8_truevals) > 0
 } else {
-  nrow(sheet8) == 0
+  nrow(sheet8_truevals) == 0
 }
 
 all(
-  colnames(sheet8) == c(
+  colnames(sheet8_truevals) == c(
     'Individual_ID',
     'Plot_ID',
     'Date',
@@ -429,11 +432,18 @@ all(
   )
 )
 
+## Check for missing required fields ####
+
+if (sheet2$`Is it available?`[2] == 1) {
+  required_fields_sheet8 = c(1, 2, 3, 4, 5, 7)
+  
+  check_fields(sheet8_truevals, required_fields_sheet8)
+}
+
+
 ## Set column types ####
 
-str(sheet8)
-
-sheet8_cols_typed <-  sheet8 |>
+sheet8_cols_typed <-  sheet8_truevals |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
   mutate(across(all_of(c(1, 2, 5, 6)), (
     \(x) ifelse(is.na(x), NA_character_, as.character(x))
@@ -443,8 +453,6 @@ sheet8_cols_typed <-  sheet8 |>
   )))) |>
   mutate(Date = as.Date(Date, format = "%Y%m%d")) |>
   mutate(Time = format(Time, "%H:%M:%S"))
-
-str(sheet8_cols_typed)
 
 ## Store typed data ####
 
@@ -471,8 +479,8 @@ sheet9 <-
       "skip",
       "text",
       "text",
-      "text",
       "date",
+      "text",
       "text",
       "text",
       "text",
@@ -486,17 +494,18 @@ sheet9 <-
       "text",
       "text"
     )
-  )[-c(1:2),] |>
-  filter(if_any(everything(), ~ !is.na(.)))
-
+  )[-c(1:2),]
 
 
 ## Check that there are the right number/names rows and columns ####
 
-if (sum(sheet2_cols_typed$`Is it available?`[3:6] == TRUE) > 0) {
-  nrow(sheet9) > 0
+sheet9_truevals <- sheet9 |>
+  filter(if_any(everything(), ~ !is.na(.)))
+
+if (sum(sheet2$`Is it available?`[3:6] == 1) > 0) {
+  nrow(sheet9_truevals) > 0
 } else {
-  nrow(sheet9) == 0
+  nrow(sheet9_truevals) == 0
 }
 
 all(
@@ -520,13 +529,19 @@ all(
   )
 )
 
+## Check for missing required fields ####
+
+# Missing data availability specification
+
+if (sum(sheet2$`Is it available?`[3:6] == 1) > 0) {
+  required_fields_sheet9 = c(2, 3, 4)
+  check_fields(sheet9_truevals, required_fields_sheet9)
+  
+}
+
 ## Set column types ####
 
-str(sheet9)
-
-
-
-sheet9_cols_typed <-  sheet9 |>
+sheet9_cols_typed <-  sheet9_truevals |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
   mutate(across(all_of(c(1, 2)), (
     \(x) ifelse(is.na(x), NA_character_, as.character(x))
@@ -534,10 +549,7 @@ sheet9_cols_typed <-  sheet9 |>
   across(all_of(c(5:16)), (\(x) ifelse(
     is.na(x), NA_real_, as.numeric(x)
   )))) |>
-  mutate(Date = as.character(Date),
-         Time = format(Time, "%H:%M:%S"))
-
-str(sheet9_cols_typed)
+  mutate(Date = as.character(Date))
 
 
 ## Store typed data ####
@@ -575,20 +587,21 @@ sheet10 <-
       "text",
       "text"
     )
-  )[-c(1:2),] |>
-  filter(if_any(everything(), ~ !is.na(.)))
+  )[-c(1:2),]
 
+sheet10_truevals <- sheet10 |>
+  filter(if_any(everything(), ~ !is.na(.)))
 
 ## Check that there are the right number/names rows and columns ####
 
-if (sum(sheet2_cols_typed$`Is it available?`[7:14] == TRUE) > 0) {
-  nrow(sheet10) > 0
+if (sum(sheet2$`Is it available?`[7:14] == 1) > 0) {
+  nrow(sheet10_truevals) > 0
 } else {
-  nrow(sheet10) == 0
+  nrow(sheet10_truevals) == 0
 }
 
 all(
-  colnames(sheet10) == c(
+  colnames(sheet10_truevals) == c(
     'Date',
     'Time',
     'Precipitation (mm)',
@@ -602,20 +615,25 @@ all(
   )
 )
 
+## Check for missing required fields ####
+
+# Missing data availability specification
+
+if (sum(sheet2$`Is it available?`[7:14] == 1) > 0) {
+  required_fields_sheet10 = c(1,2)
+  check_fields(sheet10_truevals, required_fields_sheet10)
+}
+
 ## Set column types ####
 
-str(sheet10)
-
-
-sheet10_cols_typed <-  sheet10 |>
+sheet10_cols_typed <-  sheet10_truevals |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
-  mutate(across(all_of(c(3:10)), (\(x) ifelse(
+  mutate(across(all_of(c(2:10)), (\(x) ifelse(
     is.na(x), NA_real_, as.numeric(x)
   )))) |>
   mutate(Date = as.character(Date),
          Time = as.character(Time))
 
-str(sheet10_cols_typed)
 
 ## Store typed data ####
 
@@ -625,4 +643,3 @@ box_write(
   write_fun = readr::write_excel_csv,
   dir_id = qa_box_folder_id
 )
-

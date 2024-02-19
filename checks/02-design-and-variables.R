@@ -7,7 +7,7 @@ error_list <- vector(mode = "character")
 
 # Setup ####
 
-dataset_identifier <- "Flo_1"
+dataset_identifier <- "Sturchio_1"
 
 tracking_sheet <- box_read_excel("1426404123641")
 
@@ -23,6 +23,7 @@ qa_box_folder_id <-
 qa_files <- as.data.frame(box_ls(qa_box_folder_id)) |>
   filter(!grepl(".xlsx", name)) |>
   filter(!grepl("error", name)) |>
+  filter(!grepl("changes.txt", name)) |>
   mutate(sheet = gsub(".csv", "", name),
          file_order = c(1, 10, 2:9)) |>
   arrange(file_order)
@@ -158,7 +159,7 @@ if (any(is.na(sheet6_required_cols))) {
 }
 
 if (any(!(
-  all_sheets$sheet6$Plot_Treatment_ID %in% all_sheets$sheet4$`Treatment ID`
+  all_sheets$sheet6$Plot_Treatment_ID %in% c(all_sheets$sheet4$`Treatment ID`, "No treatment")
 ))) {
   error_list <-
     c(error_list,
@@ -167,7 +168,7 @@ if (any(!(
 
 if (any(
   !(
-    all_sheets$sheet6$Individual_Treatment_ID %in% all_sheets$sheet4$`Treatment ID`
+    all_sheets$sheet6$Individual_Treatment_ID %in% c(all_sheets$sheet4$`Treatment ID`, "No treatment")
   )
 )) {
   error_list <-
@@ -389,6 +390,9 @@ if (nrow(sheet2_required_met) > 0) {
 
 if(length(error_list) == 0) {
   error_list = "All good!"
+  tracking_sheet[this_dataset_row, "completed_checks_2"] <- 1
+} else {
+  tracking_sheet[this_dataset_row, "completed_checks_2"] <- 2
 }
 
 error_df <- data.frame(
@@ -397,3 +401,7 @@ error_df <- data.frame(
   errors = error_list
 )
 box_write(error_df, paste0(dataset_identifier, "_errors_02.csv"), dir_id = qa_box_folder_id)
+
+# Update dataset tracking #### 
+
+box_write(tracking_sheet, "dataset_tracking.xlsx", "230431401206")

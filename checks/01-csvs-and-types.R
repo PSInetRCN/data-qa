@@ -7,7 +7,7 @@ error_list <- vector(mode = "character")
 
 # Setup ####
 
-dataset_identifier <- "Flo_1"
+dataset_identifier <- "Sturchio_1"
 
 tracking_sheet <- box_read_excel("1426404123641")
 
@@ -23,6 +23,7 @@ qa_box_folder_id <-
 qa_files <- as.data.frame(box_ls(qa_box_folder_id)) |>
   filter(!grepl(".xlsx", name)) |>
   filter(!grepl("error", name)) |>
+  filter(!grepl("changes.txt", name)) |>
   mutate(sheet = gsub(".csv", "", name),
          file_order = c(1, 10, 2:9)) |>
   arrange(file_order)
@@ -94,10 +95,13 @@ if(any(all_compares_lengths != 0)) {
   error_list <- c(error_list, "Col classes error")
 }
 
-# Summarize errors #### 
+# Summarize errors and update tracking#### 
 
 if(length(error_list) == 0) {
   error_list = "All good!"
+  tracking_sheet[this_dataset_row, "completed_checks_1"] <- 1
+} else {
+  tracking_sheet[this_dataset_row, "completed_checks_1"] <- 2
 }
 
 error_df <- data.frame(
@@ -107,3 +111,8 @@ error_df <- data.frame(
 )
 
 box_write(error_df, paste0(dataset_identifier, "_errors_01.csv"), dir_id = qa_box_folder_id)
+
+# Update dataset tracking #### 
+
+box_write(tracking_sheet, "dataset_tracking.xlsx", "230431401206")
+

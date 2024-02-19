@@ -68,26 +68,4 @@ tracking_data_updated <- tracking_data_updated |>
   filter(!is.na(qa_box_folder_ID)) |>
   bind_rows(needs_folders)
 
-# Create error report files #### 
-
-error_report <- box_read("1422883959952", sheet = 1)
-
-for(i in 1:nrow(tracking_data_updated)) {
-  
-  if(!is.na(tracking_data_updated$error_report_box_file_ID[i])) {
-    next
-  }
-  
-  write_output <- box_write(
-    error_report |>
-      mutate(dataset_name = tracking_data_updated$dataset_name[i],
-             raw_box_file_ID = tracking_data_updated$raw_box_file_ID[i]),
-    file_name = paste(tracking_data_updated$dataset_name[i], "error_report.xlsx", sep = "_"),
-    dir_id = tracking_data_updated$qa_box_folder_ID[i]
-  )
-  
-  tracking_data_updated$error_report_box_file_ID[i] <- write_output$id
-  tracking_data_updated$error_report_box_file_name[i] <- write_output$name
-}
-
 box_write(tracking_data_updated, "dataset_tracking.xlsx", "230431401206")
