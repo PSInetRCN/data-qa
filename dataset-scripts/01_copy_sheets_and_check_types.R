@@ -835,4 +835,12 @@ box_write(
   dir_id = qa_box_folder_id
 )
 
+## Store notes on changes #### 
+# 
+# Sturchio_notes <- data.frame(Changes = "Plot treatments were all assigned to Control and Individual treatments were assigned to No treatment. 
+#                              Individuals designated as '1,2,3' were split out into separate individuals 1 2 and 3, each representing 1 individual.
+#                              Water potential SDs all set to 0 and n's all set to 1.")
+# 
+# box_write(Sturchio_notes, "changes.txt",  dir_id = qa_box_folder_id)
+
 
