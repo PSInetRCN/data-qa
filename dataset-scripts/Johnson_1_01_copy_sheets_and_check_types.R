@@ -318,8 +318,8 @@ sheet6_cols_typed <-  sheet6 |>
   )
 
 str(sheet6_cols_typed)
-
-## Fix plot for all plants
+ 
+## Fix plot for all plants #### 
 
 sheet6_cols_typed <- sheet6_cols_typed |>
   mutate(Plot_ID = "Whole study",
@@ -344,72 +344,27 @@ sheet7_cols <- box_read_excel(raw_box_id,
                               n_max = 0,
                               col_types = "text")[,-1]
 
-# sheet7 <-
-#   box_read_excel(
-#     raw_box_id,
-#     sheet = 8,
-#     col_names = colnames(sheet7_cols),
-#     col_types = c(
-#       "skip",
-#       "text",
-#       "text",
-#       "text",
-#       "date",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text"
-#     )
-#   )[-c(1:2),]  |>
-#   filter(if_any(everything(), ~ !is.na(.)))
+sheet7 <-
+  box_read_excel(
+    raw_box_id,
+    sheet = 8,
+    col_names = colnames(sheet7_cols),
+    col_types = c(
+      "skip",
+      "text",
+      "text",
+      "text",
+      "date",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text"
+    )
+  )[-c(1:2),]  |>
+  filter(if_any(everything(), ~ !is.na(.)))
 
   
-  sheet7 <-
-    box_read_excel(
-      raw_box_id,
-      sheet = 8,
-      col_names = colnames(sheet7_cols),
-      col_types = c(
-        "skip",
-        "text",
-        "text",
-        "date",
-        "date",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text"
-      )
-    )[-c(1:2),]  |>
-    filter(if_any(everything(), ~ !is.na(.)))
-# 
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   
-#   sheet7 <-
-#     box_read_excel(
-#       raw_box_id,
-#       sheet = 8,
-#       col_names = colnames(sheet7_cols),
-#       col_types = c(
-#         "skip",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text"
-#       )
-#     )[-c(1:2),]  |>
-#     filter(if_any(everything(), ~ !is.na(.)))
-# }
-
-
 # These warnings are expected:
 # Warning messages:
 # 1: Expecting date in E1 / R1C5: got 'Time'
@@ -441,12 +396,6 @@ all(
 ## Set column types ####
 
 str(sheet7)
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   sheet7 <-  sheet7 |>
-#     mutate(Date = as.Date(Date, format = "%Y%m%d")) |>
-#     mutate(Time = as.POSIXct(Time, format = "%H:%M:%S"))
-# }
 
 sheet7_cols_typed <-  sheet7 |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA_character_, x)))) |>
@@ -459,6 +408,10 @@ sheet7_cols_typed <-  sheet7 |>
 
 str(sheet7_cols_typed)
 
+## Fix plot ID for all plants ####
+
+sheet7_cols_typed <- sheet7_cols_typed |>
+  mutate(Plot_ID = "Whole study")
 
 ## Store typed data ####
 
@@ -552,94 +505,35 @@ sheet9_cols <- box_read_excel(raw_box_id,
                               sheet = 10,
                               n_max = 0,
                               col_types = "text")[,-1]
-# 
-# sheet9 <-
-#   box_read_excel(
-#     raw_box_id,
-#     sheet = 10,
-#     col_names = colnames(sheet9_cols),
-#     col_types = c(
-#       "skip",
-#       "text",
-#       "text",
-#       "text",
-#       "date",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text",
-#       "text"
-#     )
-#   )[-c(1:2),] |>
-#   filter(if_any(everything(), ~ !is.na(.)))
+
+sheet9 <-
+  box_read_excel(
+    raw_box_id,
+    sheet = 10,
+    col_names = colnames(sheet9_cols),
+    col_types = c(
+      "skip",
+      "text",
+      "text",
+      "text",
+      "date",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text"
+    )
+  )[-c(1:2),] |>
+  filter(if_any(everything(), ~ !is.na(.)))
 
 
-  
-  sheet9 <-
-    box_read_excel(
-      raw_box_id,
-      sheet = 10,
-      col_names = colnames(sheet9_cols),
-      col_types = c(
-        "skip",
-        "text",
-        "text",
-        "date",
-        "date",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text"
-      )
-    )[-c(1:2),] |>
-    filter(if_any(everything(), ~ !is.na(.)))
-# 
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   
-#   sheet9 <-
-#     box_read_excel(
-#       raw_box_id,
-#       sheet = 10,
-#       col_names = colnames(sheet9_cols),
-#       col_types = c(
-#         "skip",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text"
-#       )
-#     )[-c(1:2),] |>
-#     filter(if_any(everything(), ~ !is.na(.)))
-# }
-# 
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -674,13 +568,6 @@ all(
 ## Set column types ####
 
 str(sheet9)
-
-
-# if(dataset_identifier == "Bohrer_1") {
-#   sheet9 <-  sheet9 |>
-#     mutate(Date = as.Date(Date, format = "%Y%m%d")) |>
-#     mutate(Time = as.POSIXct(Time, format = "%H:%M:%S"))
-# }
 
 sheet9_cols_typed <-  sheet9 |>
   mutate(across(where(is.character), (\(x) ifelse(x == "NA", NA, x)))) |>
@@ -734,54 +621,6 @@ sheet10 <-
   )[-c(1:2),] |>
   filter(if_any(everything(), ~ !is.na(.)))
 
-# if(dataset_identifier == "Sturchio_1") {
-#   
-#   sheet10_date1 <- box_read_excel(
-#     raw_box_id,
-#     sheet = 11,
-#     col_names = c("Date"),
-#     col_types = c(
-#       "skip",
-#       "text",
-#       "skip",
-#       "skip",
-#       "skip",
-#       "skip",
-#       "skip",
-#       "skip"
-#     ),
-#     skip = 2,
-#     n_max = 1
-#   ) |>
-#     mutate(Date = as.Date(Date, format = "%Y%m%d"))
-#   
-#   sheet10$Date[1] <- sheet10_date1$Date[1]
-# }
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   
-#   sheet10 <-
-#     box_read_excel(
-#       raw_box_id,
-#       sheet = 11,
-#       col_names = colnames(sheet10_cols),
-#       col_types = c(
-#         "skip",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text",
-#         "text"
-#       )
-#     )[-c(1:2),] |>
-#     filter(if_any(everything(), ~ !is.na(.)))
-# }
-
 
 ## Check that there are the right number/names rows and columns ####
 
@@ -811,15 +650,6 @@ all(
 
 str(sheet10)
 
-# 
-# if(dataset_identifier == "Bohrer_1") {
-#   sheet10 <-  sheet10 |>
-#     mutate(Date = as.Date(Date, format = "%Y%m%d"))
-# }
-# if(dataset_identifier == "Sturchio_1") {
-#   sheet10 <-  sheet10 |>
-#     mutate(Time = format(Time, format = "%H:%M:%S"))
-# }
 
 
 sheet10_cols_typed <-  sheet10 |>
@@ -844,10 +674,9 @@ box_write(
 
 ## Store notes on changes #### 
 # 
-# Sturchio_notes <- data.frame(Changes = "Plot treatments were all assigned to Control and Individual treatments were assigned to No treatment. 
-#                              Individuals designated as '1,2,3' were split out into separate individuals 1 2 and 3, each representing 1 individual.
-#                              Water potential SDs all set to 0 and n's all set to 1.")
-# 
-# box_write(Sturchio_notes, "changes.txt",  dir_id = qa_box_folder_id)
+notes <- data.frame(Changes = "Plot IDs for all individuals set to Whole study.
+                    Treatment IDs for all individuals set to No treatment")
+
+box_write(notes, "changes.txt",  dir_id = qa_box_folder_id)
 
 

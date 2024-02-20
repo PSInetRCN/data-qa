@@ -29,7 +29,33 @@ new_datasets[which(is.na(new_datasets$raw_box_file_name)), ]
 ## If any rows are NA, fix the discrepancy and continue
 # new_datasets[which(is.na(new_datasets$raw_box_file_name)), "raw_box_file_name"] <- "DJohnson_PSInetdata.xlsx"
 # new_datasets[which(is.na(new_datasets$raw_box_file_ID)), "raw_box_file_ID"] <- "1422807121407"
+# new_datasets$raw_box_file_name[1] <- "Potts_PSInetData_1.xlsx"
+# new_datasets$raw_box_file_ID[1] <- 1437129998390
+# new_datasets$raw_box_file_name[2] <- "Potts_PSInetData_2.xlsx"
+# new_datasets$raw_box_file_ID[2] <- 1437142110862
+# new_datasets$raw_box_file_name[7] <- "Gharun_PSInetData.xlsx"
+# new_datasets$raw_box_file_ID[7] <- 1438074164570
+# new_datasets$raw_box_file_name[14] <- "PSInet_Prades.xlsx"
+# new_datasets$raw_box_file_ID[14] <- 1440312467684
+# new_datasets <- new_datasets[-c(15, 16, 25), ]
 
+## Look for duplicated file names
+
+new_datasets_dups <- new_datasets |>
+  group_by(raw_box_file_ID, raw_box_file_name) |>
+  tally() |>
+  filter(n > 1)
+
+new_datasets_dups
+
+# Use this to check that, for each filename with a dup, all records except timestamp and response ID are identical
+filter(new_datasets, raw_box_file_name == "Wood_PSInetData.xlsx") |>
+  select(-timestamp, -response_ID) |>
+  distinct()
+
+# Remove duplicate rows
+new_datasets <- new_datasets |>
+  filter(!(response_ID %in% c(34, 35, 44, 23, 28, 30, 46)))
 
 # Bind new and old records ####
 
