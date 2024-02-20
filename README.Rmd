@@ -1,0 +1,67 @@
+---
+title: "README"
+author: "Renata"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+This repo houses scripts for QA of PSInet data.
+
+## Current status
+
+```{r, include = F, echo = F}
+library(boxr)
+library(dplyr)
+library(ggplot2)
+
+source(here::here("general-scripts", "box_auth.R"))
+
+tracking_data <- box_read_excel("1426404123641", sheet = 1)
+
+tracking_data <- tracking_data |>
+  mutate(across(contains("completed_checks"), .f = (\(x) ifelse(is.na(x), 0, x)))) 
+
+check_key <- data.frame(
+  check_code = c(0, 1, 2),
+  check_status = c("Not started", "Completed", "Completed with errors")
+)
+
+
+checks0 <- tracking_data |>
+  tally() |> 
+  mutate(check_code = 1) |>
+  left_join(check_key) |>
+  mutate(check_level = "Check 0: Data submitted")
+  
+checks1 <- tracking_data |>
+  group_by(completed_checks_1) |>
+  tally() |>
+  rename(check_code = completed_checks_1) |>
+  left_join(check_key) |>
+  mutate(check_level = "Check 1: Data imported")
+checks2 <- tracking_data |>
+  group_by(completed_checks_2) |>
+  tally() |>
+  rename(check_code = completed_checks_2) |>
+  left_join(check_key) |>
+  mutate(check_level = "Check 2: Study design and variables")
+checks <- bind_rows(checks0, checks1, checks2)
+
+
+theme_set(theme_minimal())
+
+```
+
+```{r, echo = F}
+
+ggplot(checks, aes(check_level, n, fill = check_status)) +
+  geom_col(position = "stack") +
+  ggtitle("Dataset statuses"
+  ) +
+  xlab("Stage") +
+  ylab("Number of datasets") +
+  theme(legend.position = "bottom") +
+  scale_fill_viridis_d(option = "mako", begin = .2, end = .8) +
+  geom_label(aes(label = n), fill = "white", position = "stack")
+
+```
