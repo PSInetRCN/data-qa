@@ -18,7 +18,11 @@ source(here::here("general-scripts", "box_auth.R"))
 
 tracking_data <- box_read_excel("1426404123641", sheet = 1)
 
+sfn_data  <- box_read_excel("1451006536192", sheet = 1) |>
+  filter(submission_path != "foo")
+
 tracking_data <- tracking_data |>
+  bind_rows(sfn_data) |> 
   mutate(across(contains("completed_checks"), .f = (\(x) ifelse(is.na(x), 0, x)))) 
 
 check_key <- data.frame(
@@ -26,21 +30,22 @@ check_key <- data.frame(
   check_status = c("Not started", "Completed", "Completed with errors")
 )
 
-
 checks0 <- tracking_data |>
+  group_by(submission_path) |>
   tally() |> 
   mutate(check_code = 1) |>
   left_join(check_key) |>
   mutate(check_level = "Check 0: Data submitted")
   
 checks1 <- tracking_data |>
-  group_by(completed_checks_1) |>
+  group_by(completed_checks_1, submission_path) |>
   tally() |>
   rename(check_code = completed_checks_1) |>
   left_join(check_key) |>
   mutate(check_level = "Check 1: Data imported")
+
 checks2 <- tracking_data |>
-  group_by(completed_checks_2) |>
+  group_by(completed_checks_2, submission_path) |>
   tally() |>
   rename(check_code = completed_checks_2) |>
   left_join(check_key) |>
@@ -48,11 +53,11 @@ checks2 <- tracking_data |>
 checks <- bind_rows(checks0, checks1, checks2)
 
 
-theme_set(theme_minimal())
+theme_set(theme_bw())
 
 ```
 
-```{r, echo = F, fig.dim = c(6,4)}
+```{r, echo = F, fig.dim = c(7,7)}
 
 ggplot(checks, aes(check_level, n, fill = check_status)) +
   geom_col(position = "stack") +
@@ -62,7 +67,8 @@ ggplot(checks, aes(check_level, n, fill = check_status)) +
   ylab("Number of datasets") +
   theme(legend.position = "bottom") +
   scale_fill_viridis_d(option = "mako", begin = .2, end = .8) +
-  geom_label(aes(label = n), fill = "white", position = "stack")
+  geom_label(aes(label = n), fill = "white", position = "stack") +
+  facet_wrap(vars(submission_path), ncol = 1)
 
 ```
 
