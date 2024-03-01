@@ -15,7 +15,7 @@ sfn_raw_ls <- box_ls(sfn_raw_box_folder_id) |>
   rename(raw_box_file_name = name,
          raw_box_file_ID = id) 
 
-sfn_md_box_folder_id <- "251357771783"
+sfn_md_box_folder_id <- "249745170984"
 
 sfn_md_ls <- box_ls(sfn_md_box_folder_id) |>
   as.data.frame() |>
@@ -38,3 +38,5 @@ sfn_available_md <- sfn_raw_ls |>
   ungroup()
 
 sfn_missing_md <- filter(sfn_available_md, nmd < 5)
+
+box_write(sfn_available_md, file_name = "sfn_datasets.xlsx", dir_id = "230431401206")
