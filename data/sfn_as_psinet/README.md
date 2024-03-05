@@ -1,0 +1,1 @@
+This directory is for SFN datasets processed into the PSInet Excel template.

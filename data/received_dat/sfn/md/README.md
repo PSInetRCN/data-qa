@@ -1,0 +1,1 @@
+This directory is for SFN metadata (leaf metadata in .csv form) downloaded from Zenodo.
