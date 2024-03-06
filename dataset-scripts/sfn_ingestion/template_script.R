@@ -5,7 +5,7 @@ library(openxlsx)
 
 #### Specify site name
 
-sfn_site <- "BRA_CAM" # Change this to match each site
+sfn_site <- "ESP_SAN_B2_100" # Change this to match each site
 
 #### Establish connections to files ####
 
@@ -139,8 +139,8 @@ site_md$`End year`[2] <- NA
 site_md$`Latitude (WGS84)`[2] <- unique(sfn_wp$lat)
 site_md$`Longitude (WGS84)`[2] <- unique(sfn_wp$lon)
 site_md$Remarks[2] <- sfn_site_md$si_remarks
-site_md$Study[2] <- sfn_site
-site_md$`Study type`[2] <- "Observational"
+site_md$Study[2] <- substr(sfn_site, 0, 7)
+site_md$`Study type`[2] <- "Multi-site experiment"
 site_md$Study_description[2] <- NA
 
 writeData(filled_psinet_template, 2, site_md)
@@ -274,26 +274,8 @@ writeData(filled_psinet_template, 4, data_avail)
 
 treatments <- blank_psinet_template[[4]][1:2, ]
 
-if (any(!is.na(sfn_wp$pl_treatment))) {
-  treatments <- data.frame(
-    `Level of treatment` = c(
-      treatments$`Treatment ID`[1],
-      rep("Individual", times = length(unique(
-        sfn_wp$pl_treatment
-      )))
-    ),
-    `Treatment ID` = c(treatments$`Treatment ID`[1], unique(sfn_wp$pl_treatment)),
-    `Treatment description` = c(
-      treatments$`Treatment description`[1],
-      unique(sfn_wp$pl_treatment)
-    )
-  )
-  
-} else {
-  treatments$`Level of treatment`[2] <- "Whole study" # may want to update this to "Whole site"
-  treatments$`Treatment ID`[2] <- "No treatment"
-  
-}
+treatments$`Level of treatment`[2] <- "Whole study" # may want to update this to "Whole site"
+treatments$`Treatment ID`[2] <- unique(sfn_wp$pl_treatment)
 
 writeData(filled_psinet_template, 5, treatments)
 
@@ -341,11 +323,7 @@ matched_plants <-
     Number_of_individuals = ifelse(all(sfn_wp$aggregation_level == "tree level"), 1, NA),
     Plot_ID = sfn_site,
     Plot_Treatment_ID = plots$`Treatment ID`[2],
-    Individual_Treatment_ID = ifelse(
-      is.na(sfn_individuals$pl_treatment),
-      "No treatment",
-      sfn_individuals$pl_treatment
-    ),
+    Individual_Treatment_ID = "No treatment",
     Genus = sfn_individuals$genus,
     Specific_epithet = sfn_individuals$species,
     `Plant social status` = NA,
