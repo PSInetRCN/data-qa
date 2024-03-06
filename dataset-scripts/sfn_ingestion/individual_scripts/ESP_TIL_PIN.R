@@ -5,7 +5,7 @@ library(openxlsx)
 
 #### Specify site name
 
-sfn_site <- "ESP_TIL_MIX" # Change this to match each site
+sfn_site <- "ESP_TIL_PIN" # Change this to match each site
 
 #### Establish connections to files ####
 
