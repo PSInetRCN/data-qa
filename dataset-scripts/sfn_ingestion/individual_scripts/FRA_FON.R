@@ -5,7 +5,7 @@ library(openxlsx)
 
 #### Specify site name
 
-sfn_site <- "ARG_MAZ" # Change this to match each site
+sfn_site <- "FRA_FON" # Change this to match each site
 
 #### Establish connections to files ####
 
@@ -50,6 +50,7 @@ sfn_species_md <-
     "md",
     paste0(sfn_site, "_species_md.csv")
   ))
+
 
 sfn_plant_md <-
   read.csv(here::here(
@@ -141,7 +142,7 @@ site_md$`Longitude (WGS84)`[2] <- unique(sfn_wp$lon)
 site_md$Remarks[2] <- sfn_site_md$si_remarks
 site_md$Study[2] <- substr(sfn_site, 0, 7)
 site_md$Experimental_study[2] <- FALSE
-site_md$Study_description[2] <- "Multi-site"
+site_md$Study_description[2] <- NA
 
 writeData(filled_psinet_template, 2, site_md)
 
@@ -210,7 +211,6 @@ data_desc$`Is it available?`[9] <- "rh" %in% colnames(sfn_env)
 if (data_desc$`Is it available?`[9]) {
   data_desc$`Sensor location`[9] <- sfn_env_md$env_rh[1]
 }
-
 
 # Vapor pressure deficit
 data_desc$`Is it available?`[10] <- "vpd" %in% colnames(sfn_env)
@@ -284,7 +284,7 @@ writeData(filled_psinet_template, 5, treatments)
 
 plots <- blank_psinet_template[[5]]
 
-plots$`Plot ID`[2] <- sfn_site
+plots$`Plot ID`[2] <- "Whole study" # If there's only one site/study, "Whole study"
 plots$`Treatment ID`[2] <- "No treatment"
 plots$`Vegetation type`[2] <- sfn_site_md$si_igbp[1]
 plots$`Growth condition`[2] <- sfn_stand_md$st_growth_condition[1]
@@ -310,8 +310,7 @@ sfn_individuals <- sfn_wp |>
          pl_dbh,
          remarks) |>
   distinct() |>
-  separate(col = pl_species, into = c("genus", "species"), sep = " ") |>
-  mutate(remarks = ifelse(is.na(pl_treatment), remarks, paste0(remarks, "; ", pl_treatment))) 
+  separate(col = pl_species, into = c("genus", "species"), sep = " ") 
 
 matched_plants <-
   data.frame(

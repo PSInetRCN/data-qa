@@ -302,7 +302,7 @@ writeData(filled_psinet_template, 5, treatments)
 
 plots <- blank_psinet_template[[5]]
 
-plots$`Plot ID`[2] <- sfn_site
+plots$`Plot ID`[2] <- "Whole study"
 plots$`Treatment ID`[2] <-
   ifelse(length(unique(na.omit(
     sfn_wp$pl_treatment
