@@ -1,10 +1,19 @@
 ﻿dataset_name,status,notes,next_step
 ARG_MAZ,to template,,template qa
 ARG_TRE,to template,,template qa
+AUS_CAN_ST1_EUC,to template,,template qa
+AUS_CAN_ST2_MIX,to_template,,template qa
+AUS_CAN_ST3_ACA,to template,,template qa
+AUS_RIC_EUC_AMB,to template,Listed no met/soil moisture data as available (all with ELE treatment). Confirm with RP that this is the appropriate course.,email RP
+AUS_RIC_EUC_ELE,to template,,template qa
 BRA_CAM,to template,,template qa
 BRA_CAX_CON,to template with flags,Need to double check with RP about the existence of BRA_CAX_DRO WP data,email RP
 CHE_LOT_NOR,to template,,template qa
+CHE_PFY_IRR,to template,,template qa
 ESP_ALT_ARM,to template with flags,"Cannot be sure about correctness of pl_name guesses. I have labeled all unknown pl_names by species, but they might be different individuals and I wouldn't know. Maybe the solution is to label these as ""species level"" aggregates or to add a flag.",talk to JG
+ESP_GUA_VAL,to template,,template qa
+ESP_RIN,to template,,template qa
+ESP_RON_PIL,to template,,template qa
 ESP_SAN_A_45I,to template,,template qa
 ESP_SAN_A2_45I,to template,,template qa
 ESP_SAN_B_100,to template,,template qa
@@ -14,18 +23,22 @@ ESP_TIL_OAK,to template,,template qa
 ESP_TIL_PIN,to template,,template qa
 ESP_VAL_BAR,to template,,template qa
 ESP_VAL_SOR,to template,,template qa
-ESP_RIN,to template,,template qa
-ESP_RON_PIL,to template,,template qa
+ESP_YUN_C1,to template,,template qa
+ESP_YUN_C2,to template,,template qa
+ESP_YUN_T1_THI,to template,,template qa
 FRA_FON,to template,,template qa
 FRA_PUE,to template,,template qa
+GBR_GUI_ST1,to template,,template qa
+GBR_GUI_ST2,to template,,template qa
+GBR_GUI_ST3,to template,,template qa
+GUF_GUY_ST2,to template,,template qa
+GUF_GUY_ST2_BIS,to template,No independent met data (all with ST2_no suffix). Confirm with RP that this is appropriate.,email RP
 ISR_YAT_YAT,to template,,template qa
 PRT_LEZ_ARN,to template,,template qa
 PRT_MIT,to template,,template qa
+SEN_SOU_IRR,to template,,template qa
+SEN_SOU_POS,to template,,template qa
+SEN_SOU_PRE,to template,,template qa
 THA_KHU,to template,,template qa
 USA_DUK_HAR,to template,,template qa
-USA_MOR_SF,to templae,,template qa
-AUS_CAN_ST1_EUC,to template,,template qa
-AUS_CAN_ST2_MIX,to_template,,template qa
-AUS_CAN_ST3_ACA,to template,,template qa
-AUS_RIC_EUC_AMB,to template,Listed no met/soil moisture data as available (all with ELE treatment). Confirm with RP that this is the appropriate course.,email RP
-AUS_RIC_EUC_ELE,to template,,template qa
+USA_MOR_SF,to template,,template qa
