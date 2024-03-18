@@ -24,3 +24,8 @@ PRT_MIT,to template,,template qa
 THA_KHU,to template,,template qa
 USA_DUK_HAR,to template,,template qa
 USA_MOR_SF,to templae,,template qa
+AUS_CAN_ST1_EUC,to template,,template qa
+AUS_CAN_ST2_MIX,to_template,,template qa
+AUS_CAN_ST3_ACA,to template,,template qa
+AUS_RIC_EUC_AMB,to template,Listed no met/soil moisture data as available (all with ELE treatment). Confirm with RP that this is the appropriate course.,email RP
+AUS_RIC_EUC_ELE,to template,,template qa

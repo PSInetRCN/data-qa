@@ -274,7 +274,7 @@ writeData(filled_psinet_template, 4, data_avail)
 
 treatments <- blank_psinet_template[[4]][1:2, ]
 
-treatments$`Level of treatment`[2] <- "Stand/plot/transect"
+treatments$`Level of treatment`[2] <- "Site"
 treatments$`Treatment ID`[2] <- unique(sfn_wp$pl_treatment)
 
 writeData(filled_psinet_template, 5, treatments)

@@ -5,7 +5,7 @@ library(openxlsx)
 
 #### Specify site name
 
-sfn_site <- "ESP_SAN_B_100" # Change this to match each site
+sfn_site <- "AUS_RIC_EUC_AMB" # Change this to match each site
 
 #### Establish connections to files ####
 
@@ -30,62 +30,63 @@ sfn_site_md <-
     "received_dat",
     "sfn",
     "md",
-    paste0(sfn_site, "_site_md.csv")
+    paste0("AUS_RIC_EUC_ELE", "_site_md.csv")
   ))
 
-sfn_stand_md <-
-  read.csv(here::here(
-    "data",
-    "received_dat",
-    "sfn",
-    "md",
-    paste0(sfn_site, "_stand_md.csv")
-  ))
-
-sfn_species_md <-
-  read.csv(here::here(
-    "data",
-    "received_dat",
-    "sfn",
-    "md",
-    paste0(sfn_site, "_species_md.csv")
-  ))
-
-sfn_plant_md <-
-  read.csv(here::here(
-    "data",
-    "received_dat",
-    "sfn",
-    "md",
-    paste0(sfn_site, "_plant_md.csv")
-  ))
-
-sfn_env_md <-
-  read.csv(here::here(
-    "data",
-    "received_dat",
-    "sfn",
-    "md",
-    paste0(sfn_site, "_env_md.csv")
-  ))
-
-sfn_sapflow <-
-  read.csv(here::here(
-    "data",
-    "received_dat",
-    "sfn",
-    "md",
-    paste0(sfn_site, "_sapf_data.csv")
-  ))
-
-sfn_env <-
-  read.csv(here::here(
-    "data",
-    "received_dat",
-    "sfn",
-    "md",
-    paste0(sfn_site, "_env_data.csv")
-  ))
+# sfn_stand_md <-
+#   read.csv(here::here(
+#     "data",
+#     "received_dat",
+#     "sfn",
+#     "md",
+#     paste0(sfn_site, "_stand_md.csv")
+#   ))
+# 
+# sfn_species_md <-
+#   read.csv(here::here(
+#     "data",
+#     "received_dat",
+#     "sfn",
+#     "md",
+#     paste0(sfn_site, "_species_md.csv")
+#   ))
+# 
+# 
+# sfn_plant_md <-
+#   read.csv(here::here(
+#     "data",
+#     "received_dat",
+#     "sfn",
+#     "md",
+#     paste0(sfn_site, "_plant_md.csv")
+#   ))
+# 
+# sfn_env_md <-
+#   read.csv(here::here(
+#     "data",
+#     "received_dat",
+#     "sfn",
+#     "md",
+#     paste0(sfn_site, "_env_md.csv")
+#   ))
+# 
+# sfn_sapflow <-
+#   read.csv(here::here(
+#     "data",
+#     "received_dat",
+#     "sfn",
+#     "md",
+#     paste0(sfn_site, "_sapf_data.csv")
+#   ))
+# 
+# sfn_env <-
+#   read.csv(here::here(
+#     "data",
+#     "received_dat",
+#     "sfn",
+#     "md",
+#     paste0(sfn_site, "_env_data.csv")
+#   ))
 
 sfn_wp <-
   readxl::read_xlsx(
@@ -99,15 +100,15 @@ sfn_wp <-
 sfn_wp <- sfn_wp |>
   mutate(date = format(timestamp, "%Y%m%d"),
          time = format(timestamp, "%H:%M:%S"))
-
-sfn_env <- sfn_env |>
-  mutate(cleaned_timestamp = sub("T", " ", TIMESTAMP)) |>
-  mutate(cleaned_timestamp = sub("Z", "", cleaned_timestamp)) |>
-  mutate(formatted_timestamp = as.POSIXct(cleaned_timestamp, format = "%Y-%m-%d %H:%M:%S"))  |>
-  mutate(
-    date = format(formatted_timestamp, "%Y%m%d"),
-    time = format(formatted_timestamp, "%H:%M:%S")
-  )
+# 
+# sfn_env <- sfn_env |>
+#   mutate(cleaned_timestamp = sub("T", " ", TIMESTAMP)) |>
+#   mutate(cleaned_timestamp = sub("Z", "", cleaned_timestamp)) |>
+#   mutate(formatted_timestamp = as.POSIXct(cleaned_timestamp, format = "%Y-%m-%d %H:%M:%S"))  |>
+#   mutate(
+#     date = format(formatted_timestamp, "%Y%m%d"),
+#     time = format(formatted_timestamp, "%H:%M:%S")
+#   )
 
 ##### New file path
 
@@ -154,6 +155,7 @@ data_desc <- blank_psinet_template[[2]]
 data_desc$`Is it available?`[2] <-
   any("chamber-bagged" %in% sfn_wp$method,
       "chamber-unbagged" %in% sfn_wp$method)
+
 if (data_desc$`Is it available?`[2]) {
   data_desc$`Methodology or Instrument`[2] <- unique(sfn_wp$method)
   
@@ -168,8 +170,7 @@ if (data_desc$`Is it available?`[3]) {
 }
 
 # Soil water content shallow
-data_desc$`Is it available?`[4] <-
-  "swc_shallow" %in% colnames(sfn_env)
+data_desc$`Is it available?`[4] <- F
 
 if (data_desc$`Is it available?`[4]) {
   data_desc$`Soil depth - start (cm)`[4] <-
@@ -182,8 +183,7 @@ if (data_desc$`Is it available?`[4]) {
 
 
 # Soil water content deep
-data_desc$`Is it available?`[5] <- "swc_deep" %in% colnames(sfn_env)
-
+data_desc$`Is it available?`[5] <- F
 if (data_desc$`Is it available?`[5]) {
   data_desc$`Soil depth - start (cm)`[5] <-
     sfn_env_md$env_swc_deep_depth
@@ -198,36 +198,35 @@ data_desc$`Is it available?`[6:7] <- FALSE
 
 
 # Precipitation
-data_desc$`Is it available?`[8] <- "precip" %in% colnames(sfn_env)
+data_desc$`Is it available?`[8] <- F
 
 if (data_desc$`Is it available?`[8]) {
   data_desc$`Sensor location`[8] <- sfn_env_md$env_precip[1]
 }
 
 # Relative humidity
-data_desc$`Is it available?`[9] <- "rh" %in% colnames(sfn_env)
+data_desc$`Is it available?`[9] <- F
 
 if (data_desc$`Is it available?`[9]) {
   data_desc$`Sensor location`[9] <- sfn_env_md$env_rh[1]
 }
 
-
 # Vapor pressure deficit
-data_desc$`Is it available?`[10] <- "vpd" %in% colnames(sfn_env)
+data_desc$`Is it available?`[10] <- F
 
 if (data_desc$`Is it available?`[10]) {
   data_desc$`Sensor location`[10] <- sfn_env_md$env_vpd[1]
 }
 
 # Air temperature
-data_desc$`Is it available?`[11] <- "ta" %in% colnames(sfn_env)
+data_desc$`Is it available?`[11] <- F
 
 if (data_desc$`Is it available?`[11]) {
   data_desc$`Sensor location`[11] <- sfn_env_md$env_ta[1]
 }
 
 # PPFD
-data_desc$`Is it available?`[12] <- "ppfd_in" %in% colnames(sfn_env)
+data_desc$`Is it available?`[12] <- F
 
 if (data_desc$`Is it available?`[12]) {
   data_desc$`Sensor location`[12] <- sfn_env_md$env_ppfd_in[1]
@@ -235,7 +234,7 @@ if (data_desc$`Is it available?`[12]) {
 
 
 # Incident shortwave radiation
-data_desc$`Is it available?`[13] <- "sw_in" %in% colnames(sfn_env)
+data_desc$`Is it available?`[13] <- F
 
 if (data_desc$`Is it available?`[13]) {
   data_desc$`Sensor location`[13] <- sfn_env_md$env_sw_in[1]
@@ -243,14 +242,14 @@ if (data_desc$`Is it available?`[13]) {
 
 
 # Net radiation
-data_desc$`Is it available?`[14] <- "netrad" %in% colnames(sfn_env)
+data_desc$`Is it available?`[14] <- F
 
 if (data_desc$`Is it available?`[14]) {
   data_desc$`Sensor location`[14] <- sfn_env_md$env_netrad[1]
 }
 
 # Windspeed
-data_desc$`Is it available?`[15] <- "ws" %in% colnames(sfn_env)
+data_desc$`Is it available?`[15] <- F
 
 if (data_desc$`Is it available?`[15]) {
   data_desc$`Sensor location`[15] <- sfn_env_md$env_ws[1]
@@ -285,12 +284,7 @@ writeData(filled_psinet_template, 5, treatments)
 plots <- blank_psinet_template[[5]]
 
 plots$`Plot ID`[2] <- sfn_site
-plots$`Treatment ID`[2] <-
-  ifelse(length(unique(na.omit(
-    sfn_wp$pl_treatment
-  ))) == 1,
-  unique(sfn_wp$pl_treatment),
-  "No treatment")
+plots$`Treatment ID`[2] <- unique(sfn_wp$pl_treatment)
 plots$`Vegetation type`[2] <- sfn_site_md$si_igbp[1]
 plots$`Growth condition`[2] <- sfn_stand_md$st_growth_condition[1]
 plots$Aspect[2] <- sfn_stand_md$st_aspect[1]
@@ -315,7 +309,7 @@ sfn_individuals <- sfn_wp |>
          pl_dbh,
          remarks) |>
   distinct() |>
-  separate(col = pl_species, into = c("genus", "species"), sep = " ") 
+  separate(col = pl_species, into = c("genus", "species"), sep = " ")
 
 matched_plants <-
   data.frame(
@@ -323,7 +317,7 @@ matched_plants <-
     Number_of_individuals = ifelse(all(sfn_wp$aggregation_level == "tree level"), 1, NA),
     Plot_ID = sfn_site,
     Plot_Treatment_ID = plots$`Treatment ID`[2],
-    Individual_Treatment_ID = "No treatment",
+    Individual_Treatment_ID = unique(sfn_wp$pl_treatment),
     Genus = sfn_individuals$genus,
     Specific_epithet = sfn_individuals$species,
     `Plant social status` = NA,

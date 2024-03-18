@@ -1,1 +1,1 @@
-This directory is for SFN metadata (leaf metadata in .csv form) downloaded from Zenodo.
+This directory is for SFN metadata (leaf metadata in .csv form, except for AUS_RIC_EUC_ELE, which are plant metadata in csv form) downloaded from Zenodo.

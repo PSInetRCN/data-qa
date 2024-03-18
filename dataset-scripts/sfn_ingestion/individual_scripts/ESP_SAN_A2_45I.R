@@ -5,7 +5,7 @@ library(openxlsx)
 
 #### Specify site name
 
-sfn_site <- "ESP_SAN_A_45I" # Change this to match each site
+sfn_site <- "ESP_SAN_A2_45I" # Change this to match each site
 
 #### Establish connections to files ####
 
@@ -50,6 +50,7 @@ sfn_species_md <-
     "md",
     paste0(sfn_site, "_species_md.csv")
   ))
+
 
 sfn_plant_md <-
   read.csv(here::here(
@@ -143,6 +144,8 @@ site_md$Study[2] <- substr(sfn_site, 0, 7)
 site_md$Experimental_study[2] <- TRUE
 site_md$Study_description[2] <- "Multi-site experiment"
 
+View(site_md)
+
 writeData(filled_psinet_template, 2, site_md)
 
 
@@ -154,6 +157,7 @@ data_desc <- blank_psinet_template[[2]]
 data_desc$`Is it available?`[2] <-
   any("chamber-bagged" %in% sfn_wp$method,
       "chamber-unbagged" %in% sfn_wp$method)
+
 if (data_desc$`Is it available?`[2]) {
   data_desc$`Methodology or Instrument`[2] <- unique(sfn_wp$method)
   
@@ -210,7 +214,6 @@ data_desc$`Is it available?`[9] <- "rh" %in% colnames(sfn_env)
 if (data_desc$`Is it available?`[9]) {
   data_desc$`Sensor location`[9] <- sfn_env_md$env_rh[1]
 }
-
 
 # Vapor pressure deficit
 data_desc$`Is it available?`[10] <- "vpd" %in% colnames(sfn_env)
@@ -274,8 +277,10 @@ writeData(filled_psinet_template, 4, data_avail)
 
 treatments <- blank_psinet_template[[4]][1:2, ]
 
-treatments$`Level of treatment`[2] <- "Stand/plot/transect"
+treatments$`Level of treatment`[2] <- "Site"
 treatments$`Treatment ID`[2] <- unique(sfn_wp$pl_treatment)
+
+View(treatments)
 
 writeData(filled_psinet_template, 5, treatments)
 
@@ -285,12 +290,7 @@ writeData(filled_psinet_template, 5, treatments)
 plots <- blank_psinet_template[[5]]
 
 plots$`Plot ID`[2] <- sfn_site
-plots$`Treatment ID`[2] <-
-  ifelse(length(unique(na.omit(
-    sfn_wp$pl_treatment
-  ))) == 1,
-  unique(sfn_wp$pl_treatment),
-  "No treatment")
+plots$`Treatment ID`[2] <- unique(sfn_wp$pl_treatment)
 plots$`Vegetation type`[2] <- sfn_site_md$si_igbp[1]
 plots$`Growth condition`[2] <- sfn_stand_md$st_growth_condition[1]
 plots$Aspect[2] <- sfn_stand_md$st_aspect[1]
@@ -302,7 +302,7 @@ plots$`Percent clay`[2] <- sfn_stand_md$st_clay_perc[1]
 
 writeData(filled_psinet_template, 6, plots)
 
-
+View(plots)
 #### Sheet 6 Plants ####
 
 plants <- blank_psinet_template[[6]]
@@ -315,7 +315,7 @@ sfn_individuals <- sfn_wp |>
          pl_dbh,
          remarks) |>
   distinct() |>
-  separate(col = pl_species, into = c("genus", "species"), sep = " ") 
+  separate(col = pl_species, into = c("genus", "species"), sep = " ")
 
 matched_plants <-
   data.frame(
@@ -323,7 +323,7 @@ matched_plants <-
     Number_of_individuals = ifelse(all(sfn_wp$aggregation_level == "tree level"), 1, NA),
     Plot_ID = sfn_site,
     Plot_Treatment_ID = plots$`Treatment ID`[2],
-    Individual_Treatment_ID = "No treatment",
+    Individual_Treatment_ID = unique(sfn_wp$pl_treatment),
     Genus = sfn_individuals$genus,
     Specific_epithet = sfn_individuals$species,
     `Plant social status` = NA,
@@ -332,6 +332,8 @@ matched_plants <-
     `Leaf area index (m2/m2)` = NA,
     Remarks = sfn_individuals$remarks
   )
+
+View(matched_plants)
 
 writeData(
   filled_psinet_template,
@@ -539,4 +541,3 @@ writeData(
 
 
 saveWorkbook(filled_psinet_template, site_path, overwrite = T)
-
