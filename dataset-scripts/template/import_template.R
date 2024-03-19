@@ -1,151 +1,78 @@
-# This script is for general-purpose QA of datasets submitted using the PSInet template.
+# This is a starting point for importing template datasets into PSInet.
 
 library(dplyr)
+library(readxl)
+
+source(here::here("checks", "check_functions.R"))
+source(here::here("dataset-scripts", "template", "import_functions.R"))
 
 # Setup ####
 
-dataset_identifier <- "Johnson_1"
+dataset_tracking <- read.csv(here::here("dataset_tracking.csv"))
 
-tracking_sheet <- box_read_excel("1426404123641")
+dataset_identifier <- "Flo_1"
 
-this_dataset_row <-
-  which(tracking_sheet$dataset_name == dataset_identifier)
-raw_box_id <- tracking_sheet[this_dataset_row, "raw_box_file_ID"]
-qa_box_folder_id <-
-  tracking_sheet[this_dataset_row, "qa_box_folder_ID"]
+dataset_path <- here::here("data", "received_dat", "template", paste0(dataset_identifier, ".xlsx"))
 
 # Sheet 1. Study and site information ####
 
-sheet1 <- box_read_excel(raw_box_id, sheet = 2,
-                         col_types = "text")[2,-1]
+sheet1_expectations <- read.csv(here::here("checks", "expectations", "01_site.csv"))
 
-## Check that there are the right number/names rows and columns ####
+# Import and add dataset_name
 
-nrow(sheet1) == 1
+sheet1 <- import_sheet(dataset_path, 1, sheet1_expectations)
 
-all(
-  colnames(sheet1) == c(
-    'Submitting author first name',
-    'Submitting author last name',
-    'Institution',
-    'Email',
-    'Data publication?',
-    'Data publication DOI(s)',
-    'Study type',
-    'Begin year',
-    'End year',
-    'Latitude (WGS84)',
-    'Longitude (WGS84)',
-    'Remarks'
-  )
-)
+sheet1 <- sheet1 |>
+  mutate(dataset_name = dataset_identifier, .before = 1,
+         study_description = "Single-site")
 
-## Set column types ####
+# Add any needed code here until the last checks pass
 
-str(sheet1)
+# Set col types
 
+sheet1_cols_typed <- set_col_types(sheet1, sheet1_expectations)
 
-  to_decimal_degrees <- function(x) {
-    lat_deg = as.numeric(substr(x, 1,2))
-    lat_min = as.numeric(substr(x, 4,5))
-    lat_sec = as.numeric(substr(x, 7,8))
-    
-    sum(lat_deg, lat_min / 60, lat_sec / 3600)
-  }
-  
-  sheet1 <- sheet1 |>
-    mutate(`Latitude (WGS84)` = to_decimal_degrees(`Latitude (WGS84)`),
-           `Longitude (WGS84)` = to_decimal_degrees(`Longitude (WGS84)`))
-  
-  str(sheet1)
-  
-# 
-# 
-# if(dataset_identifier == "Johnson_1") {
-#   
-#   to_decimal_degrees <- function(x) {
-#     lat_deg = as.numeric(substr(x, 1,2))
-#     lat_min = as.numeric(substr(x, 4,5))
-#     lat_sec = as.numeric(substr(x, 8,9))
-#     
-#     sum(lat_deg, lat_min / 60, lat_sec / 3600)
-#   }
-#   
-#   sheet1 <- sheet1 |>
-#     mutate(`Latitude (WGS84)` = to_decimal_degrees(`Latitude (WGS84)`),
-#            `Longitude (WGS84)` = to_decimal_degrees(`Longitude (WGS84)`))
-#   
-#   str(sheet1)
-#   
-# }
+# Check col types
 
+all(check_col_classes(sheet1_cols_typed, sheet1_expectations))
 
-sheet1_cols_typed <- sheet1 |>  
-  mutate(
-    across(all_of(c(1,2,3,4,5,6,7,12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-    across(all_of(c(8,9)), (\(x) ifelse(is.na(x), NA_integer_, as.integer(x)))),
-    across(all_of(c(10,11)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))
-  )
+# Check ranges
 
-str(sheet1_cols_typed)
+all(check_ranges(sheet1_cols_typed, sheet1_expectations))
 
-## Store typed data ####
+# Write csv
 
-box_write(
-  sheet1_cols_typed,
-  "sheet1.csv",
-  write_fun = readr::write_excel_csv,
-  dir_id = qa_box_folder_id
-)
+write.csv(sheet1_cols_typed, here::here("data", "processed_psinet", paste0(dataset_identifier, "_sheet1.csv")), row.names = F)
 
 # Sheet 2. Data description ####
 
-sheet2 <- box_read_excel(raw_box_id, sheet = 3,
-                         col_types = "text")[-1,-1]
+sheet2_expectations <- read.csv(here::here("checks", "expectations", "02_data_description.csv"))
 
-## Check that there are the right number/names rows and columns ####
+# Import and add dataset_name
 
-nrow(sheet2) == 14
+sheet2 <- import_sheet(dataset_path, 2, sheet2_expectations)
 
-all(
-  colnames(sheet2) == c(
-    'Data variable',
-    'Is it available?',
-    'Manual or automated collection?',
-    'Units',
-    'Sensor location',
-    'Methodology or Instrument',
-    'Soil depth - start (cm)',
-    'Soil depth - end (cm)',
-    'Remarks'
-  )
-)
+sheet2 <- sheet2 |>
+  mutate(dataset_name = dataset_identifier, .before = 1)
 
+# Add any needed code here until the last checks pass
 
-## Set column types ####
+sheet2 <- sheet2 |>
+  mutate(is_it_available = ifelse(is_it_available == 1, TRUE, FALSE))
 
-str(sheet2)
+# Set col types
 
-sheet2_cols_typed <- sheet2 |>
-  mutate(`Is it available?` = ifelse(`Is it available?` %in% c("TRUE", "FALSE"),
-                                     as.logical(`Is it available?`),
-                                     as.numeric(`Is it available?`))) |>
-  mutate(`Is it available?` = as.logical(`Is it available?`),
-         across(all_of(c(1,3,4,5,6,9)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-         across(all_of(c(7,8)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))
-  )
+sheet2_cols_typed <- set_col_types(sheet2, sheet2_expectations)
 
-str(sheet2_cols_typed)
+# Check col types
 
-## Store typed data ####
+all(check_col_classes(sheet2_cols_typed, sheet2_expectations))
 
-box_write(
-  sheet2_cols_typed,
-  "sheet2.csv",
-  write_fun = readr::write_excel_csv,
-  dir_id = qa_box_folder_id
-)
+# Check ranges
 
+all(check_ranges(sheet2_cols_typed, sheet2_expectations))
+
+write.csv(sheet2_cols_typed, here::here("data", "processed_psinet", paste0(dataset_identifier, "_sheet2.csv")), row.names = F)
 
 # Sheet 3. Additional data availability ####
 
@@ -360,26 +287,26 @@ sheet7_cols <- box_read_excel(raw_box_id,
 #   )[-c(1:2),]  |>
 #   filter(if_any(everything(), ~ !is.na(.)))
 
-  
-  sheet7 <-
-    box_read_excel(
-      raw_box_id,
-      sheet = 8,
-      col_names = colnames(sheet7_cols),
-      col_types = c(
-        "skip",
-        "text",
-        "text",
-        "date",
-        "date",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text"
-      )
-    )[-c(1:2),]  |>
-    filter(if_any(everything(), ~ !is.na(.)))
+
+sheet7 <-
+  box_read_excel(
+    raw_box_id,
+    sheet = 8,
+    col_names = colnames(sheet7_cols),
+    col_types = c(
+      "skip",
+      "text",
+      "text",
+      "date",
+      "date",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text"
+    )
+  )[-c(1:2),]  |>
+  filter(if_any(everything(), ~ !is.na(.)))
 # 
 # 
 # if(dataset_identifier == "Bohrer_1") {
@@ -577,33 +504,33 @@ sheet9_cols <- box_read_excel(raw_box_id,
 #   filter(if_any(everything(), ~ !is.na(.)))
 
 
-  
-  sheet9 <-
-    box_read_excel(
-      raw_box_id,
-      sheet = 10,
-      col_names = colnames(sheet9_cols),
-      col_types = c(
-        "skip",
-        "text",
-        "text",
-        "date",
-        "date",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text",
-        "text"
-      )
-    )[-c(1:2),] |>
-    filter(if_any(everything(), ~ !is.na(.)))
+
+sheet9 <-
+  box_read_excel(
+    raw_box_id,
+    sheet = 10,
+    col_names = colnames(sheet9_cols),
+    col_types = c(
+      "skip",
+      "text",
+      "text",
+      "date",
+      "date",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text"
+    )
+  )[-c(1:2),] |>
+  filter(if_any(everything(), ~ !is.na(.)))
 # 
 # 
 # if(dataset_identifier == "Bohrer_1") {
