@@ -275,7 +275,8 @@ sheet7 <- sheet7 |>
   mutate(time_seconds = 60 * 60 * 24 * time_num) |>
   mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
   mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX)
+  select(-time_num,-time_seconds,-time_POSIX)|>
+  mutate(water_potential_mean = as.numeric(water_potential_mean) * -1)
 
 # Set col types
 
@@ -616,6 +617,9 @@ outcomes_report$outcome <- outcomes_vect
 
 outcomes_report |>
   filter(!outcome)
+
+outcomes_report$remarks[18] <- "Positive WP values converted to negative"
+
 
 write.csv(outcomes_report,
           here::here(
