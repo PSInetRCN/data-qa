@@ -9,6 +9,7 @@ source(here::here("dataset-scripts", "template", "import_functions.R"))
 # Setup ####
 
 dataset_tracking <- read.csv(here::here("dataset_tracking.csv"))
+problems <- read.csv(here::here("problems.csv"), colClasses = "character")
 
 dataset_identifier <- "Flo_1"
 
@@ -76,132 +77,89 @@ write.csv(sheet2_cols_typed, here::here("data", "processed_psinet", paste0(datas
 
 # Sheet 3. Additional data availability ####
 
-sheet3 <- box_read_excel(raw_box_id, sheet = 4,
-                         col_types = "text")[-1,-1]
+sheet3_expectations <- read.csv(here::here("checks", "expectations", "03_additional_data.csv"))
 
-## Check that there are the right number/names rows and columns ####
+# Import and add dataset_name
 
-nrow(sheet3) == 13
+sheet3 <- import_sheet(dataset_path, 3, sheet3_expectations)
 
-all(
-  colnames(sheet3) == c(
-    'Variable',
-    'Availability',
-    'Publication',
-    'Network',
-    'If other, provide the database name',
-    'Network or database ID',
-    'Link to data',
-    'Remarks'
-  )
-)
+sheet3 <- sheet3 |>
+  mutate(dataset_name = dataset_identifier, .before = 1)
 
+# Add any needed code here until the last checks pass
 
-## Set column types ####
+sheet3 <- sheet3 |>
+  mutate(availability = ifelse(availability == 1, TRUE, FALSE))
 
-str(sheet3)
+# Set col types
 
-sheet3_cols_typed <- sheet3 |>
-  mutate(across(c("Availability", "Publication"), (\(x) ifelse(x %in% c("TRUE", "FALSE", NA),
-                                                               as.logical(x),
-                                                               as.numeric(x))))) |>
-  mutate(across(c("Availability", "Publication"), as.logical)) |>
-  mutate(across(all_of(c(1, 4:8)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))))
+sheet3_cols_typed <- set_col_types(sheet3, sheet3_expectations)
 
-str(sheet3_cols_typed)
+# Check col types
 
-## Store typed data ####
+all(check_col_classes(sheet3_cols_typed, sheet3_expectations))
 
-box_write(
-  sheet3_cols_typed,
-  "sheet3.csv",
-  write_fun = readr::write_excel_csv,
-  dir_id = qa_box_folder_id
-)
+# Check ranges
 
+all(check_ranges(sheet3_cols_typed, sheet3_expectations))
+
+write.csv(sheet3_cols_typed, here::here("data", "processed_psinet", paste0(dataset_identifier, "_sheet3.csv")), row.names = F)
 
 # Sheet 4. Treatments ####
 
-## Check that there are the right number/names rows and columns ####
+sheet4_expectations <- read.csv(here::here("checks", "expectations", "04_treatments.csv"))
 
-sheet4 <- box_read_excel(raw_box_id, sheet = 5,
-                         col_types = "text")[-1, 2:4] |>
-  filter(if_any(everything(), ~ !is.na(.)))
+# Import and add dataset_name
 
-nrow(sheet4) > 0
+sheet4 <- import_sheet(dataset_path, 4, sheet4_expectations)
 
-all(colnames(sheet4) == c('Level of treatment', 'Treatment ID', 'Treatment description'))
+sheet4 <- sheet4 |>
+  mutate(dataset_name = dataset_identifier, .before = 1)
 
+# Add any needed code here until the last checks pass
 
-## Set column types ####
-str(sheet4)
+# Set col types
 
-sheet4_cols_typed <- sheet4 |>  
-  mutate(
-    across(everything(), (\(x) ifelse(is.na(x), NA_character_, as.character(x))))
-  )
+sheet4_cols_typed <- set_col_types(sheet4, sheet4_expectations)
 
-str(sheet4_cols_typed)
+# Check col types
 
+all(check_col_classes(sheet4_cols_typed, sheet4_expectations))
 
-## Store typed data ####
+# Check ranges
 
-box_write(
-  sheet4_cols_typed,
-  "sheet4.csv",
-  write_fun = readr::write_excel_csv,
-  dir_id = qa_box_folder_id
-)
+all(check_ranges(sheet4_cols_typed, sheet4_expectations))
 
+write.csv(sheet4_cols_typed, here::here("data", "processed_psinet", paste0(dataset_identifier, "_sheet4.csv")), row.names = F)
 
 # Sheet 5. Plots ####
 
-sheet5 <-  box_read_excel(raw_box_id, sheet = 6,
-                          col_types = "text")[-1, -1]|>
-  filter(if_any(everything(), ~ !is.na(.)))
+sheet5_expectations <- read.csv(here::here("checks", "expectations", "05_plots.csv"))
 
-## Check that there are the right number/names rows and columns ####
+# Import and add dataset_name
 
-nrow(sheet5) > 0
+sheet5 <- import_sheet(dataset_path, 5, sheet5_expectations)
 
-all(
-  colnames(sheet5) == c(
-    'Plot ID',
-    'Treatment ID',
-    'Vegetation type',
-    'Leaf area index (m2/m2)',
-    'Growth condition',
-    'Aspect',
-    'Terrain',
-    'Soil texture',
-    'Percent sand',
-    'Percent silt',
-    'Percent clay',
-    'Remarks'
-  )
-)
+sheet5 <- sheet5 |>
+  mutate(dataset_name = dataset_identifier, .before = 1)
 
-## Set column types ####
+# Add any needed code here until the last checks pass
 
-str(sheet5)
+sheet5$growth_condition <- "Naturally regenerated, unmanaged"
 
-sheet5_cols_typed <-  sheet5 |>  
-  mutate(
-    across(all_of(c(1, 2, 3, 4, 5, 6, 7, 8, 12)), (\(x) ifelse(is.na(x), NA_character_, as.character(x)))),
-    across(all_of(c(9, 10, 11)), (\(x) ifelse(is.na(x), NA_real_, as.numeric(x))))    
-  )
+# Set col types
 
-str(sheet5_cols_typed)
+sheet5_cols_typed <- set_col_types(sheet5, sheet5_expectations)
 
-## Store typed data ####
+# Check col types
 
-box_write(
-  sheet5_cols_typed,
-  "sheet5.csv",
-  write_fun = readr::write_excel_csv,
-  dir_id = qa_box_folder_id
-)
+all(check_col_classes(sheet5_cols_typed, sheet5_expectations))
 
+# Check ranges
+
+all(check_ranges(sheet5_cols_typed, sheet5_expectations))
+
+write.csv(sheet5_cols_typed, here::here("data", "processed_psinet", paste0(dataset_identifier, "_sheet5.csv")), row.names = F)
 
 # Sheet 6. Plants ####
 

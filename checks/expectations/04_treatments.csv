@@ -1,5 +1,5 @@
-﻿Original_column_name,Cleaned_column_name,Type,Range,Required,Remarks,
-Not provided,dataset_name,character,,TRUE,,
-Level of treatment,level_of_treatment,character,"options: Whole study, Site, Stand/plot/transect, Individual",TRUE,,
-Treatment ID,treatment_id,character,,TRUE,,
-Treatment description,treatment_description,character,,FALSE,,
+﻿Original_column_name,Cleaned_column_name,Type,Range,Required,Remarks
+Not provided,dataset_name,character,,TRUE,
+Level of treatment,level_of_treatment,character,options: Whole study; Site; Stand/plot/transect; Individual,TRUE,
+Treatment ID,treatment_id,character,,TRUE,
+Treatment description,treatment_description,character,,FALSE,
