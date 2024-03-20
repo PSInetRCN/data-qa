@@ -1,0 +1,11 @@
+﻿Original_column_name,Cleaned_column_name,Type,Range,Required,Remarks
+Not provided,dataset_name,character,,TRUE,
+Data variable,data_variable,character,options: Plant water potential - pressure chamber; Plant water potential - automated; Soil water content - shallow; Soil water content - deep; Soil water potential - shallow; Soil water potential - deep; Precipitation; Relative humidity; Vapor pressure deficit; Air temperature; Photosynthetically active radiation (PPFD); Incident shortwave radiation; Net radiation; Windspeed,TRUE,
+Is it available?,is_it_available,logical,,TRUE,
+Manual or automated collection?,manual_or_automated_collection,character,,,
+Units,units,character,options: MPa; MPa; MPa; MPa; mm; %; kPa; C; µmolPhoton m-2 s-1; W m-2; W m-2; m/s; cm3/cm3 (volumetric); g/g (gravimetric),,
+Sensor location,sensor_location,character,options: Clearing (< 1 km away); Above canopy; Below canopy; Not provided; Off-site (> 1 km away),,
+Methodology or Instrument,methodology_or_instrument,character,,,
+Soil depth - start (cm),soil_depth_start_cm,integer,range: 0:300,,
+Soil depth - end (cm),soil_depth_end_cm,integer,range: 0:300,,
+Remarks,remarks,character,,,

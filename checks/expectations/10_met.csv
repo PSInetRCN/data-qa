@@ -1,0 +1,12 @@
+﻿Original_column_name,Cleaned_column_name,Type,Range,Required,Remarks
+Not provided,dataset_name,character,,TRUE,
+Date,date,character,range: 19900101:20250101,TRUE,
+Time,time,character,time,TRUE,
+Precipitation (mm),precipitation_mm,numeric,range: 0:250,,based on SFN which is based on Cerveny et al 2007
+Relative humidity (%),relative_humidity_percent,numeric,range: 10:100,,based on SFN
+Vapor pressure deficit (kPa),vapor_pressure_deficit_k_pa,numeric,range: 0:10,,based on SFN
+Air temperature (C),air_temperature_c,numeric,range: -30:50,,based on SFN
+Photosynthetically active radiation (PPFD) (µmolPhoton m-2 s-1),photosynthetically_active_radiation_ppfd_mumol_photon_m_2_s_1,numeric,range: 0:2400,,based on SFN
+Incident shortwave radiation,incident_shortwave_radiation,numeric,range: 0:1362,,based on SFn which is based on the solar constant
+Net radiation (m s-1),net_radiation_m_s_1,numeric,range: -300:2000,,based on SFN
+Windspeed (m/s),windspeed_m_s,numeric,range: 0:45,,based on SFN which is based on Zhou and Wang 2016

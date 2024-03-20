@@ -1,0 +1,17 @@
+﻿Original_column_name,Cleaned_column_name,Type,Range,Required,Remarks
+Not provided,dataset_name,character,,TRUE,
+Submitting author first name,submitting_author_first_name,character,,TRUE,
+Submitting author last name,submitting_author_last_name,character,,TRUE,
+Institution,institution,character,,,
+Email,email,character,,TRUE,
+Data publication?,data_publication,character,options: Yes - as part of a scientific paper; Yes - as a standalone data paper; Both as a scientific paper and a data paper; Not published,TRUE,
+Data publication DOI(s),data_publication_doi_s,character,,,
+Study type,study_type,character,options: Field study; Greenhouse; Growth chamber,TRUE,
+Begin year,begin_year,integer,,,
+End year,end_year,integer,,,
+Latitude (WGS84),latitude_wgs84,numeric,range: -90:90,,decimal degrees
+Longitude (WGS84),longitude_wgs84,numeric,range: -180:180,,decimal degrees
+Remarks,remarks,character,,,
+Study,study,character,,TRUE,
+Experimental_study,experimental_study,logical,,TRUE,
+Study_description,study_description,character,options: Multi-site; Multi-site experiment; Single-site,,

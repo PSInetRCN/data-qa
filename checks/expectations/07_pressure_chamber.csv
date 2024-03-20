@@ -1,0 +1,11 @@
+﻿Original_column_name,Cleaned_column_name,Type,Range,Required,Remarks
+Not provided,dataset_name,character,,TRUE,
+Individual_ID,individual_id,character,,TRUE,
+Plot_ID,plot_id,character,,TRUE,
+Date,date,integer,range: 19900101:20250101,TRUE,
+Time,time,character,time,TRUE,
+Organ,organ,character,options: leaf; frond; twig/leaf cluster; stem; stem - equilibrated leaf; root; other,,
+Canopy position,canopy_position,character,options: top; mid; bottom,,
+Water potential mean,water_potential_mean,numeric,,TRUE,
+Water potential SD,water_potential_sd,numeric,,,
+Water potential n,water_potential_n,integer,,,
