@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Flo_2"
+dataset_identifier <- "Flo_1"
 
 is_sfn <- FALSE
 
@@ -25,6 +25,8 @@ source(here::here("checks", "check_design_functions.R"))
 source(here::here("dataset-scripts", "template", "import_functions.R"))
 
 dataset_tracking <- read.csv(here::here("dataset_tracking.csv"))
+problems <-
+  read.csv(here::here("problems.csv"), colClasses = "character")
 
 # Sheet 1. Study and site information ####
 
@@ -79,9 +81,6 @@ sheet2 <- sheet2 |>
   mutate(dataset_name = dataset_identifier, .before = 1)
 
 # Add any needed code here until the last checks pass
-
-sheet2 <- sheet2 |>
-  mutate(is_it_available = ifelse(is_it_available == 1, TRUE, FALSE))
 
 # Set col types
 
@@ -367,29 +366,6 @@ sheet9 <- sheet9 |>
   mutate(date_f = format(date_date, format = "%Y%m%d")) |>
   mutate(date = date_f) |>
   select(-date_num,-date_date,-date_f)
-
-
-sheet9 <- sheet9 |>
-  filter(!if_all(all_of(
-    c(
-      'individual_id',
-      'plot_id',
-      'date',
-      'time',
-      'swc_mean_shallow',
-      'swc_sd_shallow',
-      'swc_mean_deep',
-      'swc_sd_deep',
-      'swc_n_deep',
-      'swp_mean_shallow',
-      'swp_sd_shallow',
-      'swp_n_shallow',
-      'swp_mean_deep',
-      'swp_sd_deep',
-      'swp_n_deep'
-    )
-  ),
-  is.na))
 
 # Set col types
 
