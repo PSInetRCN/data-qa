@@ -24,6 +24,11 @@ check_range <- function(data, range, na_ok = TRUE) {
     return(TRUE)
   }
   
+  if(range == "time") {
+    regex_pattern <- "^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"
+    return(all(grepl(regex_pattern, unlist(data))))
+  }
+  
   if(grepl("options:", range)) {
     range_vector <- get_range_options(range)
     

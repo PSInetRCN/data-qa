@@ -1,0 +1,5 @@
+﻿Original_column_name,Cleaned_column_name,Type,Range,Required,Remarks
+Not provided,dataset_name,character,,TRUE,
+pl_name,pl_name,character,,,
+pl_code,pl_code,character,,,
+measured_sfn,measured_sfn,logical,,,

@@ -19,7 +19,8 @@ set_col_types <- function(sheet, sheet_expectations) {
       which(sheet_expectations$Type == "numeric")
     ), (
       \(x) ifelse(is.na(x), NA_real_, as.numeric(x))
-    )))
+    ))
+    )
   
 }
 
@@ -29,19 +30,29 @@ import_sheet <-
            sheet_expectations) {
     sheets_ranges <- data.frame(
       sheet = 1:11,
-      sheet_to_read = 2:12,
+      sheet_to_read = c(2:11, 13),
       sheet_ranges = c("B3:P3",
                        "B3:J16",
                        "B3:I15",
                        "2:4",
                        "2:13",
-                       rep(NA, 6)),
+                       "2:13",
+                       "2:10",
+                       "2:10",
+                       "2:17",
+                       "2:11",
+                       "1:3"),
       range_is_explicit = c(T,
                             T,
                             T,
                             F,
                             F,
-                            rep(NA, 6))
+                            F,
+                            F,
+                            F,
+                            F,
+                            F,
+                            F)
     )
     
     toread <-
@@ -54,21 +65,30 @@ import_sheet <-
           sheet = toread$sheet_to_read[1],
           range = toread$sheet_ranges[1],
           col_names = sheet_expectations$Cleaned_column_name[-1],
-          col_types = "text"
+          col_types = "text",
+          na = c("", "NA")
         )
     } else {
       colnums <-
         strsplit(toread$sheet_ranges[1], ":") |>  unlist() |> as.numeric()
       
+      startrow = ifelse(sheet_number == 11, 2, 3)
+      
       imported_sheet <-
         readxl::read_xlsx(
           dataset_path,
           sheet = toread$sheet_to_read[1],
-          range = cell_limits(ul = c(3, colnums[1]),
+          range = cell_limits(ul = c(startrow, colnums[1]),
                               lr = c(NA, colnums[2])),
           col_names = sheet_expectations$Cleaned_column_name[-1],
-          col_types = "text"
+          col_types = "text",
+          na = c("", "NA")
         )
+    }
+    
+    if(all(dim(imported_sheet) == c(0, 0))) {
+      imported_sheet <- matrix(nrow = 1, ncol = length(sheet_expectations$Cleaned_column_name)-1, data = NA) |>
+        as.data.frame()
     }
     
     colnames(imported_sheet) <-
