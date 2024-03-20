@@ -1,16 +1,9 @@
 # This is a starting point for importing template datasets into PSInet.
+# Identify yourself - for signing outcomes report ####
 
-library(dplyr)
-library(readxl)
+my_initials <- "RMD"
 
-source(here::here("checks", "check_functions.R"))
-source(here::here("dataset-scripts", "template", "import_functions.R"))
-
-# Setup ####
-
-dataset_tracking <- read.csv(here::here("dataset_tracking.csv"))
-problems <-
-  read.csv(here::here("problems.csv"), colClasses = "character")
+# Identify dataset ####
 
 dataset_identifier <- "Flo_1"
 
@@ -21,6 +14,19 @@ dataset_path <-
              "received_dat",
              "template",
              paste0(dataset_identifier, ".xlsx"))
+
+# Import things ####
+
+library(dplyr)
+library(readxl)
+
+source(here::here("checks", "check_functions.R"))
+source(here::here("checks", "check_design_functions.R"))
+source(here::here("dataset-scripts", "template", "import_functions.R"))
+
+dataset_tracking <- read.csv(here::here("dataset_tracking.csv"))
+problems <-
+  read.csv(here::here("problems.csv"), colClasses = "character")
 
 # Sheet 1. Study and site information ####
 
@@ -75,9 +81,6 @@ sheet2 <- sheet2 |>
   mutate(dataset_name = dataset_identifier, .before = 1)
 
 # Add any needed code here until the last checks pass
-
-sheet2 <- sheet2 |>
-  mutate(is_it_available = ifelse(is_it_available == 1, TRUE, FALSE))
 
 # Set col types
 
@@ -198,6 +201,10 @@ all(check_col_classes(sheet5_cols_typed, sheet5_expectations))
 
 all(check_ranges(sheet5_cols_typed, sheet5_expectations))
 
+# Check plot treatments
+
+check_plot_treatments(sheet4_cols_typed, sheet5_cols_typed)
+
 write.csv(sheet5_cols_typed,
           here::here(
             "data",
@@ -231,6 +238,14 @@ all(check_col_classes(sheet6_cols_typed, sheet6_expectations))
 # Check ranges
 
 all(check_ranges(sheet6_cols_typed, sheet6_expectations))
+
+# Check plot IDs and treatments
+
+check_plant_plot_treatments(sheet5_cols_typed, sheet6_cols_typed)
+
+# Check individual treatments
+
+check_individual_treatments(sheet4_cols_typed, sheet6_cols_typed)
 
 write.csv(sheet6_cols_typed,
           here::here(
@@ -273,6 +288,10 @@ all(check_col_classes(sheet7_cols_typed, sheet7_expectations))
 
 all(check_ranges(sheet7_cols_typed, sheet7_expectations))
 
+# Check that all plant-plot combos match plants table
+
+check_plant_plot_ids(sheet6_cols_typed, sheet7_cols_typed)
+
 write.csv(sheet7_cols_typed,
           here::here(
             "data",
@@ -314,6 +333,11 @@ all(check_col_classes(sheet8_cols_typed, sheet8_expectations))
 
 all(check_ranges(sheet8_cols_typed, sheet8_expectations))
 
+
+# Check that all plant-plot combos match plants table
+
+check_plant_plot_ids(sheet6_cols_typed, sheet8_cols_typed)
+
 write.csv(sheet8_cols_typed,
           here::here(
             "data",
@@ -354,6 +378,18 @@ all(check_col_classes(sheet9_cols_typed, sheet9_expectations))
 # Check ranges
 
 all(check_ranges(sheet9_cols_typed, sheet9_expectations))
+
+# Check that all plant-plot combos match plants table
+
+if(any(!is.na(sheet9_cols_typed$individual_id))) {
+  check_plant_plot_ids(sheet6_cols_typed, sheet9_cols_typed)
+}
+
+# Check that all plots occur in plots table
+
+if(any(!is.na(sheet9_cols_typed$plot_id))) {
+  check_plots(sheet5_cols_typed, sheet9_cols_typed)
+}
 
 write.csv(sheet9_cols_typed,
           here::here(
@@ -440,3 +476,139 @@ write.csv(sheet11_cols_typed,
             paste0(dataset_identifier, "_sheet11.csv")
           ),
           row.names = F)
+
+# Run all checks and add to problems report #### 
+
+outcomes_report <- read.csv(here::here("checks", "checks_outcomes_template.csv"))
+
+outcomes_report$dataset_name <- dataset_identifier
+outcomes_report$generated_by <- my_initials
+outcomes_report$generated_at <- as.character(Sys.time())
+
+outcomes_vect <- vector(mode = "logical", 
+                        length = nrow(outcomes_report))
+names(outcomes_vect) <- outcomes_report$check
+outcomes_vect['sheet1_classes'] <-
+  all(check_col_classes(sheet1_cols_typed, sheet1_expectations))
+outcomes_vect['sheet1_ranges'] <-
+  all(check_ranges(sheet1_cols_typed, sheet1_expectations))
+outcomes_vect['sheet2_classes'] <-
+  all(check_col_classes(sheet2_cols_typed, sheet2_expectations))
+outcomes_vect['sheet2_ranges'] <-
+  all(check_ranges(sheet2_cols_typed, sheet2_expectations))
+outcomes_vect['sheet3_classes'] <-
+  all(check_col_classes(sheet3_cols_typed, sheet3_expectations))
+outcomes_vect['sheet3_ranges'] <-
+  all(check_ranges(sheet3_cols_typed, sheet3_expectations))
+outcomes_vect['sheet4_classes'] <-
+  all(check_col_classes(sheet4_cols_typed, sheet4_expectations))
+outcomes_vect['sheet4_ranges'] <-
+  all(check_ranges(sheet4_cols_typed, sheet4_expectations))
+outcomes_vect['sheet5_classes'] <-
+  all(check_col_classes(sheet5_cols_typed, sheet5_expectations))
+outcomes_vect['sheet5_ranges'] <-
+  all(check_ranges(sheet5_cols_typed, sheet5_expectations))
+outcomes_vect['sheet5_plot_treatments_match'] <-
+  check_plot_treatments(sheet4_cols_typed, sheet5_cols_typed)
+outcomes_vect['sheet6_classes'] <-
+  all(check_col_classes(sheet6_cols_typed, sheet6_expectations))
+outcomes_vect['sheet6_ranges'] <-
+  all(check_ranges(sheet6_cols_typed, sheet6_expectations))
+outcomes_vect['sheet6_plot_ids_match'] <-
+  check_plots(sheet5_cols_typed, sheet6_cols_typed)
+outcomes_vect['sheet6_plant_plot_treatments_match'] <-
+  check_plant_plot_treatments(sheet5_cols_typed, sheet6_cols_typed)
+outcomes_vect['sheet6_plant_treatments_match'] <-
+  check_individual_treatments(sheet4_cols_typed, sheet6_cols_typed)
+outcomes_vect['sheet7_classes'] <-
+  all(check_col_classes(sheet7_cols_typed, sheet7_expectations))
+outcomes_vect['sheet7_ranges'] <-
+  all(check_ranges(sheet7_cols_typed, sheet7_expectations))
+outcomes_vect['sheet7_plant_ids_match'] <-
+  ifelse(any(!is.na(sheet7_cols_typed$water_potential_mean)),
+         check_plants(sheet6_cols_typed, sheet7_cols_typed),
+         NA)
+outcomes_vect['sheet7_plot_ids_match'] <-
+  ifelse(any(!is.na(sheet7_cols_typed$water_potential_mean)),
+         check_plots(sheet5_cols_typed, sheet7_cols_typed),
+         NA)
+outcomes_vect['sheet7_plant_plot_ids_match'] <-
+  ifelse(any(!is.na(sheet7_cols_typed$water_potential_mean)),
+         check_plant_plot_ids(sheet6_cols_typed, sheet7_cols_typed),
+         NA)
+outcomes_vect['sheet8_classes'] <-
+  all(check_col_classes(sheet8_cols_typed, sheet8_expectations))
+outcomes_vect['sheet8_ranges'] <-
+  all(check_ranges(sheet8_cols_typed, sheet8_expectations))
+outcomes_vect['sheet8_plant_ids_match'] <-
+  ifelse(any(!is.na(sheet8_cols_typed$water_potential_mean)),
+         check_plants(sheet6_cols_typed, sheet8_cols_typed),
+         NA)
+outcomes_vect['sheet8_plot_ids_match'] <-
+  ifelse(any(!is.na(sheet8_cols_typed$water_potential_mean)),
+         check_plots(sheet5_cols_typed, sheet8_cols_typed),
+         NA)
+outcomes_vect['sheet8_plant_plot_ids_match'] <-
+  ifelse(any(!is.na(sheet8_cols_typed$water_potential_mean)),
+         check_plant_plot_ids(sheet6_cols_typed, sheet8_cols_typed),
+         NA)
+outcomes_vect['sheet9_classes'] <-
+  all(check_col_classes(sheet9_cols_typed, sheet9_expectations))
+outcomes_vect['sheet9_ranges'] <-
+  all(check_ranges(sheet9_cols_typed, sheet9_expectations))
+outcomes_vect['sheet9_plant_ids_match'] <-
+  ifelse(any(!is.na(sheet9_cols_typed$individual_id)),
+         check_plants(sheet6_cols_typed, sheet9_cols_typed),
+         NA)
+outcomes_vect['sheet9_plot_ids_match'] <-
+  ifelse(any(!is.na(sheet9_cols_typed$plot_id)),
+         check_plots(sheet5_cols_typed, sheet9_cols_typed),
+         NA)
+outcomes_vect['sheet9_plant_plot_ids_match'] <-
+  ifelse(all(any(!is.na(sheet9_cols_typed$individual_id)), 
+             any(!is.na(sheet9_cols_typed$plot_id))),
+         check_plant_plot_ids(sheet6_cols_typed, sheet9_cols_typed),
+         NA)
+outcomes_vect['sheet10_classes'] <-
+  all(check_col_classes(sheet10_cols_typed, sheet10_expectations))
+outcomes_vect['sheet10_ranges'] <-
+  all(check_ranges(sheet10_cols_typed, sheet10_expectations))
+outcomes_vect['sheet11_classes'] <-
+  all(check_col_classes(sheet11_cols_typed, sheet11_expectations))
+outcomes_vect['sheet11_ranges'] <-
+  all(check_ranges(sheet11_cols_typed, sheet11_expectations))
+outcomes_vect['data_promised'] <-
+  check_data_promised(
+    sheet2_cols_typed,
+    sheet7_cols_typed,
+    sheet8_cols_typed,
+    sheet9_cols_typed,
+    sheet10_cols_typed
+  )
+
+outcomes_report$outcome <- outcomes_vect
+
+# Make plans to resolve any outstanding failed checks
+
+outcomes_report |>
+  filter(!outcome)
+
+write.csv(outcomes_report,
+          here::here(
+            "checks",
+            "reports",
+            paste0(dataset_identifier, "_results.csv")
+          ),
+          row.names = F)
+
+# Update dataset_tracking ####
+
+dataset_tracking[ which(dataset_tracking$dataset_name == dataset_identifier), "updated_by"] <- my_initials
+dataset_tracking[ which(dataset_tracking$dataset_name == dataset_identifier), "updated_at"] <- as.character(Sys.time())
+dataset_tracking[ which(dataset_tracking$dataset_name == dataset_identifier), "latest_status"] <- ifelse(
+  any(!(outcomes_report$outcome), na.rm = T),
+  "imported WITH FLAGS",
+  "imported NO FLAGS"
+)
+
+write.csv(dataset_tracking, here::here("dataset_tracking.csv"), row.names = F)
