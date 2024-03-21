@@ -16,7 +16,7 @@ check_individual_treatments <- function(sheet4, sheet6) {
   
   individual_treatments <-
     sheet4 |>
-    filter(level_of_treatment %in% c("Whole study", "Individual", "Site"))
+    filter(level_of_treatment %in% c("Individual", "Site"))
   
   if(nrow(individual_treatments) == 0) {
     individual_treatments <- data.frame(treatment_id = "No treatment")
