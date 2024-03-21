@@ -14,16 +14,7 @@ library(dplyr)
 library(ggplot2)
 
 tracking_data <- read.csv(here::here("dataset_tracking.csv")) |>
-  select(dataset_name, latest_status) |>
-  mutate(path = "template")
-
-sfn_data  <- read.csv(here::here("sfn_to_template_tracking.csv")) |>
-  select(dataset_name, status) |>
-  rename(latest_status = status) |>
-  mutate(path = "sfn")
-
-tracking_data <- tracking_data |>
-  bind_rows(sfn_data) |>
+  select(dataset_name, latest_status, source) |>
   mutate(latest_status = ifelse(is.na(latest_status), "submitted", latest_status))
 
 status_key <- data.frame(
@@ -35,7 +26,7 @@ tracking_data <- tracking_data |>
   left_join(status_key)
 
 tracking_data_summary <- tracking_data |>
-  group_by(path, status_description) |>
+  group_by(source, status_description) |>
   tally()
 
 theme_set(theme_bw())
@@ -44,7 +35,7 @@ theme_set(theme_bw())
 
 ```{r, echo = F, fig.dim = c(7,5)}
 
-ggplot(tracking_data_summary, aes(path, n, fill = status_description)) +
+ggplot(tracking_data_summary, aes(source, n, fill = status_description)) +
   geom_col(position = "stack") +
   ggtitle("Dataset statuses"
   ) +

@@ -1,7 +1,7 @@
 README
 ================
 Renata
-2024-03-20
+2024-03-21
 
 This repo houses scripts for QA of PSInet data.
 
@@ -9,12 +9,11 @@ This repo houses scripts for QA of PSInet data.
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-| path     | status_description           |   n |
-|:---------|:-----------------------------|----:|
-| sfn      | 1 - Obtained from SFN        |   2 |
-| sfn      | 2 - Ready as PSInet template |  41 |
-| template | 2 - Ready as PSInet template |  62 |
-| template | 4 - Passing QA               |   2 |
+| source | status_description           |   n |
+|:-------|:-----------------------------|----:|
+| PSInet | 2 - Ready as PSInet template |  62 |
+| PSInet | 4 - Passing QA               |   2 |
+| SFN    | 2 - Ready as PSInet template |  39 |
 
 # Data QA instructions
 
