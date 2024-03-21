@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "ARG_MAZ"
+dataset_identifier <- "ARG_TRE"
 
 is_sfn <- TRUE
 
@@ -83,14 +83,16 @@ sheet2_expectations <-
 sheet2 <- import_sheet(dataset_path, 2, sheet2_expectations)
 
 sheet2 <- sheet2 |>
-  mutate(dataset_name = dataset_identifier, .before = 1) |>
+  mutate(dataset_name = dataset_identifier, .before = 1) 
+
+# Add any needed code here until the last checks pass
+
+sheet2 <- sheet2 |>
   mutate(sensor_location = ifelse(
     grepl("Clearing", sensor_location),
     "Clearing (< 1 km away)",
     sensor_location
   ))
-
-# Add any needed code here until the last checks pass
 
 # Set col types
 
@@ -195,7 +197,6 @@ sheet5 <- sheet5 |>
 # Add any needed code here until the last checks pass
 
 sheet5$vegetation_type <- "4 Deciduous broadleaf forests"
-sheet5$terrain <- "Gentle slope (less than 2%)"
 
 # Set col types
 
@@ -231,10 +232,12 @@ sheet6_expectations <-
 sheet6 <- import_sheet(dataset_path, 6, sheet6_expectations)
 
 sheet6 <- sheet6 |>
-  mutate(dataset_name = dataset_identifier, .before = 1,
-         plot_id = "Whole study")
+  mutate(dataset_name = dataset_identifier, .before = 1)
 
 # Add any needed code here until the last checks pass
+
+sheet6 <- sheet6 |>
+  mutate(plot_id = "Whole study")
 
 # Set col types
 
@@ -274,17 +277,12 @@ sheet7_expectations <-
 sheet7 <- import_sheet(dataset_path, 7, sheet7_expectations)
 
 sheet7 <- sheet7 |>
-  mutate(dataset_name = dataset_identifier, .before = 1,
-         plot_id = "Whole study")
+  mutate(dataset_name = dataset_identifier, .before = 1)
 
 # Add any needed code here until the last checks pass
 
 sheet7 <- sheet7 |>
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num, -time_seconds, -time_POSIX)
+  mutate(plot_id = "Whole study")
 
 # Set col types
 
@@ -359,10 +357,12 @@ sheet9_expectations <-
 sheet9 <- import_sheet(dataset_path, 9, sheet9_expectations)
 
 sheet9 <- sheet9 |>
-  mutate(dataset_name = dataset_identifier, .before = 1,
-         plot_id = "Whole study")
+  mutate(dataset_name = dataset_identifier, .before = 1)
 
 # Add any needed code here until the last checks pass
+
+sheet9 <- sheet9 |>
+  mutate(plot_id = "Whole study")
 
 # Set col types
 
@@ -592,7 +592,7 @@ outcomes_report$outcome <- outcomes_vect
 outcomes_report |>
   filter(!outcome)
 
-outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <- "Windspeed of 62 meters per second."
+outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <- "Windspeed of 69 meters per second."
 
 write.csv(outcomes_report,
           here::here(

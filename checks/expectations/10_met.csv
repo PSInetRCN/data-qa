@@ -1,6 +1,6 @@
 ﻿Original_column_name,Cleaned_column_name,Type,Range,Required,Remarks
 Not provided,dataset_name,character,,TRUE,
-Date,date,character,range: 19900101:20250101,TRUE,
+Date,date,integer,range: 19900101:20250101,TRUE,
 Time,time,character,time,TRUE,
 Precipitation (mm),precipitation_mm,numeric,range: 0:250,,based on SFN which is based on Cerveny et al 2007
 Relative humidity (%),relative_humidity_percent,numeric,range: 10:100,,based on SFN
