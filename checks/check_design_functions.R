@@ -2,7 +2,7 @@ check_plot_treatments <- function(sheet4, sheet5) {
   
   plot_treatments <-
     sheet4 |>
-    filter(level_of_treatment %in% c("Whole study", "Stand/plot/transect"))
+    filter(level_of_treatment %in% c("Whole study", "Stand/plot/transect", "Site"))
   
   if(nrow(plot_treatments) == 0) {
     plot_treatments <- data.frame(treatment_id = "No treatment")
@@ -16,7 +16,7 @@ check_individual_treatments <- function(sheet4, sheet6) {
   
   individual_treatments <-
     sheet4 |>
-    filter(level_of_treatment %in% c("Whole study", "Individual"))
+    filter(level_of_treatment %in% c("Whole study", "Individual", "Site"))
   
   if(nrow(individual_treatments) == 0) {
     individual_treatments <- data.frame(treatment_id = "No treatment")
