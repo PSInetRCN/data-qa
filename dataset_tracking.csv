@@ -1,7 +1,7 @@
 "response_ID","dataset_name","raw_box_file_ID","updated_by","updated_at","latest_status","source"
 14,"Flo_1",1418283786880,"RMD","2024-03-20 12:37:34.238149","imported NO FLAGS","PSInet"
 15,"Flo_2",1418295647973,"RMD","2024-03-20 12:37:26.42563","imported NO FLAGS","PSInet"
-16,"Stu_1",1418324447015,NA,NA,NA,"PSInet"
+16,"Stu_1",1418324447015,"RMD","2024-03-21 12:09:26.096797","imported WITH FLAGS","PSInet"
 17,"Joh_1",1422807121407,NA,NA,NA,"PSInet"
 18,"Boh_1",1424231483194,NA,NA,NA,"PSInet"
 19,"Kee_1",1425305946244,NA,NA,NA,"PSInet"
