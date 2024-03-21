@@ -10,3 +10,7 @@ sheet1 <- sheet1 |>
   mutate(
     dataset_name = dataset_identifier,
     .before = 1)
+
+if(!is_sfn) {
+  sheet1$study <- dataset_identifier
+}

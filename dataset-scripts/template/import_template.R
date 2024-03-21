@@ -92,6 +92,9 @@ all(check_col_classes(sheet1_cols_typed, sheet1_expectations))
 # Check ranges
 all(check_ranges(sheet1_cols_typed, sheet1_expectations))
 
+# Check that no required columns have nas
+check_required_columns(sheet1, sheet1_expectations)
+
 # Write csv
 write.csv(sheet1_cols_typed,
           here::here(
@@ -126,6 +129,14 @@ all(check_col_classes(sheet2_cols_typed, sheet2_expectations))
 
 all(check_ranges(sheet2_cols_typed, sheet2_expectations))
 
+# Check required columns
+
+check_required_columns(sheet2_cols_typed, sheet2_expectations)
+
+# Check units
+
+check_sheet2_units(sheet2_cols_typed)
+
 write.csv(sheet2_cols_typed,
           here::here(
             "data",
@@ -159,6 +170,10 @@ all(check_col_classes(sheet3_cols_typed, sheet3_expectations))
 
 all(check_ranges(sheet3_cols_typed, sheet3_expectations))
 
+# Check required columns
+
+check_required_columns(sheet3_cols_typed, sheet3_expectations)
+
 write.csv(sheet3_cols_typed,
           here::here(
             "data",
@@ -191,6 +206,10 @@ all(check_col_classes(sheet4_cols_typed, sheet4_expectations))
 # Check ranges
 
 all(check_ranges(sheet4_cols_typed, sheet4_expectations))
+
+# Check required columns
+
+check_required_columns(sheet4_cols_typed, sheet4_expectations)
 
 write.csv(sheet4_cols_typed,
           here::here(
@@ -228,6 +247,10 @@ all(check_ranges(sheet5_cols_typed, sheet5_expectations))
 # Check plot treatments
 
 check_plot_treatments(sheet4_cols_typed, sheet5_cols_typed)
+
+# Check required columns
+
+check_required_columns(sheet5_cols_typed, sheet5_expectations)
 
 write.csv(sheet5_cols_typed,
           here::here(
@@ -284,6 +307,10 @@ check_plant_plot_treatments(sheet5_cols_typed, sheet6_cols_typed)
 
 check_individual_treatments(sheet4_cols_typed, sheet6_cols_typed)
 
+# Check required columns
+
+check_required_columns(sheet6_cols_typed, sheet6_expectations)
+
 write.csv(sheet6_cols_typed,
           here::here(
             "data",
@@ -335,6 +362,12 @@ all(check_ranges(sheet7_cols_typed, sheet7_expectations))
 
 check_plant_plot_ids(sheet6_cols_typed, sheet7_cols_typed)
 
+# Check required columns
+
+if(sheet2_cols_typed$is_it_available[1]) {
+  check_required_columns(sheet7_cols_typed, sheet7_expectations)
+}
+
 write.csv(sheet7_cols_typed,
           here::here(
             "data",
@@ -368,10 +401,15 @@ all(check_col_classes(sheet8_cols_typed, sheet8_expectations))
 
 all(check_ranges(sheet8_cols_typed, sheet8_expectations))
 
-
 # Check that all plant-plot combos match plants table
 
 check_plant_plot_ids(sheet6_cols_typed, sheet8_cols_typed)
+
+# Check required columns
+
+if(sheet2_cols_typed$is_it_available[2]) {
+  check_required_columns(sheet8_cols_typed, sheet7_expectations)
+}
 
 write.csv(sheet8_cols_typed,
           here::here(
@@ -431,6 +469,12 @@ if (any(!is.na(sheet9_cols_typed$plot_id))) {
   check_plots(sheet5_cols_typed, sheet9_cols_typed)
 }
 
+# Check required columns
+
+if(any(sheet2_cols_typed$is_it_available[3:6])) {
+  check_required_columns(sheet9_cols_typed, sheet9_expectations)
+}
+
 write.csv(sheet9_cols_typed,
           here::here(
             "data",
@@ -476,6 +520,12 @@ all(check_col_classes(sheet10_cols_typed, sheet10_expectations))
 
 all(check_ranges(sheet10_cols_typed, sheet10_expectations))
 
+# Check required columns
+
+if(any(sheet2_cols_typed$is_it_available[7:14])) {
+  check_required_columns(sheet10_cols_typed, sheet10_expectations)
+}
+
 write.csv(sheet10_cols_typed,
           here::here(
             "data",
@@ -508,6 +558,12 @@ all(check_col_classes(sheet11_cols_typed, sheet11_expectations))
 # Check ranges
 
 all(check_ranges(sheet11_cols_typed, sheet11_expectations))
+
+# Check required columns
+
+if(is_sfn) {
+  check_required_columns(sheet11_cols_typed, sheet11_expectations)
+}
 
 write.csv(sheet11_cols_typed,
           here::here(

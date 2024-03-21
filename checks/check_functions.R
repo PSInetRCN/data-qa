@@ -80,3 +80,43 @@ check_ranges <- function(sheet, sheet_expectations, na_ok = TRUE) {
   
   ranges_valid
 }
+
+check_required_columns <- function(sheet, sheet_expectations, details = FALSE) {
+  
+  required_columns <- sheet_expectations |>
+    filter(Required) |>
+    select(Cleaned_column_name) |>
+    group_by_all() |>
+    mutate(has_nas = check_if_col_is_na(Cleaned_column_name, sheet = sheet))
+  
+  if(!any(required_columns$has_nas)) {
+    return(TRUE)
+  }
+  
+  if(details) {
+    return(required_columns |> filter(has_nas))
+  }
+  
+  return(any(required_columns$has_nas))
+  
+}
+
+check_if_col_is_na <- function(col_name, sheet) {
+  any(is.na(sheet[,col_name]))
+}
+
+check_sheet2_units <- function(sheet2, details = FALSE) {
+  
+  sheet2 <- sheet2 |>
+    filter(is_it_available) 
+  
+  if(details) {
+    return(
+      sheet2 |>
+        filter(is.na(units)) |>
+        select(data_variable, units)
+    )
+  }
+  
+  return(!(any(is.na(sheet2$units))))
+}

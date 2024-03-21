@@ -18,6 +18,6 @@ library(readxl)
 
 source(here::here("checks", "check_functions.R"))
 source(here::here("checks", "check_design_functions.R"))
-source(here::here("dataset-scripts", "template", "import_functions.R"))
+source(here::here("dataset-scripts", "template", "standardized_scripts", "import_functions.R"))
 
 dataset_tracking <- read.csv(here::here("dataset_tracking.csv"))
