@@ -31,7 +31,7 @@ import_sheet <-
     sheets_ranges <- data.frame(
       sheet = 1:11,
       sheet_to_read = c(2:11, 13),
-      sheet_ranges = c("B3:P3",
+      sheet_ranges = c("B3:O3",
                        "B3:J16",
                        "B3:I15",
                        "2:4",
