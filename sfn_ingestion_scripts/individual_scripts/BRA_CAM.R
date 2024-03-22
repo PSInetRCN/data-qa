@@ -140,8 +140,8 @@ site_md$`Latitude (WGS84)`[2] <- unique(sfn_wp$lat)
 site_md$`Longitude (WGS84)`[2] <- unique(sfn_wp$lon)
 site_md$Remarks[2] <- sfn_site_md$si_remarks
 site_md$Study[2] <- sfn_site
-site_md$Experimental_study[2] <- FALSE
-site_md$Study_description[2] <- NA
+
+site_md$`Multi site study`[2] <- FALSE
 
 writeData(filled_psinet_template, 2, site_md)
 
