@@ -5,9 +5,9 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Flo_1"
+dataset_identifier <- "ARG_TRE"
 
-is_sfn <- FALSE
+is_sfn <- TRUE
 
 source(here::here(
   "template_ingestion_scripts",
@@ -27,9 +27,6 @@ source(here::here(
 )
 
 # Add any needed code here until the checks pass
-
-sheet1 <- sheet1 |>
-  mutate(multi_site = FALSE)
 
 # Set col types
 
@@ -173,9 +170,8 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5$vegetation_type <- "2 Evergreen broadleaf forests"
-sheet5$terrain <- "Gentle slope (less than 2%)"
-sheet5$growth_condition <- "Orchard or plantation"
+sheet5$vegetation_type <- "4 Deciduous broadleaf forests"
+
 
 # Set col types
 
@@ -260,14 +256,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet7 <- sheet7 |>
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |>
-  mutate(water_potential_mean = as.numeric(water_potential_mean) * -1)
-
 # Set col types
 
 sheet7_cols_typed <- set_col_types(sheet7, sheet7_expectations)
@@ -350,12 +338,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet9 <- sheet9 |>
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num,-date_date,-date_f)
 
 # Set col types
 
@@ -482,8 +464,8 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-outcomes_report$remarks[which(outcomes_report$check == "sheet7_ranges")] <-
-  "Positive WP values converted to negative"
+outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <-
+  "Windspeed of 69 meters per second."
 
 write.csv(outcomes_report,
           here::here(

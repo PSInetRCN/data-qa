@@ -7,5 +7,4 @@ sheet7_expectations <-
 sheet7 <- import_sheet(dataset_path, 7, sheet7_expectations)
 
 sheet7 <- sheet7 |>
-  mutate(dataset_name = dataset_identifier, .before = 1,
-         plot_id = "Whole study")
+  mutate(dataset_name = dataset_identifier, .before = 1)

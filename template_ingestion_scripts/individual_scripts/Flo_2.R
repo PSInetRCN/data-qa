@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Flo_1"
+dataset_identifier <- "Flo_2"
 
 is_sfn <- FALSE
 
@@ -64,6 +64,9 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet2 <- sheet2 |>
+  mutate(is_it_available = ifelse(is_it_available == 1, TRUE, FALSE))
+
 # Set col types
 
 sheet2_cols_typed <- set_col_types(sheet2, sheet2_expectations)
@@ -102,6 +105,9 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
+
+sheet3 <- sheet3 |>
+  mutate(availability = ifelse(availability == 1, TRUE, FALSE))
 
 # Set col types
 
@@ -357,6 +363,30 @@ sheet9 <- sheet9 |>
   mutate(date = date_f) |>
   select(-date_num,-date_date,-date_f)
 
+
+sheet9 <- sheet9 |>
+  filter(!if_all(all_of(
+    c(
+      'individual_id',
+      'plot_id',
+      'date',
+      'time',
+      'swc_mean_shallow',
+      'swc_sd_shallow',
+      'swc_mean_deep',
+      'swc_sd_deep',
+      'swc_n_deep',
+      'swp_mean_shallow',
+      'swp_sd_shallow',
+      'swp_n_shallow',
+      'swp_mean_deep',
+      'swp_sd_deep',
+      'swp_n_deep'
+    )
+  ),
+  is.na))
+
+
 # Set col types
 
 sheet9_cols_typed <- set_col_types(sheet9, sheet9_expectations)
@@ -501,3 +531,4 @@ source(here::here(
     "13_update_dataset_tracking.R"
   )
 )
+
