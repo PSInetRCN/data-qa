@@ -1,6 +1,6 @@
 "response_ID","dataset_name","raw_box_file_ID","updated_by","updated_at","latest_status","source","flag_summary"
-14,"Flo_1",1418283786880,"RMD","2024-03-22 12:38:52.624445","imported NO FLAGS","PSInet","Met values out of range"
-15,"Flo_2",1418295647973,"RMD","2024-03-22 12:38:56.648961","imported NO FLAGS","PSInet","Met values out of range"
+14,"Flo_1",1418283786880,"RMD","2024-03-22 12:40:35.993893","imported NO FLAGS","PSInet",NA
+15,"Flo_2",1418295647973,"RMD","2024-03-22 12:40:46.539965","imported NO FLAGS","PSInet",NA
 16,"Stu_1",1418324447015,"RMD","2024-03-22 12:39:13.602648","imported WITH FLAGS","PSInet","Met values out of range"
 17,"Joh_1",1422807121407,"RMD","2024-03-22 12:39:01.032559","imported WITH FLAGS","PSInet","Met data listed as available but not provided"
 18,"Boh_1",1424231483194,"RMD","2024-03-22 12:38:47.863198","imported WITH FLAGS","PSInet","Met values out of range"

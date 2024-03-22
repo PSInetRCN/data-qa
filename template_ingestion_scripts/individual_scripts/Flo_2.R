@@ -525,6 +525,8 @@ write.csv(outcomes_report,
 
 # Update dataset tracking ####
 
+flag_summary <- NA
+
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
