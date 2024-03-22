@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Bev_1"
+dataset_identifier <- "Pot_2"
 
 is_sfn <- FALSE
 
@@ -28,6 +28,46 @@ source(here::here(
 
 # Add any needed code here until the checks pass
 
+sheet1 <- sheet1 |>
+  tidyr::separate_wider_position(
+    latitude_wgs84,
+    widths = c(
+      lat_deg = 2,
+      drop1 = 1,
+      lat_min = 2,
+      drop2 = 2,
+      lat_dir = 1
+    ),
+    cols_remove = F
+  ) |>
+  select(-drop1, -drop2) |>
+  tidyr::separate_wider_position(
+    longitude_wgs84,
+    widths = c(
+      lon_deg = 3,
+      drop1 = 1,
+      lon_min = 1,
+      drop2 = 2,
+      lon_dir = 1
+    ),
+    cols_remove = F
+  ) |>
+  select(-drop1, -drop2) |>
+  mutate(
+    latitude_wgs84 = as.numeric(lat_deg) +
+      (as.numeric(lat_min) / 60),
+    longitude_wgs84 = -1 *
+      (as.numeric(lon_deg) +
+         (as.numeric(lon_min) / 60))
+  ) |>
+  select(-c(
+    lon_deg,
+    lon_min,
+    lat_deg,
+    lat_min,
+    lon_dir,
+    lat_dir
+  ))
 # Set col types
 
 sheet1_cols_typed <- set_col_types(sheet1, sheet1_expectations)
@@ -135,6 +175,7 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet4$level_of_treatment <- "Whole study"
 sheet4$treatment_id<- "No treatment"
 
 # Set col types
@@ -173,7 +214,9 @@ source(here::here(
 # Add any needed code here until the last checks pass
 
 sheet5 <- sheet5 |>
-  mutate(growth_condition = "Naturally regenerated, unmanaged")
+  mutate(plot_id = "Whole study",
+         treatment_id = "No treatment",
+         growth_condition = "Naturally regenerated, unmanaged")
 
 # Set col types
 
@@ -214,8 +257,7 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet6$plot_treatment_id <- "No treatment"
-sheet6$individual_treatment_id <- "No treatment"
+sheet6$plot_id <- "Whole study"
 
 # Set col types
 
@@ -261,19 +303,12 @@ source(here::here(
 # Add any needed code here until the last checks pass
 
 sheet7 <- sheet7 |>
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f) |>
-  mutate(hr = as.numeric(time) / 100) |>
-  mutate(time = ifelse(hr < 10,
-                       paste0("0", hr, ":00:00"),
-                       paste0(hr, ":00:00"))) |>
-  select(-hr) |>
-  mutate(plot_id = ifelse(grepl("NF", plot_id), "NorthFace (NF)",
-                          ifelse(grepl("SF", plot_id), "SouthFace (SF)",
-                                 ifelse(grepl("TR", plot_id), "Trench (TR)", NA))))
+  mutate(time_num = as.numeric(time)) |>
+  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
+  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
+  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
+  select(-time_num,-time_seconds,-time_POSIX) |>
+  mutate(plot_id = "Whole study")
 
 # Set col types
 
@@ -406,17 +441,7 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet10 <- sheet10 |>
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |>
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
+sheet10$time <- NA
 
 # Set col types
 
@@ -503,7 +528,7 @@ write.csv(outcomes_report,
 
 # Update dataset tracking ####
 
-flag_summary <- "Met data out of range and netrad available but not provided"
+flag_summary <- NA
 
 source(here::here(
   "template_ingestion_scripts",
