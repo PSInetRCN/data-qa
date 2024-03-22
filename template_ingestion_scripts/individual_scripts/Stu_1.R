@@ -5,9 +5,9 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "ARG_MAZ"
+dataset_identifier <- "Stu_1"
 
-is_sfn <- TRUE
+is_sfn <- FALSE
 
 source(here::here(
   "template_ingestion_scripts",
@@ -27,6 +27,57 @@ source(here::here(
 )
 
 # Add any needed code here until the checks pass
+
+sheet1 <- sheet1 |>
+  mutate(multi_site = FALSE) |>
+  tidyr::separate_wider_position(
+    latitude_wgs84,
+    widths = c(
+      lat_deg = 2,
+      drop1 = 1,
+      lat_min = 2,
+      drop2 = 1,
+      lat_sec = 4,
+      drop3 = 2,
+      lat_dir = 1
+    ),
+    cols_remove = F
+  ) |>
+  select(-drop1, -drop2, -drop3) |>
+  tidyr::separate_wider_position(
+    longitude_wgs84,
+    widths = c(
+      lon_deg = 3,
+      drop1 = 1,
+      lon_min = 2,
+      drop2 = 1,
+      lon_sec = 4,
+      drop3 = 2,
+      lon_dir = 1
+    ),
+    cols_remove = F
+  ) |>
+  select(-drop1, -drop2, -drop3) |>
+  mutate(
+    latitude_wgs84 = as.numeric(lat_deg) +
+      (as.numeric(lat_min) / 60) +
+      (as.numeric(lat_sec) / 3600),
+    longitude_wgs84 = -1 *
+      (as.numeric(lon_deg) +
+         (as.numeric(lon_min) / 60) +
+         (as.numeric(lon_sec) / 3600))
+  ) |>
+  select(-c(
+    lon_deg,
+    lon_min,
+    lon_sec,
+    lat_deg,
+    lat_min,
+    lat_sec,
+    lon_dir,
+    lat_dir
+  ))
+
 
 # Set col types
 
@@ -170,10 +221,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5$vegetation_type <- "4 Deciduous broadleaf forests"
-sheet5$terrain <- "Gentle slope (less than 2%)"
-
-
 # Set col types
 
 sheet5_cols_typed <- set_col_types(sheet5, sheet5_expectations)
@@ -213,6 +260,19 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet6 <- sheet6 |>
+  mutate(plot_treatment_id = "Control") |>
+  select(-individual_id) |>
+  mutate(matching = TRUE)
+
+new_ids <- data.frame(matching = TRUE,
+                      individual_id = 1:3)
+
+sheet6 <- left_join(new_ids, sheet6) |>
+  select(-matching) |>
+  mutate(number_of_individuals = 1) |>
+  select(sheet6_expectations$Cleaned_column_name) |>
+  tibble::as_tibble()
 
 # Set col types
 
@@ -256,6 +316,20 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
+
+sheet7 <- sheet7 |>
+  mutate(time_num = as.numeric(time)) |>
+  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
+  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
+  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
+  select(-time_num,-time_seconds,-time_POSIX) |>
+  mutate(date_num = as.numeric(date)) |>
+  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
+  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
+  mutate(date = date_f) |>
+  select(-date_num, -date_date, -date_f)
+
+sheet7 <- sheet7[-1,]
 
 # Set col types
 
@@ -339,6 +413,18 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet9 <- sheet9 |>
+  mutate(plot_id = "Whole study") |>
+  mutate(time_num = as.numeric(time)) |>
+  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
+  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
+  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
+  select(-time_num,-time_seconds,-time_POSIX) |>
+  mutate(date_num = as.numeric(date)) |>
+  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
+  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
+  mutate(date = ifelse(date_num == 20220607, date, date_f)) |>
+  select(-date_num, -date_date, -date_f)
 
 # Set col types
 
@@ -389,6 +475,17 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet10 <- sheet10 |>
+  mutate(time_num = as.numeric(time)) |>
+  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
+  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
+  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
+  select(-time_num,-time_seconds,-time_POSIX) |>
+  mutate(date_num = as.numeric(date)) |>
+  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
+  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
+  mutate(date = ifelse(date_num == 20220101, date, date_f)) |>
+  select(-date_num, -date_date, -date_f)
 
 # Set col types
 
@@ -466,7 +563,7 @@ outcomes_report |>
   filter(!outcome)
 
 outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <-
-  "Windspeed of 62 meters per second."
+  "Humidity, temp, and ppfd out of range"
 
 write.csv(outcomes_report,
           here::here(

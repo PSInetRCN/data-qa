@@ -13,11 +13,8 @@ blank_psinet_template <- lapply(
   2:11,
   FUN = function(x)
     readxl::read_xlsx(
-      here::here(
-        "dataset-scripts",
-        "sfn_ingestion",
-        "PSInet_template_SFNStudy.xlsx"
-      ),
+      here::here("sfn_ingestion_scripts", "PSInet_template_SFNStudy.xlsx")
+,
       sheet = x
     )
 )
@@ -116,7 +113,7 @@ site_path <-
   here::here("data", "sfn_as_psinet", paste0(sfn_site, "_as_psinet.xlsx"))
 
 orig_psinet_template <-
-  loadWorkbook(here::here("dataset-scripts", "sfn_ingestion", "PSInet_template_SFNStudy.xlsx"))
+  loadWorkbook(here::here("sfn_ingestion_scripts", "PSInet_template_SFNStudy.xlsx"))
 
 filled_psinet_template <- copyWorkbook(orig_psinet_template)
 
@@ -319,7 +316,7 @@ matched_plants <-
   data.frame(
     Individual_ID = sfn_individuals$pl_name,
     Number_of_individuals = ifelse(all(sfn_wp$aggregation_level == "tree level"), 1, NA),
-    Plot_ID = sfn_site,
+    Plot_ID = plots$`Plot ID`[2],
     Plot_Treatment_ID = plots$`Treatment ID`[2],
     Individual_Treatment_ID = "No treatment",
     Genus = sfn_individuals$genus,
@@ -360,7 +357,7 @@ if (any("chamber-bagged" %in% sfn_wp$method,
            `Ψ`,
            `Ψ SE`,
            `Ψ N`) |>
-    mutate(Plot_ID = sfn_site, .before = date) |> # Or "Whole study"
+    mutate(Plot_ID = plots$`Plot ID`[2], .before = date) |> # Or "Whole study"
     rename(
       Individual_ID = pl_name,
       Date = date,
@@ -405,7 +402,7 @@ if ("psychometer" %in% sfn_wp$method) {
            `Ψ`,
            `Ψ SE`,
            `Ψ N`) |>
-    mutate(Plot_ID = sfn_site, .after = pl_code) |> # Or "Whole study"
+    mutate(Plot_ID = plots$`Plot ID`[2], .after = pl_code) |> # Or "Whole study"
     rename(
       Individual_ID = pl_name,
       Date = date,
@@ -456,7 +453,7 @@ if (any(data_desc$`Is it available?`[4:5])) {
     ) |>
     bind_rows(sm_dat) |>
     select(colnames(sm_dat)) |>
-    mutate(Plot_ID = sfn_site)
+    mutate(Plot_ID = plots$`Plot ID`[2])
   
   writeData(
     filled_psinet_template,
