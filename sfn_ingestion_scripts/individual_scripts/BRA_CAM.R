@@ -131,7 +131,7 @@ site_md$Institution[2] <- sfn_wp$contact_institution[1]
 site_md$Email[2] <- sfn_wp$contact_email[1]
 site_md$`Data publication?`[2] <-
   ifelse(is.na(sfn_site_md$si_paper[1]), "Not published",
-         "Yes - see DOI")
+         "Yes - as part of a scientific paper")
 site_md$`Data publication DOI(s)`[2] <- sfn_site_md$si_paper
 site_md$`Study type`[2] <- "Field study"
 site_md$`Begin year`[2] <- NA
@@ -303,12 +303,7 @@ writeData(filled_psinet_template, 5, treatments)
 plots <- blank_psinet_template[[5]]
 
 plots$`Plot ID`[2] <- "Whole study"
-plots$`Treatment ID`[2] <-
-  ifelse(length(unique(na.omit(
-    sfn_wp$pl_treatment
-  ))) == 1,
-  unique(sfn_wp$pl_treatment),
-  "No treatment")
+plots$`Treatment ID`[2] <- "No treatment"
 plots$`Vegetation type`[2] <- sfn_site_md$si_igbp[1]
 plots$`Growth condition`[2] <- sfn_stand_md$st_growth_condition[1]
 plots$Aspect[2] <- sfn_stand_md$st_aspect[1]
@@ -341,11 +336,7 @@ matched_plants <-
     Number_of_individuals = ifelse(all(sfn_wp$aggregation_level == "tree level"), 1, NA),
     Plot_ID = sfn_site,
     Plot_Treatment_ID = plots$`Treatment ID`[2],
-    Individual_Treatment_ID = ifelse(
-      is.na(sfn_individuals$pl_treatment),
-      "No treatment",
-      sfn_individuals$pl_treatment
-    ),
+    Individual_Treatment_ID = "No treatment",
     Genus = sfn_individuals$genus,
     Specific_epithet = sfn_individuals$species,
     `Plant social status` = NA,

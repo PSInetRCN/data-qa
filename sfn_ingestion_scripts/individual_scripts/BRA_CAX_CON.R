@@ -134,7 +134,7 @@ site_md$Institution[2] <- sfn_wp$contact_institution[1]
 site_md$Email[2] <- sfn_wp$contact_email[1]
 site_md$`Data publication?`[2] <-
   ifelse(is.na(sfn_site_md$si_paper[1]), "Not published",
-         "Yes - see DOI")
+         "Yes - as part of a scientific paper")
 site_md$`Data publication DOI(s)`[2] <- sfn_site_md$si_paper
 site_md$`Study type`[2] <- "Field study"
 site_md$`Begin year`[2] <- NA

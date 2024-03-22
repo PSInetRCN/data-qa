@@ -131,7 +131,7 @@ site_md$Institution[2] <- sfn_wp$contact_institution[1]
 site_md$Email[2] <- sfn_wp$contact_email[1]
 site_md$`Data publication?`[2] <-
   ifelse(is.na(sfn_site_md$si_paper[1]), "Not published",
-         "Yes - see DOI")
+         "Yes - as part of a scientific paper")
 site_md$`Data publication DOI(s)`[2] <- sfn_site_md$si_paper
 site_md$`Study type`[2] <- "Field study"
 site_md$`Begin year`[2] <- NA
@@ -274,7 +274,7 @@ writeData(filled_psinet_template, 4, data_avail)
 
 treatments <- blank_psinet_template[[4]][1:2, ]
 
-treatments$`Level of treatment`[2] <- "Site"
+treatments$`Level of treatment`[2] <- "Stand/plot/transect"
 treatments$`Treatment ID`[2] <- unique(sfn_wp$pl_treatment)
 
 writeData(filled_psinet_template, 5, treatments)
@@ -284,13 +284,8 @@ writeData(filled_psinet_template, 5, treatments)
 
 plots <- blank_psinet_template[[5]]
 
-plots$`Plot ID`[2] <- sfn_site
-plots$`Treatment ID`[2] <-
-  ifelse(length(unique(na.omit(
-    sfn_wp$pl_treatment
-  ))) == 1,
-  unique(sfn_wp$pl_treatment),
-  "No treatment")
+plots$`Plot ID`[2] <- substr(sfn_site, 9, nchar(sfn_site))
+plots$`Treatment ID`[2] <- unique(sfn_wp$pl_treatment)
 plots$`Vegetation type`[2] <- sfn_site_md$si_igbp[1]
 plots$`Growth condition`[2] <- sfn_stand_md$st_growth_condition[1]
 plots$Aspect[2] <- sfn_stand_md$st_aspect[1]
