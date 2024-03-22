@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "BRA_CAM"
+dataset_identifier <- "CHE_LOT_NOR"
 
 is_sfn <- TRUE
 
@@ -171,8 +171,7 @@ source(here::here(
 # Add any needed code here until the last checks pass
 
 sheet5 <- sheet5 |>
-  mutate(vegetation_type = "5 Mixed forests",
-         terrain = "Medium slope (2-5%)")
+  mutate(vegetation_type = "1 Evergreen needleleaf forests")
 
 # Set col types
 
@@ -256,6 +255,8 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet7$organ <- "twig/leaf cluster"
+
 # Set col types
 
 sheet7_cols_typed <- set_col_types(sheet7, sheet7_expectations)
@@ -338,6 +339,10 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet9_vals <- sheet9[,6:17] |> is.na() |> rowSums()
+
+sheet9 <- sheet9[ which(sheet9_vals < 12), ]
+
 # Set col types
 
 sheet9_cols_typed <- set_col_types(sheet9, sheet9_expectations)
@@ -388,11 +393,11 @@ source(here::here(
 # Add any needed code here until the last checks pass
 
 sheet10_vals <- sheet10 |>
-  select(4:11) 
+  select(4:11) |>
+  is.na() |>
+  rowSums()
 
-data_vals <- which(rowSums(is.na(sheet10_vals)) < 8)
-
-sheet10 <- sheet10[data_vals, ]
+sheet10 <- sheet10[which(sheet10_vals < 8), ]
 
 # Set col types
 
@@ -469,10 +474,7 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <-
-  "Slightly high PPFD, slightly low RH."
-
-flag_summary <- "Met values out of range"
+flag_summary <- NA
 
 
 write.csv(outcomes_report,
@@ -484,8 +486,6 @@ write.csv(outcomes_report,
           row.names = F)
 
 # Update dataset tracking ####
-
-flag_summary <- "Met data out of range and netrad available but not provided"
 
 source(here::here(
   "template_ingestion_scripts",

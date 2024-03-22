@@ -69,8 +69,8 @@
 -4,"AUS_CAN_ST2_MIX",NA,"RMD","2024-03-22 12:38:35.687241","imported WITH FLAGS","SFN","Met values out of range"
 -5,"AUS_CAN_ST3_ACA",NA,"RMD","2024-03-22 12:38:40.375099","imported WITH FLAGS","SFN","Met values out of range"
 -7,"AUS_RIC_EUC_ELE",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--8,"BRA_CAM",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--10,"CHE_LOT_NOR",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
+-8,"BRA_CAM",NA,"RMD","2024-03-22 14:24:45.595199","imported WITH FLAGS","SFN","Met values out of range"
+-10,"CHE_LOT_NOR",NA,"RMD","2024-03-22 14:24:04.109232","imported NO FLAGS","SFN",NA
 -11,"CHE_PFY_IRR",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
 -13,"ESP_GUA_VAL",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
 -14,"ESP_RIN",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA

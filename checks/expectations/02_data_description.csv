@@ -4,7 +4,7 @@ Data variable,data_variable,character,options: Plant water potential - pressure 
 Is it available?,is_it_available,logical,,TRUE,
 Manual or automated collection?,manual_or_automated_collection,character,,,
 Units,units,character,options: MPa; MPa; MPa; MPa; mm; %; kPa; C; µmolPhoton m-2 s-1; W m-2; W m-2; m/s; cm3/cm3 (volumetric); g/g (gravimetric),,
-Sensor location,sensor_location,character,options: Clearing; Above canopy; Below canopy; Not provided; Off-site,,
+Sensor location,sensor_location,character,options: Clearing; Above canopy; Below canopy; Not provided; Off-site; Within canopy,,
 Methodology or Instrument,methodology_or_instrument,character,,,
 Soil depth - start (cm),soil_depth_start_cm,integer,range: 0:300,,
 Soil depth - end (cm),soil_depth_end_cm,integer,range: 0:300,,

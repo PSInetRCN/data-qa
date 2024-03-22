@@ -470,7 +470,7 @@ outcomes_report |>
   filter(!outcome)
 
 outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <-
-  "Slightly high PPFD, slightly low RH."
+  "Wide PPFD range."
 
 flag_summary <- "Met values out of range"
 
@@ -484,8 +484,6 @@ write.csv(outcomes_report,
           row.names = F)
 
 # Update dataset tracking ####
-
-flag_summary <- "Met data out of range and netrad available but not provided"
 
 source(here::here(
   "template_ingestion_scripts",
