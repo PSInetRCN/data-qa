@@ -47,7 +47,3 @@ ggplot(tracking_data_summary, aes(source, n, fill = status_description)) +
 knitr::kable(tracking_data_summary)
 
 ```
-
-# Data QA instructions
-
-TO BE UPDATED
