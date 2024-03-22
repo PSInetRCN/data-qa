@@ -14,6 +14,7 @@ info_data_local <- read.csv(
     "character",
     "character",
     "character",
+    "character",
     "character"
   )
 )

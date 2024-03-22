@@ -64,6 +64,9 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet2 <- sheet2 |>
+  mutate(is_it_available = ifelse(is_it_available == 1, TRUE, FALSE))
+
 # Set col types
 
 sheet2_cols_typed <- set_col_types(sheet2, sheet2_expectations)
@@ -102,6 +105,9 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
+
+sheet3 <- sheet3 |>
+  mutate(availability = ifelse(availability == 1, TRUE, FALSE))
 
 # Set col types
 
