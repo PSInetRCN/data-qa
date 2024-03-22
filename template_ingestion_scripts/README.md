@@ -1,0 +1,1 @@
+Scripts for cleaning individual PSInet datasets (in template form - whether they came from SFN or submitters) so that the checks in `checks` pass. 
