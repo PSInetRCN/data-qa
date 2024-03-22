@@ -13,4 +13,5 @@ sheet1 <- sheet1 |>
 
 if(!is_sfn) {
   sheet1$study <- dataset_identifier
+  sheet1$multi_site <- FALSE
 }

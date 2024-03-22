@@ -5,9 +5,9 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "AUS_CAN_ST3_ACA"
+dataset_identifier <- "Joh_1"
 
-is_sfn <- TRUE
+is_sfn <- FALSE
 
 source(here::here(
   "template_ingestion_scripts",
@@ -27,6 +27,49 @@ source(here::here(
 )
 
 # Add any needed code here until the checks pass
+
+sheet1 <- sheet1 |>
+  tidyr::separate_wider_position(
+    latitude_wgs84,
+    widths = c(
+      lat_deg = 2,
+      drop1 = 1,
+      lat_min = 2,
+      drop2 = 2,
+      lat_sec = 2
+    ),
+    too_many = "drop",
+    cols_remove = F
+  ) |>
+  select(-drop1, -drop2) |>
+  tidyr::separate_wider_position(
+    longitude_wgs84,
+    widths = c(
+      lon_deg = 2,
+      drop1 = 1,
+      lon_min = 2,
+      drop2 = 2,
+      lon_sec = 2
+    ),
+    too_many = "drop",
+    cols_remove = F
+  ) |>
+  select(-drop1, -drop2) |>
+  mutate(
+    latitude_wgs84 = as.numeric(lat_deg) +
+      (as.numeric(lat_min) / 60) +
+      (as.numeric(lat_sec) / 3600),
+    longitude_wgs84 = as.numeric(lon_deg) +
+         (as.numeric(lon_min) / 60) +
+         (as.numeric(lon_sec) / 3600)
+  ) |>
+  select(-c(
+    lon_deg,
+    lon_min,
+    lon_sec,
+    lat_deg,
+    lat_min,
+    lat_sec))
 
 # Set col types
 
@@ -170,10 +213,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5$vegetation_type <- "2 Evergreen broadleaf forests"
-sheet5$terrain <- "Gentle slope (less than 2%)"
-sheet5$growth_condition <- "Orchard or plantation"
-
 # Set col types
 
 sheet5_cols_typed <- set_col_types(sheet5, sheet5_expectations)
@@ -213,6 +252,9 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet6$plot_id <- "Whole study"
+sheet6$plot_treatment_id <- "No treatment"
+sheet6$individual_treatment_id <- "No treatment"
 
 # Set col types
 
@@ -256,6 +298,14 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
+
+sheet7 <- sheet7 |>
+  mutate(plot_id = "Whole study") |>
+  mutate(time_num = as.numeric(time)) |>
+  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
+  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
+  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
+  select(-time_num,-time_seconds,-time_POSIX) 
 
 # Set col types
 
@@ -338,7 +388,6 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
-
 
 # Set col types
 
@@ -465,8 +514,6 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <-
-  "Slightly high PPFD, slightly low RH."
 
 write.csv(outcomes_report,
           here::here(

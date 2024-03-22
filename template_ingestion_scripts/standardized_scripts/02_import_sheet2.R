@@ -8,5 +8,6 @@ sheet2 <- import_sheet(dataset_path, 2, sheet2_expectations)
 
 sheet2 <- sheet2 |>
   mutate(dataset_name = dataset_identifier, .before = 1,
-         sensor_location = gsub(" (<1 km away)", "", sensor_location),
-         sensor_location = gsub(" (>1 km away)", "", sensor_location)) 
+         sensor_location = ifelse(grepl("Clearing", sensor_location),
+                                  "Clearing",
+                                  sensor_location)) 

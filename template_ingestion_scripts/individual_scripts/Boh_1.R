@@ -5,9 +5,9 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "AUS_CAN_ST3_ACA"
+dataset_identifier <- "Boh_1"
 
-is_sfn <- TRUE
+is_sfn <- FALSE
 
 source(here::here(
   "template_ingestion_scripts",
@@ -170,10 +170,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5$vegetation_type <- "2 Evergreen broadleaf forests"
-sheet5$terrain <- "Gentle slope (less than 2%)"
-sheet5$growth_condition <- "Orchard or plantation"
-
 # Set col types
 
 sheet5_cols_typed <- set_col_types(sheet5, sheet5_expectations)
@@ -212,7 +208,6 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
-
 
 # Set col types
 
@@ -339,7 +334,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-
 # Set col types
 
 sheet9_cols_typed <- set_col_types(sheet9, sheet9_expectations)
@@ -465,8 +459,8 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <-
-  "Slightly high PPFD, slightly low RH."
+outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <- 
+  "Negative PPFD values"
 
 write.csv(outcomes_report,
           here::here(
