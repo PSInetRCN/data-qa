@@ -474,7 +474,7 @@ outcomes_report |>
 
 outcomes_report[ which(outcomes_report$check == "sheet10_ranges"), "remarks"] <- "Relative humidity of 8"
 
-flag_summary <- "Met data out of range."
+flag_summary <- "Met values out of range"
 
 
 write.csv(outcomes_report,

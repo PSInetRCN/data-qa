@@ -1,18 +1,18 @@
 "response_ID","dataset_name","raw_box_file_ID","updated_by","updated_at","latest_status","source","flag_summary"
-14,"Flo_1",1418283786880,"RMD","2024-03-22 12:40:35.993893","imported NO FLAGS","PSInet",NA
-15,"Flo_2",1418295647973,"RMD","2024-03-22 12:40:46.539965","imported NO FLAGS","PSInet",NA
-16,"Stu_1",1418324447015,"RMD","2024-03-22 12:39:13.602648","imported WITH FLAGS","PSInet","Met values out of range"
-17,"Joh_1",1422807121407,"RMD","2024-03-22 12:39:01.032559","imported WITH FLAGS","PSInet","Met data listed as available but not provided"
-18,"Boh_1",1424231483194,"RMD","2024-03-22 12:38:47.863198","imported WITH FLAGS","PSInet","Met values out of range"
-19,"Kee_1",1425305946244,"RMD","2024-03-22 12:39:06.738143","imported WITH FLAGS","PSInet","WP values out of range"
-20,"Pot_1",1437129998390,"RMD","2024-03-22 12:51:44.29506","imported NO FLAGS","PSInet",NA
-21,"Pot_2",1437142110862,"RMD","2024-03-22 13:10:03.759863","imported NO FLAGS","PSInet",NA
-22,"Bev_1",1437212447041,"RMD","2024-03-22 13:24:29.786042","imported WITH FLAGS","PSInet","Met data out of range and netrad available but not provided"
-24,"Bev_2",1437259031384,"RMD","2024-03-22 13:30:40.67252","imported NO FLAGS","PSInet",NA
-25,"Bev_3",1437270716986,"RMD","2024-03-22 13:38:03.54932","imported NO FLAGS","PSInet",NA
-26,"Gha_1",1438074164570,NA,NA,NA,"PSInet",NA
-27,"Bai_1",1438421599170,NA,NA,NA,"PSInet",NA
-29,"San_1",1438523404672,NA,NA,NA,"PSInet",NA
+14,"Flo_1",1418283786880,"RMD","2024-03-25 14:45:39.501729","imported NO FLAGS","PSInet",NA
+15,"Flo_2",1418295647973,"RMD","2024-03-25 14:45:42.492767","imported NO FLAGS","PSInet",NA
+16,"Stu_1",1418324447015,"RMD","2024-03-25 14:46:10.059046","imported WITH FLAGS","PSInet","Met values out of range"
+17,"Joh_1",1422807121407,"RMD","2024-03-25 14:45:50.117641","imported WITH FLAGS","PSInet","Met data listed as available but not provided"
+18,"Boh_1",1424231483194,"RMD","2024-03-25 14:44:02.998235","imported WITH FLAGS","PSInet","Met values out of range"
+19,"Kee_1",1425305946244,"RMD","2024-03-25 14:45:53.927192","imported WITH FLAGS","PSInet","WP values out of range"
+20,"Pot_1",1437129998390,"RMD","2024-03-25 14:45:57.161626","imported NO FLAGS","PSInet",NA
+21,"Pot_2",1437142110862,"RMD","2024-03-25 14:45:59.789485","imported NO FLAGS","PSInet",NA
+22,"Bev_1",1437212447041,"RMD","2024-03-25 14:43:50.772105","imported WITH FLAGS","PSInet","Met data out of range and netrad available but not provided"
+24,"Bev_2",1437259031384,"RMD","2024-03-25 14:43:56.083915","imported NO FLAGS","PSInet",NA
+25,"Bev_3",1437270716986,"RMD","2024-03-25 14:43:59.415881","imported NO FLAGS","PSInet",NA
+26,"Gha_1",1438074164570,"RMD","2024-03-25 14:45:46.699474","imported WITH FLAGS","PSInet","Plants are present in WP data not described in Plants table"
+27,"Bai_1",1438421599170,"RMD","2024-03-25 14:43:44.471144","imported WITH FLAGS","PSInet","Met values out of range"
+29,"San_1",1438523404672,"RMD","2024-03-25 14:46:04.950283","imported WITH FLAGS","PSInet","Positive WP values, met values out of range"
 31,"San_2",1438521815209,NA,NA,NA,"PSInet",NA
 32,"Kno_1",1439483264938,NA,NA,NA,"PSInet",NA
 33,"Pen_1",1440312467684,NA,NA,NA,"PSInet",NA
@@ -63,24 +63,24 @@
 91,"Ker_3",1474186701319,NA,NA,NA,"PSInet",NA
 92,"Ker_4",1474198148524,NA,NA,NA,"PSInet",NA
 93,"Sim_1",1474935722117,NA,NA,NA,"PSInet",NA
--1,"ARG_MAZ",NA,"RMD","2024-03-22 12:38:26.113158","imported WITH FLAGS","SFN","Met values out of range"
--2,"ARG_TRE",NA,"RMD","2024-03-22 12:38:29.12715","imported WITH FLAGS","SFN","Met values out of range"
--3,"AUS_CAN_ST1_EUC",NA,"RMD","2024-03-22 12:38:32.169263","imported WITH FLAGS","SFN","Met values out of range"
--4,"AUS_CAN_ST2_MIX",NA,"RMD","2024-03-22 12:38:35.687241","imported WITH FLAGS","SFN","Met values out of range"
--5,"AUS_CAN_ST3_ACA",NA,"RMD","2024-03-22 12:38:40.375099","imported WITH FLAGS","SFN","Met values out of range"
+-1,"ARG_MAZ",NA,"RMD","2024-03-25 14:43:06.972863","imported WITH FLAGS","SFN","Met values out of range"
+-2,"ARG_TRE",NA,"RMD","2024-03-25 14:43:09.705305","imported WITH FLAGS","SFN","Met values out of range"
+-3,"AUS_CAN_ST1_EUC",NA,"RMD","2024-03-25 14:43:20.533697","imported WITH FLAGS","SFN","Met values out of range"
+-4,"AUS_CAN_ST2_MIX",NA,"RMD","2024-03-25 14:43:28.910568","imported WITH FLAGS","SFN","Met values out of range"
+-5,"AUS_CAN_ST3_ACA",NA,"RMD","2024-03-25 14:43:32.668138","imported WITH FLAGS","SFN","Met values out of range"
 -7,"AUS_RIC_EUC_ELE",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--8,"BRA_CAM",NA,"RMD","2024-03-22 14:24:45.595199","imported WITH FLAGS","SFN","Met values out of range"
--10,"CHE_LOT_NOR",NA,"RMD","2024-03-25 09:12:45.630955","imported NO FLAGS","SFN",NA
--11,"CHE_PFY_IRR",NA,"RMD","2024-03-25 09:27:06.326885","imported NO FLAGS","SFN",NA
--13,"ESP_GUA_VAL",NA,"RMD","2024-03-25 09:34:23.276824","imported WITH FLAGS","SFN","Met data out of range."
--14,"ESP_RIN",NA,"RMD","2024-03-25 09:37:28.427207","imported NO FLAGS","SFN",NA
--15,"ESP_RON_PIL",NA,"RMD","2024-03-25 09:42:31.285396","imported WITH FLAGS","SFN","Met data out of range."
--16,"ESP_SAN_A_45I",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--17,"ESP_SAN_A2_45I",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--18,"ESP_SAN_B_100",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--19,"ESP_SAN_B2_100",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--20,"ESP_TIL_MIX",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--21,"ESP_TIL_OAK",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
+-8,"BRA_CAM",NA,"RMD","2024-03-25 14:44:07.693986","imported WITH FLAGS","SFN","Met values out of range"
+-10,"CHE_LOT_NOR",NA,"RMD","2024-03-25 14:44:25.492854","imported NO FLAGS","SFN",NA
+-11,"CHE_PFY_IRR",NA,"RMD","2024-03-25 14:44:33.041943","imported NO FLAGS","SFN",NA
+-13,"ESP_GUA_VAL",NA,"RMD","2024-03-25 14:44:38.850677","imported WITH FLAGS","SFN","Met values out of range"
+-14,"ESP_RIN",NA,"RMD","2024-03-25 14:44:42.360472","imported NO FLAGS","SFN",NA
+-15,"ESP_RON_PIL",NA,"RMD","2024-03-25 14:44:48.658259","imported WITH FLAGS","SFN","Met values out of range"
+-16,"ESP_SAN_A_45I",NA,"RMD","2024-03-25 14:47:18.031787","imported NO FLAGS","SFN",NA
+-17,"ESP_SAN_A2_45I",NA,"RMD","2024-03-25 14:45:06.6543","imported NO FLAGS","SFN",NA
+-18,"ESP_SAN_B_100",NA,"RMD","2024-03-25 14:47:44.326186","imported NO FLAGS","SFN",NA
+-19,"ESP_SAN_B2_100",NA,"RMD","2024-03-25 14:45:14.310739","imported NO FLAGS","SFN",NA
+-20,"ESP_TIL_MIX",NA,"RMD","2024-03-25 14:45:27.160955","imported WITH FLAGS","SFN","Met data out of range"
+-21,"ESP_TIL_OAK",NA,"RMD","2024-03-25 14:45:35.988082","imported WITH FLAGS","SFN","Met data out of range"
 -22,"ESP_TIL_PIN",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
 -23,"ESP_VAL_BAR",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
 -24,"ESP_VAL_SOR",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA

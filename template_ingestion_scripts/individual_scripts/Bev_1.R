@@ -172,9 +172,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5 <- sheet5 |>
-  mutate(growth_condition = "Naturally regenerated, unmanaged")
-
 # Set col types
 
 sheet5_cols_typed <- set_col_types(sheet5, sheet5_expectations)

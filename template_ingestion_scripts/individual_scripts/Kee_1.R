@@ -222,8 +222,7 @@ sheet5 <- sheet5 |>
   tidyr::separate_wider_delim(leaf_area_index_m2_m2, "-", names = c("ml", "mxl"), cols_remove = F) |>
   mutate(across(c(ml, mxl), as.numeric)) |>
   mutate(leaf_area_index_m2_m2 = (ml + mxl) / 2) |>
-  select(-ml, -mxl) |>
-  mutate(growth_condition = "Naturally regenerated, unmanaged")
+  select(-ml, -mxl) 
 
 # Set col types
 

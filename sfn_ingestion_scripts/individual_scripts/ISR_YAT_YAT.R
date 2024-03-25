@@ -280,13 +280,16 @@ writeData(filled_psinet_template, 5, treatments)
 #### Sheet 5 Plots ####
 
 plots <- blank_psinet_template[[5]]
+vegtype_key <- read.csv(here::here("sfn_ingestion_scripts", "vegtype_key.csv"))
+gc_key <- read.csv(here::here("sfn_ingestion_scripts", "growth_condition_key.csv"))
+terrain_key <- read.csv(here::here("sfn_ingestion_scripts", "terrain_key.csv"))
 
 plots$`Plot ID`[2] <- "Whole study" # If there's only one site/study, "Whole study"
 plots$`Treatment ID`[2] <- "No treatment"
-plots$`Vegetation type`[2] <- sfn_site_md$si_igbp[1]
-plots$`Growth condition`[2] <- sfn_stand_md$st_growth_condition[1]
+plots$`Vegetation type`[2] <- vegtype_key[which(vegtype_key$sfn == sfn_site_md$si_igbp[1]), "psi"]
+plots$`Growth condition`[2] <- gc_key[which(gc_key$sfn == sfn_stand_md$st_growth_condition[1]), "psi"]
 plots$Aspect[2] <- sfn_stand_md$st_aspect[1]
-plots$Terrain[2] <- sfn_stand_md$st_terrain[1]
+plots$Terrain[2] <- terrain_key[which(terrain_key$sfn == sfn_stand_md$st_terrain[1]), "psi"]
 plots$`Soil texture`[2] <- tolower(sfn_stand_md$st_soil_texture[1])
 plots$`Percent sand`[2] <- sfn_stand_md$st_sand_perc[1]
 plots$`Percent silt`[2] <- sfn_stand_md$st_silt_perc[1]
@@ -370,7 +373,7 @@ if (any("chamber-bagged" %in% sfn_wp$method,
     ) |>
     mutate(
       `Water potential SD` = sqrt(`Water potential N`) * `Water potential SE`,
-      .after = `Water potential mean`
+      .after = `Water potential mean`, Organ = ifelse(Organ == "twig", "twig/leaf cluster", Organ)
     ) |>
     select(-`Water potential SE`)
   
@@ -415,7 +418,7 @@ if ("psychometer" %in% sfn_wp$method) {
     ) |>
     mutate(
       `Water potential SD` = sqrt(`Water potential N`) * `Water potential SE`,
-      .after = `Water potential mean`
+      .after = `Water potential mean`, Organ = ifelse(Organ == "twig", "twig/leaf cluster", Organ)
     ) |>
     select(-`Water potential SE`)
   
