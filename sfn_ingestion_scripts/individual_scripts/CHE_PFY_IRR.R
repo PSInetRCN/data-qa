@@ -282,7 +282,10 @@ treatmentVals <- data.frame(
 colnames(treatmentVals) <- colnames(treatmentCols)[2:3]
 treatments <- bind_rows(treatmentCols, treatmentVals)
 
-writeData(filled_psinet_template, 5, treatments)
+writeData(filled_psinet_template, 5, treatments,
+          startCol = 1,
+          startRow = 3,
+          colNames = F)
 
 View(treatments)
 

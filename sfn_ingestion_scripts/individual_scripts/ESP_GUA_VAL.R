@@ -285,7 +285,7 @@ treatments <- bind_rows(treatmentCols, treatmentVals)
 treatments <- treatments |>
   mutate(`Treatment ID` = ifelse(is.na(`Treatment ID`), "No treatment", `Treatment ID`))
 
-writeData(filled_psinet_template, 5, treatments)
+writeData(filled_psinet_template, 5, treatments, startRow = 3, colNames = F)
 
 View(treatments)
 

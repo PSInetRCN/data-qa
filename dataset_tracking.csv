@@ -70,11 +70,11 @@
 -5,"AUS_CAN_ST3_ACA",NA,"RMD","2024-03-22 12:38:40.375099","imported WITH FLAGS","SFN","Met values out of range"
 -7,"AUS_RIC_EUC_ELE",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
 -8,"BRA_CAM",NA,"RMD","2024-03-22 14:24:45.595199","imported WITH FLAGS","SFN","Met values out of range"
--10,"CHE_LOT_NOR",NA,"RMD","2024-03-22 14:24:04.109232","imported NO FLAGS","SFN",NA
--11,"CHE_PFY_IRR",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--13,"ESP_GUA_VAL",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--14,"ESP_RIN",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
--15,"ESP_RON_PIL",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
+-10,"CHE_LOT_NOR",NA,"RMD","2024-03-25 09:12:45.630955","imported NO FLAGS","SFN",NA
+-11,"CHE_PFY_IRR",NA,"RMD","2024-03-25 09:27:06.326885","imported NO FLAGS","SFN",NA
+-13,"ESP_GUA_VAL",NA,"RMD","2024-03-25 09:34:23.276824","imported WITH FLAGS","SFN","Met data out of range."
+-14,"ESP_RIN",NA,"RMD","2024-03-25 09:37:28.427207","imported NO FLAGS","SFN",NA
+-15,"ESP_RON_PIL",NA,"RMD","2024-03-25 09:42:31.285396","imported WITH FLAGS","SFN","Met data out of range."
 -16,"ESP_SAN_A_45I",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
 -17,"ESP_SAN_A2_45I",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
 -18,"ESP_SAN_B_100",NA,"RMD","2024-03-22 09:29:14.977847","to template","SFN",NA
