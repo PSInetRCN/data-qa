@@ -460,8 +460,8 @@ outcomes_report |>
   filter(!outcome)
 
 outcomes_report$remarks[which(outcomes_report$check == "sheet10_ranges")] <-
-  "Slightly high PPFD, slightly low RH."
-flag_summary <- "Met data out of range"
+  "Slightly high PPFD."
+flag_summary <- "Met values out of range"
 
 write.csv(outcomes_report,
           here::here(

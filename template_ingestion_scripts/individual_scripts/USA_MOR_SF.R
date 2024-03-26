@@ -5,9 +5,9 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Bev_1"
+dataset_identifier <- "USA_MOR_SF"
 
-is_sfn <- FALSE
+is_sfn <- TRUE
 
 source(here::here(
   "template_ingestion_scripts",
@@ -22,11 +22,12 @@ source(here::here(
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "01_import_sheet1.R"
-  )
+  "01_import_sheet1.R"
+)
 )
 
 # Add any needed code here until the checks pass
+
 
 # Set col types
 
@@ -55,8 +56,8 @@ write.csv(sheet1_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "02_import_sheet2.R"
-  )
+  "02_import_sheet2.R"
+)
 )
 
 # Add any needed code here until the last checks pass
@@ -94,8 +95,8 @@ write.csv(sheet2_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "03_import_sheet3.R"
-  )
+  "03_import_sheet3.R"
+)
 )
 
 # Add any needed code here until the last checks pass
@@ -135,8 +136,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet4$treatment_id<- "No treatment"
-
 # Set col types
 
 sheet4_cols_typed <- set_col_types(sheet4, sheet4_expectations)
@@ -166,8 +165,8 @@ write.csv(sheet4_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "05_import_sheet5.R"
-  )
+  "05_import_sheet5.R"
+)
 )
 
 # Add any needed code here until the last checks pass
@@ -205,14 +204,11 @@ write.csv(sheet5_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "06_import_sheet6.R"
-  )
+  "06_import_sheet6.R"
+)
 )
 
 # Add any needed code here until the last checks pass
-
-sheet6$plot_treatment_id <- "No treatment"
-sheet6$individual_treatment_id <- "No treatment"
 
 # Set col types
 
@@ -251,26 +247,11 @@ write.csv(sheet6_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "07_import_sheet7.R"
-  )
+  "07_import_sheet7.R"
+)
 )
 
 # Add any needed code here until the last checks pass
-
-sheet7 <- sheet7 |>
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f) |>
-  mutate(hr = as.numeric(time) / 100) |>
-  mutate(time = ifelse(hr < 10,
-                       paste0("0", hr, ":00:00"),
-                       paste0(hr, ":00:00"))) |>
-  select(-hr) |>
-  mutate(plot_id = ifelse(grepl("NF", plot_id), "NorthFace (NF)",
-                          ifelse(grepl("SF", plot_id), "SouthFace (SF)",
-                                 ifelse(grepl("TR", plot_id), "Trench (TR)", NA))))
 
 # Set col types
 
@@ -307,8 +288,8 @@ write.csv(sheet7_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "08_import_sheet8.R"
-  )
+  "08_import_sheet8.R"
+)
 )
 
 # Add any needed code here until the last checks pass
@@ -348,8 +329,8 @@ write.csv(sheet8_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "09_import_sheet9.R"
-  )
+  "09_import_sheet9.R"
+)
 )
 
 # Add any needed code here until the last checks pass
@@ -397,23 +378,11 @@ write.csv(sheet9_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "10_import_sheet10.R"
-  )
+  "10_import_sheet10.R"
+)
 )
 
 # Add any needed code here until the last checks pass
-
-sheet10 <- sheet10 |>
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |>
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
 
 # Set col types
 
@@ -446,8 +415,8 @@ write.csv(sheet10_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "11_import_sheet11.R"
-  )
+  "11_import_sheet11.R"
+)
 )
 
 # Add any needed code here until the last checks pass
@@ -483,12 +452,20 @@ write.csv(sheet11_cols_typed,
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "12_run_all_checks.R"
-  )
+  "12_run_all_checks.R"
+)
 )
 
 outcomes_report |>
   filter(!outcome)
+
+flag_summary <- NA
+
+if(all(sum(!outcomes_report$outcome, na.rm =T) == 1,
+       outcomes_report[which(!outcomes_report$outcome), "check"] == "sheet10_ranges")) {
+  flag_summary <- "Met values out of range"
+}
+
 
 write.csv(outcomes_report,
           here::here(
@@ -500,12 +477,10 @@ write.csv(outcomes_report,
 
 # Update dataset tracking ####
 
-flag_summary <- "Met values out of range and netrad available but not provided"
-
 source(here::here(
   "template_ingestion_scripts",
   "standardized_scripts",
-    "13_update_dataset_tracking.R"
-  )
+  "13_update_dataset_tracking.R"
+)
 )
 
