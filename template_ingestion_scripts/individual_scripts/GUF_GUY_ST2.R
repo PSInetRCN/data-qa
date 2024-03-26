@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "ESP_YUN_C2"
+dataset_identifier <- "GUF_GUY_ST2"
 
 is_sfn <- TRUE
 
@@ -459,7 +459,13 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-flag_summary <- "Met values out of range"
+flag_summary <- NA
+
+if(all(sum(!outcomes_report$outcome, na.rm =T) == 1,
+       outcomes_report[which(!outcomes_report$outcome), "check"] == "sheet10_ranges")) {
+  flag_summary <- "Met values out of range"
+}
+
 
 write.csv(outcomes_report,
           here::here(
