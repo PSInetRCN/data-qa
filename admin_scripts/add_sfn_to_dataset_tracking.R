@@ -1,7 +1,9 @@
 library(dplyr)
 
-dataset_tracking <- read.csv(here::here("dataset_tracking.csv")) |>
-  mutate(source = "PSInet")
+dataset_tracking <- read.csv(here::here("dataset_tracking.csv"))
+
+dataset_tracking <- dataset_tracking |>
+  mutate(source = ifelse(response_ID < 0, "SFN", "PSInet"))
 
 sfn_to_template <- read.csv(here::here("sfn_to_template_tracking.csv"))
 
