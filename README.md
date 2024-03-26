@@ -1,7 +1,7 @@
 README
 ================
 Renata
-2024-03-25
+2024-03-26
 
 This repo houses scripts for QA of PSInet data.
 
@@ -11,9 +11,10 @@ This repo houses scripts for QA of PSInet data.
 
 | source | status_description           |   n |
 |:-------|:-----------------------------|----:|
-| PSInet | 2 - Ready as PSInet template |  50 |
-| PSInet | 3 - QA flags                 |   8 |
-| PSInet | 4 - Passing QA               |   6 |
-| SFN    | 2 - Ready as PSInet template |  22 |
-| SFN    | 3 - QA flags                 |  10 |
-| SFN    | 4 - Passing QA               |   7 |
+| PSInet | 2 - Ready as PSInet template |  46 |
+| PSInet | 3 - QA flags                 |  10 |
+| PSInet | 4 - Passing QA               |   8 |
+| SFN    | 1 - Obtained from SFN        |   4 |
+| SFN    | 2 - Ready as PSInet template |   1 |
+| SFN    | 3 - QA flags                 |  23 |
+| SFN    | 4 - Passing QA               |  15 |
