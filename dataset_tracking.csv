@@ -22,16 +22,16 @@
 39,"Poy_3",1440396099965,NA,NA,NA,"PSInet",NA
 40,"Poy_4",1440431852720,NA,NA,NA,"PSInet",NA
 41,"Poy_5",1440415943721,NA,NA,NA,"PSInet",NA
-42,"Bev_5",1440544780072,NA,NA,NA,"PSInet",NA
-43,"Kon_1",1441481207803,NA,NA,NA,"PSInet",NA
-45,"Woo_1",1448204020778,NA,NA,NA,"PSInet",NA
-48,"Pal_1",1457186070977,NA,NA,NA,"PSInet",NA
-50,"Pal_2",1457198826137,NA,NA,NA,"PSInet",NA
+42,"Bev_5",1440544780072,"RMD","2024-03-26 10:14:05.828238","imported WITH FLAGS","PSInet","Met data marked as available but not provided"
+43,"Kon_1",1441481207803,"RMD","2024-03-26 10:17:29.215803","imported WITH FLAGS","PSInet","Met data marked as available but not provided, but see remarks"
+45,"Woo_1",1448204020778,"RMD","2024-03-26 10:31:32.901054","imported WITH FLAGS","PSInet","SWC units not provided; some met variables of -9999 changed to NA; met values out of range"
+48,"Pal_1",1457186070977,"RMD","2024-03-26 11:09:12.43225","NOT IMPORTED","PSInet","Need to revisit experimental design"
+50,"Pal_2",1457198826137,"RMD","2024-03-26 11:18:09.604792","imported WITH FLAGS","PSInet","SWC units not provided; SWC deep marked as available but not provided; met data out of range"
 51,"Pal_3",1457190397408,NA,NA,NA,"PSInet",NA
-53,"Dom_1",1458169845386,NA,NA,NA,"PSInet",NA
-57,"Dic_1",1458350935076,NA,NA,NA,"PSInet",NA
-58,"San_3",1458237263284,NA,NA,NA,"PSInet",NA
-59,"Piv_1",1458681584457,NA,NA,NA,"PSInet",NA
+53,"Dom_1",1458169845386,"RMD","2024-03-26 11:36:18.602693","imported WITH FLAGS","PSInet","Met and soil moisture data listed as available ut not provided. Also treatment Control changed to No treatment."
+57,"Dic_1",1458350935076,"RMD","2024-03-26 11:59:47.347347","imported WITH FLAGS","PSInet","Plants in PC not in plants, missing data variable, met and PWP values out of range"
+58,"San_3",1458237263284,"RMD","2024-03-26 12:13:47.614467","imported WITH FLAGS","PSInet","Plants show up in PWP that are not in Plants table"
+59,"Piv_1",1458681584457,"RMD","2024-03-26 12:18:33.636384","imported WITH FLAGS","PSInet","a plant shows up in the pressure chamber data that does not show up in the plants table"
 61,"Urb_1",1459353302111,NA,NA,NA,"PSInet",NA
 62,"Urb_2",1459349101807,NA,NA,NA,"PSInet",NA
 63,"Urb_3",1459357741296,NA,NA,NA,"PSInet",NA

@@ -136,6 +136,9 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet4 <- sheet4 |>
+  mutate(treatment_id = "No treatment")
+
 # Set col types
 
 sheet4_cols_typed <- set_col_types(sheet4, sheet4_expectations)
@@ -171,7 +174,9 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5 <- sheet5 
+sheet5 <- sheet5 |>
+  mutate(plot_id = "Whole study",
+         treatment_id = "No treatment")
 
 # Set col types
 
@@ -212,6 +217,10 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet6 <- sheet6 |>
+  mutate(plot_id = "Whole study",
+         individual_treatment_id = "No treatment",
+         plot_treatment_id = "No treatment")
 
 # Set col types
 
@@ -304,12 +313,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet8 <- sheet8 |>
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) 
 
 # Set col types
 
@@ -351,18 +354,6 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
-
-sheet9 <- sheet9 |> 
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |> 
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
 
 # Set col types
 
@@ -412,18 +403,6 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
-
-sheet10 <- sheet10 |> 
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |> 
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
 
 # Set col types
 
@@ -500,7 +479,7 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-flag_summary <- NA
+flag_summary <- "Met data marked as available but not provided"
 
 write.csv(outcomes_report,
           here::here(

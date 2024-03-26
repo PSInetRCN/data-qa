@@ -18,8 +18,8 @@ tracking_data <- read.csv(here::here("dataset_tracking.csv")) |>
   mutate(latest_status = ifelse(is.na(latest_status), "submitted", latest_status))
 
 status_key <- data.frame(
-  latest_status = c('imported NO FLAGS', 'submitted', 'to template', 'to_template', 'to template with flags', 'imported WITH FLAGS', 'need more info'),
-  status_description = c("4 - Passing QA", "2 - Ready as PSInet template", "2 - Ready as PSInet template", "2 - Ready as PSInet template", "1 - Obtained from SFN", "3 - QA flags", "1 - Obtained from SFN")
+  latest_status = c('imported NO FLAGS', 'submitted', 'to template', 'to_template', 'to template with flags', 'imported WITH FLAGS', 'need more info', "NOT IMPORTED"),
+  status_description = c("4 - Passing QA", "2 - Ready as PSInet template", "2 - Ready as PSInet template", "2 - Ready as PSInet template", "1 - Obtained from SFN", "3 - QA flags", "1 - Obtained from SFN", "3 - QA flags")
 )
 
 tracking_data <- tracking_data |>

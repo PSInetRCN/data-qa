@@ -3,7 +3,7 @@ library(dplyr)
 
 source(here::here("admin_scripts", "box_auth.R"))
 
-info_data <- box_read_excel("1475679138432", sheet = 1)[1:30, ]
+info_data <- box_read_excel("1475679138432", sheet = 1)[, ]
 
 for (i in 1:nrow(info_data)) {
   box_dl(

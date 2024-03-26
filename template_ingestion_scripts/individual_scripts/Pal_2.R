@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Bev_5"
+dataset_identifier <- "Pal_2"
 
 is_sfn <- FALSE
 
@@ -61,6 +61,9 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
+
+sheet2 <- sheet2 |>
+  mutate(is_it_available = ifelse(is.na(is_it_available), "FALSE", is_it_available))
 
 # Set col types
 
@@ -171,7 +174,9 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5 <- sheet5 
+sheet5 <- sheet5 |>
+  mutate(plot_id = "Whole study",
+         treatment_id = "No treatment")
 
 # Set col types
 
@@ -261,7 +266,9 @@ sheet7 <- sheet7 |>
   mutate(time_seconds = 60 * 60 * 24 * time_num) |>
   mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
   mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) 
+  select(-time_num,-time_seconds,-time_POSIX) |>
+  mutate(date = gsub("T00:00:00Z", "", date),
+         date = gsub("-", "", date))
 
 # Set col types
 
@@ -304,12 +311,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet8 <- sheet8 |>
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) 
 
 # Set col types
 
@@ -500,7 +501,7 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-flag_summary <- NA
+flag_summary <- "SWC units not provided; SWC deep marked as available but not provided; met data out of range"
 
 write.csv(outcomes_report,
           here::here(

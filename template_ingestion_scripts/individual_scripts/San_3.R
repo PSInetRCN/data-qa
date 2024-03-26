@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Bev_5"
+dataset_identifier <- "San_3"
 
 is_sfn <- FALSE
 
@@ -27,7 +27,17 @@ source(here::here(
 )
 
 # Add any needed code here until the checks pass
+source(here::here("template_ingestion_scripts", "snippets", "to_dd.R"))
 
+sheet1 <- sheet1 |>
+  mutate(latitude_wgs84 = to_dd(substr(latitude_wgs84, 1,2),
+                                substr(latitude_wgs84, 4,5),
+                                substr(latitude_wgs84, 7,8),
+                                dir = "N"),
+         longitude_wgs84 = to_dd(substr(longitude_wgs84, 1,2),
+                                 substr(longitude_wgs84, 4,5),
+                                 substr(longitude_wgs84, 7,8),
+                                 dir = "W"))
 
 # Set col types
 
@@ -304,12 +314,6 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet8 <- sheet8 |>
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) 
 
 # Set col types
 
@@ -357,12 +361,7 @@ sheet9 <- sheet9 |>
   mutate(time_seconds = 60 * 60 * 24 * time_num) |>
   mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
   mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |> 
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
+  select(-time_num,-time_seconds,-time_POSIX) 
 
 # Set col types
 
@@ -418,12 +417,7 @@ sheet10 <- sheet10 |>
   mutate(time_seconds = 60 * 60 * 24 * time_num) |>
   mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
   mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |> 
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
+  select(-time_num,-time_seconds,-time_POSIX)
 
 # Set col types
 
@@ -500,7 +494,7 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-flag_summary <- NA
+flag_summary <- "Plants show up in PWP that are not in Plants table"
 
 write.csv(outcomes_report,
           here::here(

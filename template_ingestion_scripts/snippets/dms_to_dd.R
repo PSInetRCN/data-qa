@@ -1,3 +1,15 @@
+source(here::here("template_ingestion_scripts", "snippets", "to_dd.R"))
+
+sheet1 <- sheet1 |>
+  mutate(latitude_wgs84 = to_dd(substr(latitude_wgs84, 1,2),
+                                substr(latitude_wgs84, 4,5),
+                                substr(latitude_wgs84, 7,8),
+                                dir = "N"),
+         longitude_wgs84 = to_dd(substr(longitude_wgs84, 1,2),
+                                 substr(longitude_wgs84, 4,5),
+                                 substr(longitude_wgs84, 7,8),
+                                 dir = "W"))
+
 sheet1 <- sheet1 |>
   tidyr::separate_wider_position(
     latitude_wgs84,

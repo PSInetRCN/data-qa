@@ -2,7 +2,7 @@
 Not provided,dataset_name,character,,TRUE,
 Individual_ID,individual_id,character,,,
 Plot_ID,plot_id,character,,TRUE,
-Date,date,integer,range: 19900101:20250101,TRUE,
+Date,date,integer,range: 19000101:20250101,TRUE,
 Time,time,character,time,TRUE,
 SWC_mean_shallow,swc_mean_shallow,numeric,,,
 SWC_sd_shallow,swc_sd_shallow,numeric,,,
