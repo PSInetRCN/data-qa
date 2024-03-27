@@ -47,3 +47,18 @@ ggplot(tracking_data_summary, aes(source, n, fill = status_description)) +
 knitr::kable(tracking_data_summary)
 
 ```
+
+
+```{r, echo = F}
+
+tracking_data_summary |>
+  group_by(source) |>
+  summarize(total_datasets = sum(n)) |>
+  knitr::kable()
+
+
+tracking_data_summary |>
+  ungroup() |>
+  summarize(total_datasets = sum(n)) |>
+  knitr::kable()
+```

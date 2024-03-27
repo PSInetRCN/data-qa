@@ -27,19 +27,19 @@
 45,"Woo_1",1448204020778,"RMD","2024-03-26 10:31:32.901054","imported WITH FLAGS","PSInet","SWC units not provided; some met variables of -9999 changed to NA; met values out of range"
 48,"Pal_1",1457186070977,"RMD","2024-03-26 11:09:12.43225","NOT IMPORTED","PSInet","Need to revisit experimental design"
 50,"Pal_2",1457198826137,"RMD","2024-03-26 11:18:09.604792","imported WITH FLAGS","PSInet","SWC units not provided; SWC deep marked as available but not provided; met data out of range"
-51,"Pal_3",1457190397408,NA,NA,NA,"PSInet",NA
+51,"Pal_3",1457190397408,"RMD","2024-03-27 08:32:54.037888","NOT IMPORTED","PSInet","Need to revisit experimental design"
 53,"Dom_1",1458169845386,"RMD","2024-03-26 11:36:18.602693","imported WITH FLAGS","PSInet","Met and soil moisture data listed as available ut not provided. Also treatment Control changed to No treatment."
 57,"Dic_1",1458350935076,"RMD","2024-03-26 11:59:47.347347","imported WITH FLAGS","PSInet","Plants in PC not in plants, missing data variable, met and PWP values out of range"
 58,"San_3",1458237263284,"RMD","2024-03-26 12:13:47.614467","imported WITH FLAGS","PSInet","Plants show up in PWP that are not in Plants table"
 59,"Piv_1",1458681584457,"RMD","2024-03-26 12:18:33.636384","imported WITH FLAGS","PSInet","a plant shows up in the pressure chamber data that does not show up in the plants table"
-61,"Urb_1",1459353302111,NA,NA,NA,"PSInet",NA
-62,"Urb_2",1459349101807,NA,NA,NA,"PSInet",NA
-63,"Urb_3",1459357741296,NA,NA,NA,"PSInet",NA
-64,"Urb_4",1459358411512,NA,NA,NA,"PSInet",NA
-65,"Mat_1",1459418992095,NA,NA,NA,"PSInet",NA
-67,"Pel_1",1459489345202,NA,NA,NA,"PSInet",NA
-68,"Cha_1",1459689913645,NA,NA,NA,"PSInet",NA
-69,"Mor_1",1461544486980,NA,NA,NA,"PSInet",NA
+61,"Urb_1",1459353302111,"RMD","2024-03-27 08:47:19.376857","imported WITH FLAGS","PSInet","Met values out of range, WP values out of range"
+62,"Urb_2",1459349101807,"RMD","2024-03-27 08:51:19.184376","NOT IMPORTED","PSInet","Need to revisit experimental design"
+63,"Urb_3",1459357741296,"RMD","2024-03-27 08:56:03.229435","imported WITH FLAGS","PSInet","Incident rad marked as available but not provided"
+64,"Urb_4",1459358411512,"RMD","2024-03-27 09:04:21.109999","imported WITH FLAGS","PSInet","Met values out of range"
+65,"Mat_1",1459418992095,"RMD","2024-03-27 09:18:13.333889","imported WITH FLAGS","PSInet","Plant in WP not in plants, met values out of range, missing expected variable"
+67,"Pel_1",1459489345202,"RMD","2024-03-27 09:25:49.447387","imported WITH FLAGS","PSInet","Met values out of range"
+68,"Cha_1",1459689913645,"RMD","2024-03-27 09:32:46.800778","imported NO FLAGS","PSInet",NA
+69,"Mor_1",1461544486980,"RMD","2024-03-27 09:38:27.835513","imported WITH FLAGS","PSInet","Data variable promised not provided; plants in WP not in plants; positive WP changed to negative"
 71,"Ham_1",1461898091091,NA,NA,NA,"PSInet",NA
 72,"Ham_2",1461902564788,NA,NA,NA,"PSInet",NA
 73,"Ham_3",1461896298176,NA,NA,NA,"PSInet",NA
