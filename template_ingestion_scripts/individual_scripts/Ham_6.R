@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Bev_5"
+dataset_identifier <- "Ham_6"
 
 is_sfn <- FALSE
 
@@ -30,6 +30,11 @@ source(here::here(
 
 sheet1$longitude_wgs84
 sheet1$latitude_wgs84
+sheet1$study_type
+
+sheet1 <- sheet1 |>
+  mutate(study_type = "Field study",
+         data_publication = "Not published")
 
 # Set col types
 
@@ -138,6 +143,8 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet4
+
 # Set col types
 
 sheet4_cols_typed <- set_col_types(sheet4, sheet4_expectations)
@@ -173,7 +180,10 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5 <- sheet5 
+sheet5
+
+sheet5 <- sheet5 |>
+  mutate(vegetation_type = "10 Grasslands")
 
 # Set col types
 
@@ -214,6 +224,13 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet6
+
+sheet6 <- sheet6 |>
+  mutate(plot_treatment_id = "No treatment",
+         individual_treatment_id = "No treatment",
+         remarks = paste0("Avg height ", average_height_m),
+         average_height_m = NA)
 
 # Set col types
 
@@ -257,6 +274,8 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
+
+sheet7
 
 sheet7 <- sheet7 |>
   mutate(time_num = as.numeric(time)) |>
@@ -306,6 +325,8 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet8
+
 sheet8 <- sheet8 |>
   mutate(time_num = as.numeric(time)) |>
   mutate(time_seconds = 60 * 60 * 24 * time_num) |>
@@ -353,6 +374,8 @@ source(here::here(
 )
 
 # Add any needed code here until the last checks pass
+
+sheet9
 
 sheet9 <- sheet9 |> 
   mutate(time_num = as.numeric(time)) |>
@@ -415,17 +438,14 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet10
+
 sheet10 <- sheet10 |> 
   mutate(time_num = as.numeric(time)) |>
   mutate(time_seconds = 60 * 60 * 24 * time_num) |>
   mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
   mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |> 
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
+  select(-time_num,-time_seconds,-time_POSIX) 
 
 # Set col types
 
@@ -502,7 +522,7 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-flag_summary <- NA
+flag_summary <- "All PWP times are 00:00:00"
 
 
 if(all(sum(!outcomes_report$outcome, na.rm =T) == 1,

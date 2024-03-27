@@ -11,9 +11,9 @@ This repo houses scripts for QA of PSInet data.
 
 | source | status_description           |   n |
 |:-------|:-----------------------------|----:|
-| PSInet | 2 - Ready as PSInet template |  28 |
-| PSInet | 3 - QA flags                 |  27 |
-| PSInet | 4 - Passing QA               |   9 |
+| PSInet | 2 - Ready as PSInet template |   5 |
+| PSInet | 3 - QA flags                 |  35 |
+| PSInet | 4 - Passing QA               |  24 |
 | SFN    | 1 - Obtained from SFN        |   4 |
 | SFN    | 2 - Ready as PSInet template |   1 |
 | SFN    | 3 - QA flags                 |  23 |

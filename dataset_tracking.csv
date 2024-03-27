@@ -40,29 +40,29 @@
 67,"Pel_1",1459489345202,"RMD","2024-03-27 09:25:49.447387","imported WITH FLAGS","PSInet","Met values out of range"
 68,"Cha_1",1459689913645,"RMD","2024-03-27 09:32:46.800778","imported NO FLAGS","PSInet",NA
 69,"Mor_1",1461544486980,"RMD","2024-03-27 09:38:27.835513","imported WITH FLAGS","PSInet","Data variable promised not provided; plants in WP not in plants; positive WP changed to negative"
-71,"Ham_1",1461898091091,NA,NA,NA,"PSInet",NA
-72,"Ham_2",1461902564788,NA,NA,NA,"PSInet",NA
-73,"Ham_3",1461896298176,NA,NA,NA,"PSInet",NA
-74,"Ham_4",1461898573684,NA,NA,NA,"PSInet",NA
-75,"Ham_5",1461890768477,NA,NA,NA,"PSInet",NA
-76,"Ham_6",1462679534395,NA,NA,NA,"PSInet",NA
-77,"Ham_7",1462678290159,NA,NA,NA,"PSInet",NA
-79,"Avi_1",1463123413641,NA,NA,NA,"PSInet",NA
-47,"Lop_1",1451401732789,NA,NA,NA,"PSInet",NA
-47,"Lop_2",1451403239223,NA,NA,NA,"PSInet",NA
-55,"Mic_1",1458262671933,NA,NA,NA,"PSInet",NA
-56,"Mic_2",1458264303771,NA,NA,NA,"PSInet",NA
-80,"Meg_1",1463850657417,NA,NA,NA,"PSInet",NA
-82,"Poc_1",1465304963856,NA,NA,NA,"PSInet",NA
-83,"Pet_1",1467985434647,NA,NA,NA,"PSInet",NA
-85,"Pet_2",1467989207199,NA,NA,NA,"PSInet",NA
-86,"Fon_1",1467989185920,NA,NA,NA,"PSInet",NA
-87,"She_1",1471284777142,NA,NA,NA,"PSInet",NA
-89,"Ker_1",1474189331920,NA,NA,NA,"PSInet",NA
-90,"Ker_2",1474183238211,NA,NA,NA,"PSInet",NA
-91,"Ker_3",1474186701319,NA,NA,NA,"PSInet",NA
-92,"Ker_4",1474198148524,NA,NA,NA,"PSInet",NA
-93,"Sim_1",1474935722117,NA,NA,NA,"PSInet",NA
+71,"Ham_1",1461898091091,"RMD","2024-03-27 10:09:52.439631","imported NO FLAGS","PSInet",NA
+72,"Ham_2",1461902564788,"RMD","2024-03-27 10:13:49.556173","imported NO FLAGS","PSInet",NA
+73,"Ham_3",1461896298176,"RMD","2024-03-27 10:15:28.170885","imported NO FLAGS","PSInet",NA
+74,"Ham_4",1461898573684,"RMD","2024-03-27 10:16:40.926994","imported NO FLAGS","PSInet",NA
+75,"Ham_5",1461890768477,"RMD","2024-03-27 10:17:42.910879","imported NO FLAGS","PSInet",NA
+76,"Ham_6",1462679534395,"RMD","2024-03-27 10:24:53.390741","imported NO FLAGS","PSInet","All PWP times are 00:00:00"
+77,"Ham_7",1462678290159,"RMD","2024-03-27 10:24:29.834975","imported NO FLAGS","PSInet","All PWP times are 00:00:00"
+79,"Avi_1",1463123413641,"RMD","2024-03-27 11:21:42.539705","imported WITH FLAGS","PSInet","Some positive PWP values; also note all number_of_individuals changed to 1"
+47,"Lop_1",1451401732789,"RMD","2024-03-27 11:24:48.335967","imported WITH FLAGS","PSInet","SW units not provided, met values out of range, note positive WP values changed to negative"
+47,"Lop_2",1451403239223,"RMD","2024-03-27 11:26:47.197957","imported WITH FLAGS","PSInet","SW units not provided, met values out of range, note positive WP values changed to negative"
+55,"Mic_1",1458262671933,"RMD","2024-03-27 11:31:34.63283","imported WITH FLAGS","PSInet","Positive WP values; typo perhaps"
+56,"Mic_2",1458264303771,"RMD","2024-03-27 11:45:20.31821","imported NO FLAGS","PSInet","Changed ids to reflect experimental design"
+80,"Meg_1",1463850657417,"RMD","2024-03-27 11:57:07.574749","imported WITH FLAGS","PSInet","Met values out of range"
+82,"Poc_1",1465304963856,"RMD","2024-03-27 12:04:39.064553","imported WITH FLAGS","PSInet","Automated WP marked as available but not provided"
+83,"Pet_1",1467985434647,"RMD","2024-03-27 12:24:54.764219","imported WITH FLAGS","PSInet","Met values out of range"
+85,"Pet_2",1467989207199,"RMD","2024-03-27 12:30:15.739151","imported NO FLAGS","PSInet",NA
+86,"Fon_1",1467989185920,"RMD","2024-03-27 12:35:00.799304","imported NO FLAGS","PSInet",NA
+87,"She_1",1471284777142,"RMD","2024-03-27 12:37:55.768927","imported NO FLAGS","PSInet",NA
+89,"Ker_1",1474189331920,"RMD","2024-03-27 12:44:55.937257","imported NO FLAGS","PSInet","Note positive WP changed to negative"
+90,"Ker_2",1474183238211,"RMD","2024-03-27 12:47:44.213077","imported NO FLAGS","PSInet","Note positive WP changed to negative"
+91,"Ker_3",1474186701319,"RMD","2024-03-27 12:54:03.92138","imported WITH FLAGS","PSInet","Plants in WP dat not in plants table; also note positive WP changed to negative"
+92,"Ker_4",1474198148524,"RMD","2024-03-27 12:54:30.976474","imported NO FLAGS","PSInet","Note positive WP values changed to negative"
+93,"Sim_1",1474935722117,"RMD","2024-03-27 12:59:24.782538","imported NO FLAGS","PSInet","Data avail not filled in; met values out of range"
 -1,"ARG_MAZ",NA,"RMD","2024-03-25 14:43:06.972863","imported WITH FLAGS","SFN","Met values out of range"
 -2,"ARG_TRE",NA,"RMD","2024-03-25 14:43:09.705305","imported WITH FLAGS","SFN","Met values out of range"
 -3,"AUS_CAN_ST1_EUC",NA,"RMD","2024-03-25 14:43:20.533697","imported WITH FLAGS","SFN","Met values out of range"

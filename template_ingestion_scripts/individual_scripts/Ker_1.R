@@ -5,7 +5,7 @@ my_initials <- "RMD"
 
 # Identify dataset ####
 
-dataset_identifier <- "Bev_5"
+dataset_identifier <- "Ker_1"
 
 is_sfn <- FALSE
 
@@ -29,7 +29,20 @@ source(here::here(
 # Add any needed code here until the checks pass
 
 sheet1$longitude_wgs84
-sheet1$latitude_wgs84
+sheet1$latitude_wgs84 
+
+source(here::here("template_ingestion_scripts", "snippets", "to_dd.R"))
+
+sheet1 <- sheet1 |>
+  mutate(latitude_wgs84 = to_dd(substr(latitude_wgs84, 3, 4),
+                                substr(latitude_wgs84, 7, 8),
+                                substr(latitude_wgs84, 11, 16),
+                                dir = "N"),
+         longitude_wgs84 = to_dd(substr(longitude_wgs84, 3, 5),
+                                 substr(longitude_wgs84, 8, 9),
+                                 substr(longitude_wgs84, 12, 17),
+                                 dir = "W"))
+
 
 # Set col types
 
@@ -138,6 +151,8 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet4
+
 # Set col types
 
 sheet4_cols_typed <- set_col_types(sheet4, sheet4_expectations)
@@ -173,7 +188,7 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet5 <- sheet5 
+sheet5
 
 # Set col types
 
@@ -214,6 +229,11 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet6 
+
+sheet6 <- sheet6 |>
+  mutate(individual_treatment_id = "No treatment",
+         individual_id = gsub(" ", "", individual_id))
 
 # Set col types
 
@@ -258,12 +278,16 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
+sheet7
+
 sheet7 <- sheet7 |>
   mutate(time_num = as.numeric(time)) |>
   mutate(time_seconds = 60 * 60 * 24 * time_num) |>
   mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
   mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) 
+  select(-time_num,-time_seconds,-time_POSIX) |>
+  mutate(water_potential_mean = paste0("-", water_potential_mean),
+         individual_id = gsub(" ", "", individual_id))
 
 # Set col types
 
@@ -306,12 +330,7 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet8 <- sheet8 |>
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) 
+sheet8
 
 # Set col types
 
@@ -354,17 +373,7 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet9 <- sheet9 |> 
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |> 
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
+sheet9
 
 # Set col types
 
@@ -415,17 +424,8 @@ source(here::here(
 
 # Add any needed code here until the last checks pass
 
-sheet10 <- sheet10 |> 
-  mutate(time_num = as.numeric(time)) |>
-  mutate(time_seconds = 60 * 60 * 24 * time_num) |>
-  mutate(time_POSIX = as.POSIXct(time_seconds, origin = "1901-01-01", tz = "GMT")) |>
-  mutate(time = format(time_POSIX, format = "%H:%M:%S")) |>
-  select(-time_num,-time_seconds,-time_POSIX) |> 
-  mutate(date_num = as.numeric(date)) |>
-  mutate(date_date = as.Date(date_num, origin = "1899-12-30")) |>
-  mutate(date_f = format(date_date, format = "%Y%m%d")) |>
-  mutate(date = date_f) |>
-  select(-date_num, -date_date, -date_f)
+sheet10
+
 
 # Set col types
 
@@ -502,7 +502,7 @@ source(here::here(
 outcomes_report |>
   filter(!outcome)
 
-flag_summary <- NA
+flag_summary <- "Note positive WP changed to negative"
 
 
 if(all(sum(!outcomes_report$outcome, na.rm =T) == 1,
