@@ -1,7 +1,7 @@
 library(boxr)
 library(dplyr)
 
-source(here::here("admin_scripts", "box_auth.R"))
+box_auth()
 
 info_data_box <- box_read_excel("1475679138432", sheet = 1)
 
@@ -20,7 +20,10 @@ info_data_local <- read.csv(
 )
 
 new_box <- info_data_box |>
-  filter(!(response_ID %in% info_data_local$response_ID))
+  filter(!(response_ID %in% info_data_local$response_ID)) |>
+  mutate(source = ifelse(response_ID < 0,
+                         "OG",
+                         "PSInet"))
 
 info_data_local <- bind_rows(info_data_local, new_box)
 

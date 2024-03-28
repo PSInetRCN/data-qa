@@ -1,14 +1,32 @@
 library(boxr)
 library(dplyr)
 
-source(here::here("admin_scripts", "box_auth.R"))
+box_auth() 
 
-info_data <- box_read_excel("1475679138432", sheet = 1)[, ]
+# For new datasets
+
+info_data <- box_read_excel("1475679138432", sheet = 1) |>
+  filter(response_ID > 0)
 
 for (i in 1:nrow(info_data)) {
   box_dl(
     info_data$raw_box_file_ID[i],
     local_dir = here::here("data", "received_dat", "template"),
+    file_name = paste0(info_data$dataset_name[i], ".xlsx"),
+    overwrite = T
+  )
+}
+
+# For OG template datasets
+
+
+info_data <- box_read_excel("1475679138432", sheet = 1) |>
+  filter(response_ID < 0)
+
+for (i in 1:nrow(info_data)) {
+  box_dl(
+    info_data$raw_box_file_ID[i],
+    local_dir = here::here("data", "received_dat", "og_template"),
     file_name = paste0(info_data$dataset_name[i], ".xlsx"),
     overwrite = T
   )
